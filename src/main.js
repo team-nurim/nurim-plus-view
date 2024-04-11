@@ -2,5 +2,14 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import axios from 'axios'
 
-createApp(App).use(store).use(router).mount('#app')
+const app = createApp(App)
+
+// Axios를 Vue 인스턴스에 추가
+app.config.globalProperties.$axios = axios
+
+app.use(store)
+app.use(router)
+
+app.mount('#app')
