@@ -1,70 +1,106 @@
 <template>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
-    <!-- 부트스트랩 CSS 링크 추가 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0tjcO1lCWheBWTvivHQxL9aZ2zZ5aWGuXMpv7g6Aoz87NMjK0E8c5ewWPUT6o4" crossorigin="anonymous">
-    <!-- 여기에 사용할 CSS 파일 링크 추가 -->
-
-    <!-- 여기에 추가적인 헤더 요소를 추가할 수 있습니다. -->
-</head>
-<body>
+  <main class="mt-3">
     <div class="container">
-        <h1 class="mt-5 mb-4">Admin Dashboard</h1>
-        <!-- 여기에 관리자 페이지의 다양한 섹션과 요소를 추가할 수 있습니다. -->
-        <!-- 예시: 사용자 관리, 채팅 기능, 통계 및 리포트, 설정 등 -->
-
-        <!-- 예시: 사용자 관리 섹션 -->
-        <div class="card mb-4">
-            <div class="card-header">
-                User Management
-            </div>
-            <div class="card-body">
-                <!-- 사용자 관리 기능 추가 -->
-                <!-- 예시: 사용자 목록 표시, 사용자 추가/편집/삭제 기능 제공 -->
-            </div>
+      <div class="row mb-2 d-flex justify-content-center">
+          <h3 class="mt-3" style="font-weight: bold">정책정보관리</h3> <!-- 큰 글씨로 AdminPage 표시 -->
+        <div class="col-12 d-flex justify-content-center"> <!-- 부모 요소에 가운데 정렬을 적용합니다. -->
+          <select class="form-select form-select mt-3" style="width: 500px;">
+            <option selected>선택</option>
+            <option value="1">주거</option>
+            <option value="2">보육</option>
+            <option value="3">양육</option>
+          </select>
         </div>
-
-        <!-- 예시: 채팅 기능 섹션 -->
-        <div class="card mb-4">
-            <div class="card-header">
-                Chat Functionality
-            </div>
-            <div class="card-body">
-                <!-- 채팅 기능 추가 -->
-                <!-- 예시: 실시간 채팅 창, 메시지 전송 기능 제공 -->
-            </div>
+        <!-- 버튼 추가 -->
+        <div class="d-flex justify-content-end mt-2">
+           <a href="/admin/register"> <!-- 링크를 추가 -->
+            <button class="btn btn-dark" style="background-color: white; color: black;">정책정보 등록</button>
+          </a>
         </div>
-
-        <!-- 추가적인 섹션 및 요소를 필요에 따라 추가할 수 있습니다. -->
+      </div>
+        <div class="table-responsive mt-3 d-flex justify-content-center">
+        <table class="table" style="background-color: white;"> <!-- 테이블의 배경색을 흰색으로 변경 -->
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">제목</th>
+              <th scope="col">카테고리</th>
+              <th scope="col">등록일자</th>
+              <th scope="col">작성자</th>
+              <th scope="col"></th> <!-- 없애면 이상해짐 -->
+            </tr>
+          </thead>
+          <tbody style="background-color: white;"> <!-- 모든 줄의 배경색을 흰색으로 변경 -->
+  <tr v-for="item in itemList" :key="item.id">
+    <td>
+      <div style="padding: 10px 0;">{{ item.id }}</div>
+    </td>
+    <td>
+      <div style="padding: 10px 0;">{{ item.title }}</div>
+    </td>
+    <td>
+      <div style="padding: 10px 0;">{{ item.category }}</div>
+    </td>
+    <td>
+      <div style="padding: 10px 0;">{{ item.date }}</div>
+    </td>
+    <td>
+      <div style="padding: 10px 0;">{{ item.author }}</div>
+    </td>
+    <td>
+      <div style="padding: 10px 0;">
+        <!-- 드롭다운 버튼 추가 -->
+        <div class="dropdown">
+          <svg width="5" height="15" id="dropdownMenuButton" xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="pointer-events: all;">
+            <circle cx="2.5" cy="2.5" r="2" fill="black"/>
+            <circle cx="2.5" cy="7.5" r="2" fill="black"/>
+            <circle cx="2.5" cy="12.5" r="2" fill="black"/>
+          </svg>
+          <!-- 드롭다운 메뉴 -->
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
+            <li><a class="dropdown-item" href="#">게시물 수정</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">게시물 삭제</a></li>
+          </ul>
+        </div>
+      </div>
+    </td>
+  </tr>
+</tbody>
+        </table>
+      </div>
     </div>
-
-</body>
-</html>
+  </main>
 </template>
 
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
 export default {
-    // 다른 컴포넌트 옵션들...
-
-    mounted() {
-        // 외부 스크립트 로드
-        const script1 = document.createElement('script');
-        script1.src = "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js";
-        script1.integrity = "sha384-f4qMEXf+Q4ZVs+ROA3Uq7xZWPhsDlnD4FoU9z9pve5Ywz1Lk0B2E0N/hRT4TdgyJ";
-        script1.crossorigin = "anonymous";
-        document.body.appendChild(script1);
-
-        const script2 = document.createElement('script');
-        script2.src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js";
-        script2.integrity = "sha384-F59oV3yvvlV5Iip6F25sjJRz6VJ17wDZS6v0MIV9G3IvptF4i5JF9C0qRa3RqE3U";
-        script2.crossorigin = "anonymous";
-        document.body.appendChild(script2);
+  data () {
+    return {
+      itemList: [ // 예시 데이터 배열
+        { id: 1, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 2, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 3, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 4, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 5, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 6, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 7, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 8, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 9, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 10, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 11, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 12, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 13, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 14, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' },
+        { id: 15, title: '보육정책 관련 4월', category: '보육', date: '2024-04-10', author: 'LeeHanJo' }
+      ],
     }
+  },
 }
 </script>
+
+<style>
+
+</style>

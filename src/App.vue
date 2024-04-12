@@ -1,11 +1,19 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/adminlist">adminlist</router-link>
-  </nav>
+<div>
+  <HeaderAdmin />
   <router-view/>
+  <FooterAdmin />
+  </div>
 </template>
-
+<script>
+import HeaderAdmin from './layout/HeaderAdmin.vue'
+import FooterAdmin from './layout/FooterAdmin.vue'
+export default {
+  components: { HeaderAdmin, FooterAdmin }
+}
+// eslint-disable-next-line
+/* eslint-disable */
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -15,16 +23,16 @@
   color: #2c3e50;
 }
 
-nav {
+#nav {
   padding: 30px;
 }
 
-nav a {
+#nav a {
   font-weight: bold;
   color: #2c3e50;
 }
 
-nav a.router-link-exact-active {
+#nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
