@@ -6,7 +6,7 @@
       <!--가장많이 본 게시물 -->
       <div class="favorite-container">
         <div class="favorite-header">
-        <h3 class="favoriteboards-title">가장많이 본 게시물</h3>
+        <h3 class="favoriteboards-title" style="font-size: 30px;">가장 많이 본 게시물</h3>
         <div class="arrow-buttons">
           <a @click="prevPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
           <a @click="nextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
@@ -27,7 +27,7 @@
       <!--답변을 기다리는 게시물-->
       <div class="inquire-container">
       <div class="inquire-header">
-        <h3 class="inquire-title">답변을 기다리는 게시물</h3>
+        <h3 class="inquire-title" style="font-size: 30px;">답변을 기다리는 게시물</h3>
         <div class="arrow-buttons">
           <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
           <a @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
@@ -36,30 +36,45 @@
       <div class="inquire-card">
       <div v-for="(inquire, index) in insqireVisbleBoards" :key="index" class="inquireView-card">
         <div class="info">
-    <p class="category">{{ inquire.category }}</p>
-  </div>
-  <h2 class="inquire-title">{{ inquire.title }}</h2>
-  <p class="content">{{ inquire.content }}</p>
+        <p class="category">{{ inquire.category }}</p>
+      </div>
+        <h2 class="inquire-title">{{ inquire.title }}</h2>
+        <p class="content">{{ inquire.content }}</p>
         </div>
       </div>
     </div>
     <!--답변을 기다리는 게시물-->
+    <!--카테고리 및 검색창-->
+    <div class="container1">
+    <div class="category-search">
+    <div class="category-buttons">
+      <button class="category-button" @click="selectCategory('보육')">보육</button>
+    <button class="category-button" @click="selectCategory('출산/양육')">출산/양육</button>
+    <button class="category-button" @click="selectCategory('주거')">주거</button>
+    <button class="category-button" @click="selectCategory('장례')">장례</button>
+  </div>
+  <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요" class="search-input">
+</div>
      <!-- 게시물 리스트 -->
   <div class="list-container" style="display: grid;">
     <div v-for="(community, index) in communityList" :key="index" class="List-card" style="place-items: center;">
       <div class="listInfo">
-        <p>닉네임:{{ community.memberNickname }}</p>
-        <p>등록일:{{ formatDate(community.registerDate) }}</p>
-        <p>조회수:{{ community.counts }}</p>
+        <p style="margin-right: 20px; margin-left: 10px;">닉네임:{{ community.memberNickname }}</p>
+        <p style="margin-right: 20px;">등록일:{{ formatDate(community.registerDate) }}</p>
+        <p >조회수:{{ community.counts }}</p>
       </div>
-        <p>{{ community.title }}</p>
+        <p class="list-title" style="margin-left: 10px;">{{ community.title }}</p>
         </div>
       </div>
     <!-- 페이지네이션 -->
     <div class="pagination">
-      <button @click="prevPage2" :disabled="currentPage === 0">이전</button>
-      <button @click="nextPage2" :disabled="currentPage === totalPages - 1">다음</button>
-    </div>
+  <button @click="prevPage2" :disabled="currentPage === 0">이전</button>
+    <button v-for="pageNumber in Math.min(totalPages, 8)" :key="pageNumber" @click="goToPage(pageNumber)" :class="{ active: pageNumber === currentPage + 1 }">{{ pageNumber }}</button>
+  <button @click="nextPage2" :disabled="currentPage === totalPages - 1">다음</button>
+</div>
+  <button class="boardRegister">문의하기</button>
+</div>
+
   </template>
 <script>
 import axios from 'axios'
@@ -218,7 +233,6 @@ export default {
     margin-bottom: 100px;
   }
   .favorite-header {
-    display: flex;
     align-items: center;
     margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
     width: 1350px;
@@ -269,9 +283,13 @@ export default {
     color: #666;
 }
   /*=======================답변을 기다리는 게시물 스타일==================================*/
+  .inquire-container{
+    margin-bottom: 100px;
+  }
   .inquire-title{
-    font-size: 30px;
-    margin-right: auto;
+    margin-right: center;
+    font-size: 20px;
+      text-align: start;
   }
   .inquire-header {
     display: flex;
@@ -279,6 +297,7 @@ export default {
     margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
     width: 1300px;
     margin-left: 300px;
+    flex-direction: column;
   }
   .inquire-card {
     display: flex;
@@ -297,21 +316,59 @@ export default {
     margin-right: 20px;
     margin-left: 20px;
     }
-    .inquire-title{
-      font-size: 20px;
-      text-align: start;
-    }
-    .category {
+   /*====================================================================================*/
+   /*====================================카테고리 검색창=================================== */
+   .container1{
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding-top: 60px;
+    margin-bottom: 100px;
+  }
+   .category-search {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.category-buttons {
+  display: flex;
+  gap: 10px;
+  margin-right: 30px;
+}
+
+.category-button {
+  border-radius: 20%;
+  background-color: #ffffff;
+  border: 1px solid gray;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.category {
   font-size: 14px;
   font-weight: bold;
   border-radius: 10px; /* 원하는 둥근 정도로 조절 */
   background-color: #ccc; /* 배경색 설정 */
   padding: 5px 10px; /* 카테고리 내부 패딩 설정 */
 }
-   /*====================================================================================*/
-   /* 카드 스타일링 */
+
+.search-input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  flex: 1;
+  margin-left: 30px;
+}
+
+   /* ======================================카드 스타일링================================= */
    .list-container {
   justify-content: center;
+  margin-top: 20px;
 }
 
 .List-card {
@@ -321,10 +378,11 @@ export default {
   width: 1000px;
   height: 100px;
   text-align: center;
+  background-color: #f0f0f0;
 }
 .listInfo {
-  display: flex; /* Flexbox 레이아웃 사용 */
-  justify-content: space-between; /* 요소들을 가로로 균등하게 배치 */
+  display: flex;
+  justify-content: left;
 }
 
 .card-content {
@@ -340,10 +398,14 @@ export default {
   font-size: 16px;
   margin-bottom: 10px;
 }
+.list-title{
+  text-align: left;
+}
 
-/* 페이지네이션 스타일링 */
+/* ======================================페이지네이션 스타일링==================================================== */
 .pagination {
   margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .pagination button {
@@ -358,5 +420,16 @@ export default {
 .pagination button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+.boardRegister{
+  background-color: #007bff; /* primary 색상 */
+  color: white; /* 텍스트 색상 */
+  border: none; /* 테두리 없음 */
+  border-radius: 8px; /* 둥근 모서리 */
+  padding: 10px 20px; /* 내부 여백 */
+  cursor: pointer; /* 커서를 포인터로 설정하여 버튼임을 나타냄 */
+  display: inline-block; /* 인라인 블록 요소로 설정하여 길게 만듦 */
+  width: 340px;
+  font-size: 16px;
 }
   </style>
