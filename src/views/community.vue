@@ -5,12 +5,10 @@
       </div>
       <!--가장많이 본 게시물 -->
       <div class="favorite-container">
-        <div class="favorite-header">
-        <h3 class="favoriteboards-title" style="font-size: 30px;">가장 많이 본 게시물</h3>
         <div class="arrow-buttons">
+          <h3 class="favoriteboards-title" style="margin-left: 300px">가장 많이 본 게시물</h3>
           <a @click="prevPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
-          <a @click="nextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
-        </div>
+          <a @click="nextPage" :disabled="currentPage === totalPages - 1" class="arrow-button" style="margin-right: 300px">›</a>
         </div>
         <div class="popularContainer">
         <div v-for="(community, index) in popluarVisbleBoards" :key="index" class="mostView-card">
@@ -26,13 +24,11 @@
       <!-- 가장많이 본 게시물-->
       <!--답변을 기다리는 게시물-->
       <div class="inquire-container">
-      <div class="inquire-header">
-        <h3 class="inquire-title" style="font-size: 30px;">답변을 기다리는 게시물</h3>
         <div class="arrow-buttons">
-          <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
+          <h3 class="inquire-title" style="font-size: 30px; margin-left: 300px">답변을 기다리는 게시물</h3>
+          <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1" style="margin-left: 930px">‹</a>
           <a @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
         </div>
-      </div>
       <div class="inquire-card">
       <div v-for="(inquire, index) in insqireVisbleBoards" :key="index" class="inquireView-card">
         <div class="info">
@@ -48,12 +44,16 @@
     <div class="container1">
     <div class="category-search">
     <div class="category-buttons">
-      <button class="category-button" @click="selectCategory('보육')">보육</button>
-    <button class="category-button" @click="selectCategory('출산/양육')">출산/양육</button>
-    <button class="category-button" @click="selectCategory('주거')">주거</button>
-    <button class="category-button" @click="selectCategory('장례')">장례</button>
+      <button class="btn btn-outline-secondary" @click="selectCategory('전체')" style="border-radius: 17px;">전체</button>
+      <button class="btn btn-outline-secondary" @click="selectCategory('보육')" style="border-radius: 17px;">보육</button>
+    <button class="btn btn-outline-secondary" @click="selectCategory('양육')" style="border-radius: 17px;">출산/양육</button>
+    <button class="btn btn-outline-secondary" @click="selectCategory('주거')" style="border-radius: 17px;">주거</button>
+    <button class="btn btn-outline-secondary" @click="selectCategory('장례')" style="border-radius: 17px;">장례</button>
   </div>
+  <div class="search-container">
   <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요" class="search-input">
+  <i class="fa-solid fa-magnifying-glass search-icon" style="color: skyblue; cursor: pointer;" @click="searchCommunity"></i>
+</div>
 </div>
      <!-- 게시물 리스트 -->
   <div class="list-container" style="display: grid;">
@@ -72,7 +72,7 @@
     <button v-for="pageNumber in Math.min(totalPages, 8)" :key="pageNumber" @click="goToPage(pageNumber)" :class="{ active: pageNumber === currentPage + 1 }">{{ pageNumber }}</button>
   <button @click="nextPage2" :disabled="currentPage === totalPages - 1">다음</button>
 </div>
-  <button class="boardRegister">문의하기</button>
+  <button class="btn btn-primary" style="width: 400px;">문의하기</button>
 </div>
 
   </template>
@@ -85,6 +85,9 @@ export default {
       popluarBoards: [],
       inquires: [],
       communityList: [],
+      filterCommunityList: [],
+      selectedCategory: '전체',
+      searchQuery: '',
       totalPages: 0,
       currentPage: 0,
       currentPage1: 0,
@@ -122,6 +125,19 @@ export default {
       return this.currentPage1 > 0
     }
   },
+  selectCategory (category) {
+    this.selectCategory = category
+    this.filterCommunityList()
+  },
+  filterCommunityList () {
+    if (this.selectCategory === '전체') {
+      this.filterCommunityList = this.communityList
+    } else {
+      this.filterCommunityList = this.communityList.filter(
+        community => community.category === this.selectCategory
+      )
+    }
+  },
   mounted () {
     this.axiosPopularboards()
     this.axiosiquires()
@@ -151,6 +167,27 @@ export default {
         this.totalPages = response.data.totalPages
       } catch (err) {
         console.error('리스트를 불러올 수 없습니다:', err)
+      }
+    },
+    async selectCategory (category) {
+      try {
+        if (category === '전체') {
+          this.axiosCommunityList()
+        } else {
+          const response = await axios.get(`http://localhost:8080/api/v1/categoryPage/${category}`)
+          this.communityList = response.data.content
+        }
+      } catch (error) {
+        console.error('카테고리에 해당하는 게시물을 불러오는데 실패했습니다:', error)
+      }
+    },
+    async searchCommunity () {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`)
+        this.communityList = response.date.content
+        this.totalPages = response.data.totalPages
+      } catch (err) {
+        console.log('검색 실패:', err)
       }
     },
     nextPage2 () {
@@ -191,9 +228,8 @@ export default {
   <style>
   /*=======================화살표 스타일============================================*/
   .arrow-buttons {
-    margin-left: auto; /* 화살표를 오른쪽으로 이동 */
     display: flex;
-    justify-content: flex-end;
+    align-content: center;
   }
   .arrow-button1 {
     width: 30px;
@@ -235,11 +271,9 @@ export default {
   .favorite-header {
     align-items: center;
     margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
-    width: 1350px;
     margin-left: 300px;
   }
   .favoriteboards-title {
-    font-size: 30px;
     margin-right: auto;
   }
     .popularContainer {
@@ -308,7 +342,7 @@ export default {
   .inquireView-card{
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: calc(33.33% - 40px); /* 가로 여백 제외한 1/3 너비로 설정 */
+    width: calc(35.23% - 40px); /* 가로 여백 제외한 1/3 너비로 설정 */
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -330,8 +364,7 @@ export default {
   }
    .category-search {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  align-items: flex-start;
   width: 1000px;
   margin: 0 auto;
 }
@@ -361,8 +394,21 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 8px;
-  flex: 1;
-  margin-left: 30px;
+  width: 600px;
+}
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  padding-right: 30px; /* 아이콘을 위한 오른쪽 패딩 */
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
 }
 
    /* ======================================카드 스타일링================================= */
