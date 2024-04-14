@@ -1,12 +1,27 @@
 <template>
-  <nav>
+  <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">정책정보</router-link> |
     <router-link to="/about">지원추천</router-link> |
     <router-link to="/about">커뮤니티</router-link>
   </nav>
-  <router-view/>
+  <router-view/> -->
+  <Header></Header>
+  <Footer></Footer>
 </template>
+
+<script>
+import Header from './components/common/Header.vue'
+import Footer from './components/common/Footer.vue'
+
+export default {
+  name: 'App',
+  components: {
+    Header,
+    Footer
+  }
+}
+</script>
 
 <style>
 #app {
