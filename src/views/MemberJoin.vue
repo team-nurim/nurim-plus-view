@@ -9,7 +9,10 @@ export default {
   components: {},
   data () {
     return {
-      sampledata: ''
+      loggedIn: true,
+      member: {
+        nickname: '닉네임'
+      }
     }
   },
   setup () {},
@@ -24,3 +27,6 @@ export default {
   methods: {}
 }
 </script>
+
+<style scoped>
+</style>
