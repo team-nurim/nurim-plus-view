@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+
+  <b-button variant="danger">Button</b-button>
+
 </template>
 <script>
 export default {
