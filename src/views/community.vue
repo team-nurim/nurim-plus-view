@@ -67,11 +67,11 @@
         </div>
       </div>
     <!-- 페이지네이션 -->
-    <div class="pagination">
-  <button @click="prevPage2" :disabled="currentPage === 0">이전</button>
-    <button v-for="pageNumber in Math.min(totalPages, 8)" :key="pageNumber" @click="goToPage(pageNumber)" :class="{ active: pageNumber === currentPage + 1 }">{{ pageNumber }}</button>
-  <button @click="nextPage2" :disabled="currentPage === totalPages - 1">다음</button>
-</div>
+    <div>
+      <button @click="changePage(currentPage - 1)" :disabled="currentPage === 0">이전</button>
+      <span>{{ currentPage + 1 }} / {{ totalPages }}</span>
+      <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages - 1">다음</button>
+    </div>
   <button class="btn btn-primary" style="width: 400px;">문의하기</button>
 </div>
 
@@ -92,7 +92,7 @@ export default {
       currentPage: 0,
       currentPage1: 0,
       mostViewPageSize: 3,
-      inquirePageSize: 4
+      inquirePageSize: 4,
     }
   },
   computed: {
@@ -162,7 +162,7 @@ export default {
     },
     async axiosCommunityList () {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/communityList?page=${this.currentPage}$size=${this.pageSize}`)
+        const response = await axios.get(`http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`)
         this.communityList = response.data.content
         this.totalPages = response.data.totalPages
       } catch (err) {
@@ -176,30 +176,28 @@ export default {
         } else {
           const response = await axios.get(`http://localhost:8080/api/v1/categoryPage/${category}`)
           this.communityList = response.data.content
+          this.totalPages = response.data.totalPages
         }
       } catch (error) {
         console.error('카테고리에 해당하는 게시물을 불러오는데 실패했습니다:', error)
       }
     },
+    async changePage(page) {
+  this.currentPage = page;
+  if (this.selectedCategory === "전체") {
+    await this.axiosCommunityList();
+  } else {
+    this.currentPage = page;
+    await this.axiosCommunityListByCategory(this.selectedCategory);
+  }
+},
     async searchCommunity () {
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`)
-        this.communityList = response.date.content
+        this.communityList = response.data.content
         this.totalPages = response.data.totalPages
       } catch (err) {
         console.log('검색 실패:', err)
-      }
-    },
-    nextPage2 () {
-      if (this.currentPage < this.totalPages - 1) {
-        this.currentPage++
-        this.axiosCommunityList()
-      }
-    },
-    prevPage2 () {
-      if (this.currentPage > 0) {
-        this.currentPage--
-        this.axiosCommunityList()
       }
     },
     nextPage () {
