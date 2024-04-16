@@ -1,4 +1,4 @@
-<template>
+c<template>
       <div class="container">
         <h1 class="title" style="font-weight: bold">무엇이든 물어보세요</h1>
         <p class="subtitle">어디에 어떻게 물어볼지 모르겠다면 여기에</p>
@@ -7,8 +7,8 @@
       <div class="favorite-container">
         <div class="arrow-buttons">
           <h3 class="favoriteboards-title" style="margin-left: 300px">가장 많이 본 게시물</h3>
-          <a @click="prevPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
-          <a @click="nextPage" :disabled="currentPage === totalPages - 1" class="arrow-button" style="margin-right: 300px">›</a>
+          <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
+          <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button" style="margin-right: 300px">›</a>
         </div>
         <div class="popularContainer">
         <div v-for="(community, index) in popluarVisbleBoards" :key="index" class="mostView-card">
@@ -63,15 +63,19 @@
         <p style="margin-right: 20px;">등록일:{{ formatDate(community.registerDate) }}</p>
         <p >조회수:{{ community.counts }}</p>
       </div>
-        <p class="list-title" style="margin-left: 10px;">{{ community.title }}</p>
+        <p class="list-title" style="margin-left: 10px;">
+          <router-link :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">{{ community.title }}</router-link>
+        </p>
         </div>
       </div>
     <!-- 페이지네이션 -->
-    <div class="pagination">
-  <button @click="prevPage2" :disabled="currentPage === 0">이전</button>
-    <button v-for="pageNumber in Math.min(totalPages, 8)" :key="pageNumber" @click="goToPage(pageNumber)" :class="{ active: pageNumber === currentPage + 1 }">{{ pageNumber }}</button>
-  <button @click="nextPage2" :disabled="currentPage === totalPages - 1">다음</button>
-</div>
+    <div class="d-flex justify-content-center mt-3">
+        <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 1" style="margin-bottom: 50px;">‹</button>
+        <div v-for="pageNumber in totalPages" :key="pageNumber">
+          <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
+        </div>
+        <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
+      </div>
   <button class="btn btn-primary" style="width: 400px;">문의하기</button>
 </div>
 
@@ -89,10 +93,12 @@ export default {
       selectedCategory: '전체',
       searchQuery: '',
       totalPages: 0,
-      currentPage: 0,
+      pageSize: 20,
+      popluarCurrentPage: 0,
       currentPage1: 0,
+      currentPage: 0,
       mostViewPageSize: 3,
-      inquirePageSize: 4
+      inquirePageSize: 4,
     }
   },
   computed: {
@@ -100,15 +106,15 @@ export default {
       return Math.ceil(this.popluarBoards.length / this.mostViewPageSize)
     },
     popluarVisbleBoards () {
-      const startIndex = this.currentPage * this.mostViewPageSize
+      const startIndex = this.popluarCurrentPage * this.mostViewPageSize
       return this.popluarBoards.slice(startIndex, startIndex + this.mostViewPageSize)
     },
     hasNextData () {
-      const nextIndex = (this.currentPage + 1) * this.mostViewPageSize
+      const nextIndex = (this.popluarCurrentPage + 1) * this.mostViewPageSize
       return nextIndex < this.popluarBoards.length
     },
     hasPreviousData () {
-      return this.currentPage > 0
+      return this.popluarCurrentPage > 0
     },
     inquiretotalPages () {
       return Math.ceil(this.inquires.length / this.inquirePageSize)
@@ -123,19 +129,6 @@ export default {
     },
     hasInsqirePreviousData () {
       return this.currentPage1 > 0
-    }
-  },
-  selectCategory (category) {
-    this.selectCategory = category
-    this.filterCommunityList()
-  },
-  filterCommunityList () {
-    if (this.selectCategory === '전체') {
-      this.filterCommunityList = this.communityList
-    } else {
-      this.filterCommunityList = this.communityList.filter(
-        community => community.category === this.selectCategory
-      )
     }
   },
   mounted () {
@@ -160,27 +153,35 @@ export default {
         console.error('문의글을 받아올 수 없습니다:', error)
       }
     },
-    async axiosCommunityList () {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/v1/communityList?page=${this.currentPage}$size=${this.pageSize}`)
-        this.communityList = response.data.content
-        this.totalPages = response.data.totalPages
-      } catch (err) {
-        console.error('리스트를 불러올 수 없습니다:', err)
+    async nextPage() {
+      if (this.currentPage < this.totalPages - 1) {
+        this.currentPage++;
+        await this.axiosCommunityList(this.selectedCategory);
       }
     },
-    async selectCategory (category) {
-      try {
-        if (category === '전체') {
-          this.axiosCommunityList()
-        } else {
-          const response = await axios.get(`http://localhost:8080/api/v1/categoryPage/${category}`)
-          this.communityList = response.data.content
-        }
-      } catch (error) {
-        console.error('카테고리에 해당하는 게시물을 불러오는데 실패했습니다:', error)
+    async previousPage() {
+      if (this.currentPage > 0) {
+        this.currentPage--;
+        await this.axiosCommunityList(this.selectedCategory);
       }
     },
+    async axiosCommunityList(category = '전체') {
+  try {
+    let url = `http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`;
+    if (category !== '전체') {
+      url = `http://localhost:8080/api/v1/categoryPage/${category}?page=${this.currentPage}&size=${this.pageSize}`;
+    }
+    const response = await axios.get(url);
+    this.communityList = response.data.content;
+    this.totalPages = response.data.totalPages;
+  } catch (err) {
+    console.error('리스트를 불러올 수 없습니다:', err);
+  }
+},
+async selectCategory(category) {
+  this.selectedCategory = category;
+  await this.axiosCommunityList(category);
+},
     async searchCommunity () {
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`)
@@ -190,14 +191,14 @@ export default {
         console.log('검색 실패:', err)
       }
     },
-    nextPage () {
-      if (this.currentPage < this.popluarTotalPages - 1 && this.hasNextData) {
-        this.currentPage++
+    nextPopluarPage () {
+      if (this.popluarCurrentPage < this.popluarTotalPages - 1 && this.hasNextData) {
+        this.popluarCurrentPage++
       }
     },
-    prevPage () {
-      if (this.currentPage > 0 && this.hasPreviousData) {
-        this.currentPage--
+    prevPopluarPage () {
+      if (this.popluarCurrentPage > 0 && this.hasPreviousData) {
+        this.popluarCurrentPage--
       }
     },
     InsqirenextPage () {
@@ -209,7 +210,11 @@ export default {
       if (this.currentPage1 > 0 && this.hasInsqirePreviousData) {
         this.currentPage1--
       }
-    }
+    },
+    goToPage(pageNumber) {
+      this.currentPage = pageNumber -1;
+      this.axiosCommunityList(this.selectedCategory);
+    },
   }
 }
 </script>
