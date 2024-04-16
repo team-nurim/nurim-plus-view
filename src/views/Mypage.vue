@@ -1,5 +1,8 @@
 <template>
-<div></div>
+<div>
+<select>
+</select>
+</div>
 </template>
 <script>
 export default {
@@ -7,15 +10,15 @@ export default {
   components: {},
   data () {
     return {
-      sampledata: ''
-    }
+      sampleData: ''
+    };
   },
-  setup () {},
+  props: {},
   beforeCreate () {},
   created () {},
   beforeMount () {},
   mounted () {},
-  beforeUpdate () {},
+  beforeUpdate () {}, 
   updated () {},
   beforeUnmount () {},
   unmounted () {},

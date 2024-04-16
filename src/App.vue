@@ -7,6 +7,7 @@
   </nav>
   <router-view/> -->
   <Header></Header>
+  <router-view />
   <Footer></Footer>
 </template>
 
