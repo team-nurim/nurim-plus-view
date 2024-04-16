@@ -1,18 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AdminList from '../views/AdminList.vue'
-import AdminRegister from '../views/AdminRegister.vue'
+import AdminPostList from '../views/AdminPostList.vue'
+import AdminPostRegister from '../views/AdminPostRegister.vue'
+import AdminPostRead from '../views/AdminPostRead.vue'
 
 const routes = [
   {
-    path: '/admin/list',
-    name: 'admin/list',
-    component: AdminList
+    path: '/admin/post/list',
+    name: 'admin/post/list',
+    component: AdminPostList
   },
   {
-    path: '/admin/register',
-    name: 'admin/register',
-    component: AdminRegister
+    path: '/admin/post/register',
+    name: 'admin/post/register',
+    component: AdminPostRegister
+  },
+  {
+    path: '/admin/post/read/:postId', // postId를 동적으로 받아오는 부분입니다.
+    name: 'admin/post/read',
+    props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
+    component: AdminPostRead
   },
   {
     path: '/home',

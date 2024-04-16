@@ -38,6 +38,7 @@ export default {
     footer {
         background: #444444; /* 그라데이션 배경 */
         padding: 30px 0;
+          color: white; /* Text color */
     }
 
     footer a {
