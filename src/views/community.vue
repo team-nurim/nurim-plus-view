@@ -7,8 +7,8 @@
       <div class="favorite-container">
         <div class="arrow-buttons">
           <h3 class="favoriteboards-title" style="margin-left: 300px">가장 많이 본 게시물</h3>
-          <a @click="prevPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
-          <a @click="nextPage" :disabled="currentPage === totalPages - 1" class="arrow-button" style="margin-right: 300px">›</a>
+          <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
+          <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button" style="margin-right: 300px">›</a>
         </div>
         <div class="popularContainer">
         <div v-for="(community, index) in popluarVisbleBoards" :key="index" class="mostView-card">
@@ -70,7 +70,7 @@
     <div>
       <button @click="changePage(currentPage - 1)" :disabled="currentPage === 0">이전</button>
       <span>{{ currentPage + 1 }} / {{ totalPages }}</span>
-      <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages - 1">다음</button>
+      <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages - 1" style="margin-bottom: 30px">다음</button>
     </div>
   <button class="btn btn-primary" style="width: 400px;">문의하기</button>
 </div>
@@ -125,19 +125,6 @@ export default {
       return this.currentPage1 > 0
     }
   },
-  selectCategory (category) {
-    this.selectCategory = category
-    this.filterCommunityList()
-  },
-  filterCommunityList () {
-    if (this.selectCategory === '전체') {
-      this.filterCommunityList = this.communityList
-    } else {
-      this.filterCommunityList = this.communityList.filter(
-        community => community.category === this.selectCategory
-      )
-    }
-  },
   mounted () {
     this.axiosPopularboards()
     this.axiosiquires()
@@ -162,7 +149,7 @@ export default {
     },
     async axiosCommunityList () {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`)
+        const response = await axios.get(`http://localhost:8080/api/v1/communityList?page=${this.currentPage1}&size=${this.pageSize}`)
         this.communityList = response.data.content
         this.totalPages = response.data.totalPages
       } catch (err) {
@@ -200,12 +187,12 @@ export default {
         console.log('검색 실패:', err)
       }
     },
-    nextPage () {
+    nextPopluarPage () {
       if (this.currentPage < this.popluarTotalPages - 1 && this.hasNextData) {
         this.currentPage++
       }
     },
-    prevPage () {
+    prevPopluarPage () {
       if (this.currentPage > 0 && this.hasPreviousData) {
         this.currentPage--
       }
