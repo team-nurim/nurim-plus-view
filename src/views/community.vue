@@ -184,22 +184,10 @@ export default {
     async searchCommunity () {
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`)
-        this.communityList = response.date.content
+        this.communityList = response.data.content
         this.totalPages = response.data.totalPages
       } catch (err) {
         console.log('검색 실패:', err)
-      }
-    },
-    nextPage2 () {
-      if (this.currentPage < this.totalPages - 1) {
-        this.currentPage++
-        this.axiosCommunityList()
-      }
-    },
-    prevPage2 () {
-      if (this.currentPage > 0) {
-        this.currentPage--
-        this.axiosCommunityList()
       }
     },
     nextPage () {
