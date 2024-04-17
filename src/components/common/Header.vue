@@ -1,5 +1,4 @@
 <template>
-
   <main>
 
     <div class="b-example-divider"></div>

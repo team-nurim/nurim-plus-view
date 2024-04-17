@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+/* eslint-disable */
 <template>
   <div></div>
 </template>
