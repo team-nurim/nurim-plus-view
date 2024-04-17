@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import Header from './components/common/Header.vue'
-import Footer from './components/common/Footer.vue'
+import Header from './components/common/NurimHeader.vue'
+import Footer from './components/common/NurimFooter.vue'
 // import HomeView from './views/HomeView.vue'
 
 export default {
