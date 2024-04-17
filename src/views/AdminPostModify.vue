@@ -6,9 +6,9 @@
         <div class="col-md-8 offset-md-2">
           <form>
             <div class="mb-3 row">
-              <label for="adminId" class="col-md-3 col-form-label">adminId</label>
+              <label for="memberId" class="col-md-3 col-form-label">memberId</label>
               <div class="col-md-9">
-                <input v-model="postData.adminId" type="text" class="form-control" id="adminId">
+                <input v-model="postData.memberId" type="text" class="form-control" id="memberId">
               </div>
             </div>
             <!-- 입력 요소들을 중앙에 배치 -->
@@ -38,12 +38,12 @@
               </div>
             </div>
              <!-- 이미지 업로드를 위한 input 요소 추가 -->
-            <div class="mb-3 row">
+            <!-- <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
                 <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
               </div>
-            </div>
+            </div> -->
           </form>
         </div>
       </div>
@@ -63,60 +63,37 @@ import axios from 'axios'
 // eslint-disable-next-line
 /* eslint-disable */
 export default {
-  name: 'AdminRegister',
-  data () {
+  name: 'AdminModify',
+  props: ['postId'],
+
+  data() {
     return {
-      postData: {
-        adminId: '',
-        postId: '',
-        postTitle: '', // 제목 입력 필드의 데이터
-        postRegisterDate: '', // 내용 입력 필드의 데이터
-        postWriter: '', // 내용 입력 필드의 데이터
-        postContent: '', // 내용 입력 필드의 데이터
-      },
-      imageFile: null // 이미지 파일을 저장할 변수
+      postData: {},
+      imageFile: null
     }
   },
+
   methods: {
-    async savePost() {
-      try {
-        // FormData 객체 생성
-        const formData = new FormData();
-        // 입력 데이터 추가
-        formData.append('adminId', this.postData.adminId);
-        formData.append('postId', this.postData.postId);
-        formData.append('postTitle', this.postData.postTitle);
-        formData.append('postRegisterDate', this.postData.postRegisterDate);
-        formData.append('postWriter', this.postData.postWriter);
-        formData.append('postContent', this.postData.postContent);
 
-        // 이미지 파일 추가
-        if (this.imageFile) {
-          formData.append('image', this.imageFile);
-        }
+   async fetchData() {
+  try {
+    let url = `http://localhost:8080/api/v1/posts/post/update${this.postId}`; // postId를 URL에 추가
+    const response = await axios.put(url); // PUT 요청으로 수정
+    this.postData = response.data; // 응답 데이터를 postData에 할당
+  } catch (err) {
+    console.error('데이터를 불러올 수 없습니다.', err); // 오류 처리
+  }
+},
 
-
-        // API 호출
-        // URL 문자열 템플릿으로 변경하고 postId 변수를 넣어줌
-         const url = `http://localhost:8080/api/v1/posts/post/update/${this.postData.postId}`;
-
-         const response = await axios.post(url, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          }
-        });
-        
-        // 성공 시 처리
-        console.log('게시물 등록 완료:', response.data);
-      } catch (error) {
-        console.error('게시물 등록 실패:', error);
-      }
-    },
     handleImageUpload(event) {
       this.imageFile = event.target.files[0];
       console.log('Uploaded image:', this.imageFile);
     }
-  }
+  },
+
+  mounted() {
+    this.fetchData();
+  },
 }
 </script>
 

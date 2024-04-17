@@ -6,9 +6,9 @@
         <div class="col-md-8 offset-md-2">
           <form>
             <div class="mb-3 row">
-              <label for="adminId" class="col-md-3 col-form-label">adminId</label>
+              <label for="memberId" class="col-md-3 col-form-label">memberId</label>
               <div class="col-md-9">
-                <input v-model="postData.adminId" type="text" class="form-control" id="adminId">
+                <input v-model="postData.memberId" type="text" class="form-control" id="memberId">
               </div>
             </div>
             <!-- 입력 요소들을 중앙에 배치 -->
@@ -16,6 +16,12 @@
               <label for="postTitle" class="col-md-3 col-form-label">제목</label>
               <div class="col-md-9">
                 <input v-model="postData.postTitle" type="text" class="form-control" id="postTitle">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="postCategory" class="col-md-3 col-form-label">카테고리</label>
+              <div class="col-md-9">
+                <input v-model="postData.postCategory" type="text" class="form-control" id="postCategory">
               </div>
             </div>
             <!-- 다른 입력 요소들도 동일하게 구성 -->
@@ -38,12 +44,12 @@
               </div>
             </div>
              <!-- 이미지 업로드를 위한 input 요소 추가 -->
-            <div class="mb-3 row">
+            <!-- <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
                 <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
               </div>
-            </div>
+            </div> -->
           </form>
         </div>
       </div>
@@ -67,8 +73,9 @@ export default {
   data () {
     return {
       postData: {
-        adminId: '',
+        memberId: '',
         postTitle: '', // 제목 입력 필드의 데이터
+        postCategory: '',
         postRegisterDate: '', // 내용 입력 필드의 데이터
         postWriter: '', // 내용 입력 필드의 데이터
         postContent: '', // 내용 입력 필드의 데이터
@@ -82,8 +89,9 @@ export default {
         // FormData 객체 생성
         const formData = new FormData();
         // 입력 데이터 추가
-        formData.append('adminId', this.postData.adminId);
+        formData.append('memberId', this.postData.memberId);
         formData.append('postTitle', this.postData.postTitle);
+        formData.append('postCategory', this.postData.postCategory);
         formData.append('postRegisterDate', this.postData.postRegisterDate);
         formData.append('postWriter', this.postData.postWriter);
         formData.append('postContent', this.postData.postContent);
@@ -93,16 +101,16 @@ export default {
           formData.append('image', this.imageFile);
         }
 
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzMxOTk3NSwiZXhwIjoxNzEzNDA2Mzc1fQ.5ujQCTokuG5DTtfJNvFiQkQEur2_9bpkgzb_AtoyMZc';
+        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTM0Mjc1NjUsImlhdCI6MTcxMzM0MTE2NSwibWVtYmVyRW1haWwiOiIxMjMifQ.xLszpRcdF7uUqzctsRqqqc2kulrBdGNR7O2k_ieW6x0';
 
 
         // API 호출
         // URL 문자열 템플릿으로 변경하고 adminId 변수를 넣어줌
-         const url = `http://localhost:8080/api/v1/posts/post/register/${this.postData.adminId}`;
+         const url = `http://localhost:8080/api/v1/posts/post/register/${this.postData.memberId}`;
 
          const response = await axios.post(url, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${tokenValue}`
           }
         });

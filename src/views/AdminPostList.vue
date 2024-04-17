@@ -41,7 +41,7 @@
               </td>
               <td>
                 <div style="padding: 10px 0;">
-                  <router-link :to="`read/${post.postId}`">{{ post.postTitle }}</router-link>
+                  <router-link style="text-decoration: none; color: black;" :to="`read/${post.postId}`">{{ post.postTitle }}</router-link>
                 </div>
               </td>
               <td>
