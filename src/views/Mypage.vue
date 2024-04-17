@@ -87,7 +87,6 @@
   </main>
 
 </template>
-
 <style scoped>
 .custom-divider {
   border: none; /* 테두리 없음 */
