@@ -55,7 +55,7 @@
   </main>
 </template>
 
-<script>z
+<script>
 // eslint-disable-next-line
 /* eslint-disable */
 export default {

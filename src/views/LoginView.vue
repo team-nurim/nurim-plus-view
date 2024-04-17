@@ -1,3 +1,5 @@
+<!-- // eslint-disable-next-line
+/* eslint-disable */ -->
 <template>
 
   <div class="container">
@@ -9,13 +11,13 @@
           <label class="form-check-label">이메일 주소</label>
           <input type="email" class="form-control" v-model="memberEmail" />
         </div>
-  
+
         <!-- Password input -->
         <div data-mdb-input-init class="form-outline mb-2">
           <label class="form-check-label">비밀번호</label>
           <input type="password" v-model="memberPw" class="form-control" />
         </div>
-  
+
         <!-- 2 column grid layout for inline styling -->
         <div class="row mb-4">
           <div class="col d-flex">
@@ -26,23 +28,23 @@
             </div>
           </div>
         </div>
-  
+
         <!-- Submit button -->
         <button type="button" class="btn btn-block btn-primary mb-4" @click="login">로그인</button>
-  
+
         <!-- Register buttons -->
         <div class="text-center">
           <label class="form-check-label">아직 회원이 아니신가요?  <a href="/join">회원가입</a></label>
-  
+
           <!-- Social Login -->
           <!-- <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
               <i class="fab fa-facebook-f"></i>
           </button>
-  
+
           <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
               <i class="fab fa-google"></i>
           </button>
-  
+
           <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
               <i class="fab fa-twitter"></i>
           </button> -->
@@ -50,9 +52,9 @@
       </form>
     </div>
   </div>
-  
-  </template>
-  <script>
+
+</template>
+<script>
   import axios from 'axios'
   
   export default {
@@ -73,8 +75,10 @@
           })
           // JWT 토큰
           console.log('서버 응답 데이터:', response.data)
-          // 토큰 스토리지 저장 처리
-  
+
+          // JWT 토큰 스토리지 저장 처리
+          localStorage.setItem('accessToken', response.data.accessToken);
+
           // 로그인 리다이렉트 처리
   
           
@@ -112,4 +116,3 @@
     width: 100%;
   }
   </style>
-  
