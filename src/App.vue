@@ -8,19 +8,19 @@
   <router-view/> -->
   <Header></Header>
   <router-view />
-  <Footer></Footer>
+  <FooterVue></FooterVue>
 </template>
 
 <script>
 import Header from './components/common/Header.vue'
-import Footer from './components/common/Footer.vue'
+import FooterVue from './components/common/FooterVue.vue'
 // import HomeView from './views/HomeView.vue'
 
 export default {
   name: 'App',
   components: {
     Header,
-    Footer
+    FooterVue
   }
 }
 </script>

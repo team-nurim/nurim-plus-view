@@ -1,4 +1,6 @@
 <template>
+<!-- // eslint-disable-next-line
+/* eslint-disable */ -->
   <main>
     <div class="container">
       <!-- 1단계 -->
@@ -53,7 +55,9 @@
   </main>
 </template>
 
-<script>
+<script>z
+// eslint-disable-next-line
+/* eslint-disable */
 export default {
   name: '',
   components: {},

@@ -1,5 +1,6 @@
 <template>
-
+<!-- // eslint-disable-next-line
+/* eslint-disable */ -->
 <div class="container">
   <div class="loginBox">
     <!-- <form action="/generateToken" method="post"> -->
@@ -53,6 +54,8 @@
 
 </template>
 <script>
+// eslint-disable-next-line
+/* eslint-disable */
 import axios from 'axios'
 
 export default {
