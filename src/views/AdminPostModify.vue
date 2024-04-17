@@ -1,7 +1,7 @@
 <template>
   <main class="mt-5">
     <div class="container">
-      <h2 class="text-center mb-5">정책정보 등록</h2>
+      <h2 class="text-center mb-5">정책정보 수정</h2>
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
@@ -68,6 +68,7 @@ export default {
     return {
       postData: {
         adminId: '',
+        postId: '',
         postTitle: '', // 제목 입력 필드의 데이터
         postRegisterDate: '', // 내용 입력 필드의 데이터
         postWriter: '', // 내용 입력 필드의 데이터
@@ -83,6 +84,7 @@ export default {
         const formData = new FormData();
         // 입력 데이터 추가
         formData.append('adminId', this.postData.adminId);
+        formData.append('postId', this.postData.postId);
         formData.append('postTitle', this.postData.postTitle);
         formData.append('postRegisterDate', this.postData.postRegisterDate);
         formData.append('postWriter', this.postData.postWriter);
@@ -93,17 +95,14 @@ export default {
           formData.append('image', this.imageFile);
         }
 
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzMxOTk3NSwiZXhwIjoxNzEzNDA2Mzc1fQ.5ujQCTokuG5DTtfJNvFiQkQEur2_9bpkgzb_AtoyMZc';
-
 
         // API 호출
-        // URL 문자열 템플릿으로 변경하고 adminId 변수를 넣어줌
-         const url = `http://localhost:8080/api/v1/posts/post/register/${this.postData.adminId}`;
+        // URL 문자열 템플릿으로 변경하고 postId 변수를 넣어줌
+         const url = `http://localhost:8080/api/v1/posts/post/update/${this.postData.postId}`;
 
          const response = await axios.post(url, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${tokenValue}`
           }
         });
         

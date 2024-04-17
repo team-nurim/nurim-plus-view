@@ -35,7 +35,6 @@
             <div class="mb-3 row border">
               <label for="image" class="col-md-3 col-form-label border">이미지</label>
               <div class="col-md-9 border">
-                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
               </div>
             </div>
           </form>
@@ -45,8 +44,7 @@
     <div class="row mt-4">
       <div class="col-md-8 offset-md-2 d-flex justify-content-center">
         <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
-        <!-- 저장하기 버튼에 savePost 메서드 연결 -->
-        <button type="button" class="btn btn-lg btn-primary">수정하기</button>
+        <router-link :to="`/admin/post/modify/${postId}`" class="btn btn-lg btn-primary me-3">수정하기</router-link>
       </div>
     </div>
   </main>
@@ -83,52 +81,52 @@
 </script>
 
 <style scoped>
-/* Additional styling for enhanced presentation */
-.container {
-  background-color: transparent; /* 배경색을 투명하게 설정하여 배경을 없앱니다 */
-  padding: 0; /* 여백을 없앱니다 */
-  border-radius: 0; /* 테두리 반경을 없앱니다 */
-  max-width: 800px; /* 최대 너비 설정 */
-  margin: 0 auto; /* 가운데 정렬 */
-  border: none; /* 테두리를 없앱니다 */
-}
+  /* Additional styling for enhanced presentation */
+  .container {
+    background-color: transparent; /* 배경색을 투명하게 설정하여 배경을 없앱니다 */
+    padding: 0; /* 여백을 없앱니다 */
+    border-radius: 0; /* 테두리 반경을 없앱니다 */
+    max-width: 900px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    border: none; /* 테두리를 없앱니다 */
+  }
 
-h2 {
-  color: #007bff;
-  font-weight: bold; /* 글꼴 굵기 설정 */
-  text-align: center; /* 가운데 정렬 */
-}
+  h2 {
+    color: #007bff;
+    font-weight: bold; /* 글꼴 굵기 설정 */
+    text-align: center; /* 가운데 정렬 */
+  }
 
-.table {
-  border-collapse: collapse; /* 테이블 셀 경계 설정 */
-  width: 100%; /* 테이블 너비 설정 */
-}
+  .table {
+    border-collapse: collapse; /* 테이블 셀 경계 설정 */
+    width: 200%; /* 테이블 너비 설정 */
+  }
 
-.table th, .table td {
-  border: 1px solid #dee2e6; /* 셀 테두리 스타일 설정 */
-  padding: 8px; /* 셀 내부 여백 설정 */
-  text-align: left; /* 텍스트 정렬 설정 */
-}
+  .table th, .table td {
+    border: 1px solid #dee2e6; /* 셀 테두리 스타일 설정 */
+    padding: 8px; /* 셀 내부 여백 설정 */
+    text-align: left; /* 텍스트 정렬 설정 */
+  }
 
-.table th {
-  background-color: #f2f2f2; /* 테이블 헤더 배경색 설정 */
-}
+  .table th {
+    background-color: #f2f2f2; /* 테이블 헤더 배경색 설정 */
+  }
 
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  border-radius: 5px; /* 버튼 모서리 둥글게 */
-  padding: 10px 20px; /* 내부 여백 조정 */
-  font-size: 1.2rem; /* 글꼴 크기 설정 */
-  transition: background-color 0.3s ease; /* 변화 효과 설정 */
-}
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 5px; /* 버튼 모서리 둥글게 */
+    padding: 10px 20px; /* 내부 여백 조정 */
+    font-size: 1.2rem; /* 글꼴 크기 설정 */
+    transition: background-color 0.3s ease; /* 변화 효과 설정 */
+  }
 
-.btn-primary:hover {
-  background-color: #0056b3;
-}
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
 
-/* Added styling for borders */
-.border {
-  border: 1px solid #dee2e6;
-}
+  /* Added styling for borders */
+  .border {
+    border: 1px solid #dee2e6;
+  }
 </style>
