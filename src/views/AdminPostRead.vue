@@ -70,7 +70,7 @@
     methods: {
       async axiosAdminPostRead(postId) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/v1/posts/post/read${postId}`);
+          const response = await axios.get(`http://localhost:8080/api/v1/posts/post/read/${postId}`);
           this.postRead = response.data;
         } catch (error) {
           console.error('Failed to fetch post details:', error);
