@@ -56,14 +56,21 @@
 // eslint-disable-next-line
 /* eslint-disable */
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'NurimHeader',
-  // components: {},
+  computed: {
+    ...mapGetters(['getLoggedIn']),
+    memberNickname() {
+      return this.member.nickname;
+    }
+  },
   data () {
     return {
-      loggedIn: false,
-      member: {}
+      member: {
+        memberNickname: ''
+      }
     }
   },
   async created () {
@@ -76,20 +83,14 @@ export default {
   },
   methods: {
     async fetchMemberInfo () {
-      
-
       try {
         const accessToken = localStorage.getItem('accessToken')
-        if(!accessToken) {
-          console.error('토큰이 없습니다. 로그인 상태를 확인해주세요.')
-          alert('로그인 상태를 확인해주세요.')
-        }
-        
+
         const response = await axios.get('/api/v1/members/mypage', {
           headers: {
-            'Authorization': 'Bearer ${accessToken}'
+            'Authorization': 'Bearer ${accessToken}'   // 토큰 헤더에 추가
           }
-        });
+        })
         this.member = response.data;
       } catch (error) {
         console.error('회원정보를 불러오지 못했습니다.', error);
