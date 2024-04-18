@@ -63,19 +63,28 @@ export default {
   computed: {
     ...mapGetters(['getLoggedIn']),
     memberNickname() {
-      return this.member.nickname;
+      return this.member.memberNickname;
     }
   },
   data () {
     return {
+      loggedIn: false,
       member: {
         memberNickname: ''
       }
     }
   },
   async created () {
+    const accessToken = localStorage.getItem('accessToken')
+
     // 페이지 생성 시 로그인 상태 확인
-    this.loggedIn = !!localStorage.getItem('accessToken')
+    if(accessToken != null) {
+      this.loggedIn = true;
+    } else {
+      this.loggedIn = false;
+    }
+    console.log('저장된 토큰: ' + accessToken)
+    console.log('로그인 여부: ' + this.loggedIn)
     // 로그인 된 경우 회원 정보 불러오기
     if (this.loggedIn) {
       await this.fetchMemberInfo();
@@ -88,7 +97,7 @@ export default {
 
         const response = await axios.get('/api/v1/members/mypage', {
           headers: {
-            'Authorization': 'Bearer ${accessToken}'   // 토큰 헤더에 추가
+            'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
           }
         })
         this.member = response.data;
