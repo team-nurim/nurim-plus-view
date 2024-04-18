@@ -1,5 +1,5 @@
 <template>
-  <main class="mt-5">
+  <div class="mt-5">
     <div class="container">
       <h2 class="text-center mb-5">정책정보 등록</h2>
       <div class="row">
@@ -44,12 +44,12 @@
               </div>
             </div>
              <!-- 이미지 업로드를 위한 input 요소 추가 -->
-            <!-- <div class="mb-3 row">
+            <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
                 <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
               </div>
-            </div> -->
+            </div>
           </form>
         </div>
       </div>
@@ -57,11 +57,29 @@
         <div class="col-md-8 offset-md-2 d-flex justify-content-center">
           <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
   <!-- 저장하기 버튼에 savePost 메서드 연결 -->
-          <button type="button" class="btn btn-lg btn-primary" @click="savePost">저장하기</button>
+          <button type="button" class="btn btn-lg btn-primary" @click="showModal">저장하기</button>
         </div>
       </div>
     </div>
-  </main>
+  </div>
+   <!-- 모달 -->
+    <div v-if="modalVisible" class="modal fade show" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0, 0, 0, 0.5);">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">게시물 등록</h5>
+            <button type="button" class="btn-close" aria-label="Close" @click="hideModal"></button>
+          </div>
+          <div class="modal-body">
+            <p>게시물을 등록하시겠습니까?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="hideModal">취소</button>
+            <button type="button" class="btn btn-primary" @click="savePostAndHideModal">등록</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -80,7 +98,8 @@ export default {
         postWriter: '', // 내용 입력 필드의 데이터
         postContent: '', // 내용 입력 필드의 데이터
       },
-      imageFile: null // 이미지 파일을 저장할 변수
+      imageFile: null, // 이미지 파일을 저장할 변수
+      modalVisible: false, // 모달의 표시 여부
     }
   },
   methods: {
@@ -101,25 +120,37 @@ export default {
           formData.append('image', this.imageFile);
         }
 
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTM0Mjc1NjUsImlhdCI6MTcxMzM0MTE2NSwibWVtYmVyRW1haWwiOiIxMjMifQ.xLszpRcdF7uUqzctsRqqqc2kulrBdGNR7O2k_ieW6x0';
-
+        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
 
         // API 호출
-        // URL 문자열 템플릿으로 변경하고 adminId 변수를 넣어줌
          const url = `http://localhost:8080/api/v1/posts/post/register/${this.postData.memberId}`;
 
          const response = await axios.post(url, formData, {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json' ,
             'Authorization': `Bearer ${tokenValue}`
           }
         });
         
         // 성공 시 처리
+        // 성공 시 alert 메시지 표시
+        alert('게시물이 등록되었습니다.');
         console.log('게시물 등록 완료:', response.data);
+        // 리스트 페이지로 이동
+        this.$router.push('/admin/post/list');
       } catch (error) {
         console.error('게시물 등록 실패:', error);
       }
+    },
+    showModal() {
+      this.modalVisible = true; // 모달 표시
+    },
+    hideModal() {
+      this.modalVisible = false; // 모달 숨김
+    },
+    savePostAndHideModal() {
+      this.savePost(); // 게시물 저장
+      this.hideModal(); // 모달 숨김
     },
     handleImageUpload(event) {
       this.imageFile = event.target.files[0];
@@ -141,19 +172,11 @@ export default {
     box-sizing: border-box; /* 패딩과 테두리를 포함하여 요소의 전체 크기를 계산합니다 */
   }
 
-  /* 파일 업로드 요소 스타일링 */
-  input[type="file"] {
-    padding: 8px;
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-  }
-
   /* textarea 요소를 더 크게 만듭니다 */
   textarea {
-  width: 85%; /* 전체 폭을 차지하도록 설정 */
-  max-width: 85%; /* 최대 폭을 지정하여 넘치지 않도록 설정 */
-  height: 150px; /* 원하는 높이로 조정하세요 */
+  width: 80%; /* 전체 폭을 차지하도록 설정 */
+  max-width: 80%; /* 최대 폭을 지정하여 넘치지 않도록 설정 */
+  height: 300px; /* 원하는 높이로 조정하세요 */
   resize: vertical; /* 사용자가 크기를 조절할 수 있도록 합니다 */
   padding: 8px;
   background-color: #f8f9fa;
@@ -164,6 +187,7 @@ export default {
 
   /* 입력 요소들의 폭을 조절합니다 */
 input[type="text"] {
-  width: 85%; /* 전체 폭을 차지하도록 설정 */
+  width: 80%; /* 전체 폭을 차지하도록 설정 */
 }
+
 </style>

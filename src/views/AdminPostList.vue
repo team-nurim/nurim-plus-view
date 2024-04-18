@@ -6,11 +6,11 @@
         <div class="col-12 d-flex justify-content-center">
           <!-- 카테고리 선택 드롭다운 -->
           <select class="form-select form-select mt-3" style="width: 500px;" @change="handleCategoryChange($event)">
-             <option value="전체">전체</option>
-  <option value='보육'>보육</option>
-  <option value="출산/양육">출산/양육</option>
-  <option value="주거">주거</option>
-  <option value="장례">장례</option>
+            <option value="전체">전체</option>
+            <option value='보육'>보육</option>
+            <option value="출산/양육">출산/양육</option>
+            <option value="주거">주거</option>
+            <option value="장례">장례</option>
           </select>
         </div>
         <div class="d-flex justify-content-end mt-2">
@@ -41,7 +41,7 @@
               </td>
               <td>
                 <div style="padding: 10px 0;">
-                  <router-link style="text-decoration: none; color: black;" :to="`read/${post.postId}`">{{ post.postTitle }}</router-link>
+                  <router-link style="text-decoration: none; color: black; font-weight: bold; font-size: 16px; cursor: pointer; text-decoration: underline;" :to="`read/${post.postId}`" @mouseover="onMouseOver" @mouseleave="onMouseLeave">{{ post.postTitle }}</router-link>
                 </div>
               </td>
               <td>
@@ -62,32 +62,55 @@
                       <circle cx="2.5" cy="12.5" r="2" fill="black"/>
                     </svg>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
-                      <li><a class="dropdown-item" href="#">게시물 수정</a></li>
+                      <li><a @click="readPost(post.postId)" class="dropdown-item" href="#">게시물 관리</a></li>
                       <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">게시물 삭제</a></li>
+                      <li><a @click="editPost(post.postId)" class="dropdown-item" href="#">게시물 수정</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a @click="showModal(post.postId)" class="dropdown-item" href="#">게시물 삭제</a></li>
                     </ul>
                   </div>
                 </div>
               </td>
             </tr>
           </tbody>
+          <tfoot>
+          </tfoot>
         </table>
       </div>
       <!-- 페이지네이션 -->
       <div class="d-flex justify-content-center mt-3">
         <button class="btn btn-white mr-2" @click="prevPage" :disabled="currentPage === 0">이전</button>
         <div v-for="pageNumber in totalPages" :key="pageNumber">
-          <button class="btn btn-dark mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
+          <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
         </div>
         <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1">다음</button>
       </div>
     </div>
   </main>
+  <!-- 모달 -->
+    <div v-if="modalVisible" class="modal fade show" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0, 0, 0, 0.5);">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">게시물 삭제</h5>
+            <button type="button" class="btn-close" aria-label="Close" @click="hideModal"></button>
+          </div>
+          <div class="modal-body">
+            <p>게시물을 삭제하시겠습니까?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="hideModal">취소</button>
+            <button type="button" class="btn btn-danger" @click="deletePostAndHideModal()">삭제</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
+
 import axios from 'axios';
 export default {
 
@@ -99,6 +122,7 @@ export default {
       totalPages: 0,
       itemsPerPage: 10,
       selectedCategory: '전체', // 선택된 카테고리를 저장하는 변수 추가
+      modalVisible: false, // 모달의 표시 여부
     };
   },
   mounted() {
@@ -107,11 +131,17 @@ export default {
   methods: {
     async axiosAdminPostList(category = '전체') {
       try {
+        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+
+        
         let url = `http://localhost:8080/api/v1/posts/post/list?page=${this.currentPage}&size=${this.itemsPerPage}`;
         if(category !== '전체') {
           url = `http://localhost:8080/api/v1/posts/post/${category}?page=${this.currentPage}&size=${this.itemsPerPage}`;
         }
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: {
+            'Authorization': `Bearer ${tokenValue}`
+          }});
         this.postList = response.data.content;
         this.totalPages = response.data.totalPages;
       } catch (err) {
@@ -122,10 +152,10 @@ export default {
       this.selectedCategory = category;
       await this.axiosAdminPostList(category);
     },
-   goToPage(pageNumber) {
-  this.currentPage = pageNumber-1;
-  this.axiosAdminPostList(this.selectedCategory); // Pass the selected category
-},
+    goToPage(pageNumber) {
+      this.currentPage = pageNumber-1;
+      this.axiosAdminPostList(this.selectedCategory); // Pass the selected category
+    },
     prevPage() {
       if (this.currentPage > 0) {
         this.currentPage--;
@@ -141,7 +171,54 @@ export default {
     handleCategoryChange(event) {
         const category = event.target.value;
     this.selectCategory(category);
-    }
+    },
+    readPost(postId) {
+      // 수정할 게시물의 ID를 전달하여 수정 페이지로 이동
+      this.$router.push(`/admin/post/read/${postId}`);
+    },
+    editPost(postId) {
+      // 수정할 게시물의 ID를 전달하여 수정 페이지로 이동
+      this.$router.push(`/admin/post/modify/${postId}`);
+    },
+    async deletePost(postId) {
+      try {
+        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+
+        const url = `http://localhost:8080/api/v1/posts/post/${postId}`;
+        const response = await axios.delete(url, {
+          headers: {
+            'Authorization': `Bearer ${tokenValue}`
+          }
+        });
+        // 삭제 후 성공 메시지 출력
+        alert('게시물이 성공적으로 삭제되었습니다.');
+         // 삭제 후 게시물 목록을 다시 불러옴
+        await this.axiosAdminPostList(this.selectedCategory);
+        // 삭제 후 리스트 페이지로 리다이렉트
+        this.$router.push('/admin/post/list');
+      } catch (error) {
+        console.error('게시물 삭제 실패:', error);
+      }
+    },
+     showModal(postId) {
+      this.postIdToDelete = postId; // postId 저장
+      this.modalVisible = true; // 모달 표시
+    },
+    hideModal() {
+      this.modalVisible = false; // 모달 숨김
+    },
+    deletePostAndHideModal() {
+      this.deletePost(this.postIdToDelete);
+      this.hideModal(); // 모달 숨김
+    },
+
+    
+    onMouseOver(event) {
+      event.target.style.color = 'blue'; // 마우스를 올렸을 때 색상 변경
+    },
+    onMouseLeave(event) {
+      event.target.style.color = 'black'; // 마우스가 벗어났을 때 색상 변경
+}
   },
 };
 </script>
