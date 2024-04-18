@@ -38,7 +38,7 @@
               <ul class="dropdown-menu dropdown-menu-end text-small">
                 <li style="padding:0.5rem 1rem"><b>{{ member.nickname }}님</b></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">마이페이지</a></li>
+                <li><router-link class="dropdown-item" to="/mypage">마이페이지</router-link></li>
                 <li><a class="dropdown-item" href="#">계정 전환</a></li>
                 <li><a class="dropdown-item" href="#">로그아웃</a></li>
               </ul>

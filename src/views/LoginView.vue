@@ -55,7 +55,9 @@
 
 </template>
 <script>
-  import axios from 'axios'
+// eslint-disable-next-line
+/* eslint-disable */ 
+import axios from 'axios'
   
   export default {
     components: {},
