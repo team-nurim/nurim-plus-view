@@ -1,8 +1,10 @@
 <template>
-<div>
-  <HeaderAdmin />
-  <router-view/>
-  <FooterAdmin />
+  <div id="app">
+    <HeaderAdmin />
+    <div class="router-view-container">
+      <router-view/>
+    </div>
+    <FooterAdmin />
   </div>
 </template>
 <script>
@@ -16,12 +18,19 @@ export default {
 </script>
 <style>
 #app {
+   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
+.router-view-container {
+  flex: 1;
+}
+
 
 #nav {
   padding: 30px;
