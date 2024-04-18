@@ -3,9 +3,15 @@
 /* eslint-disable */ -->
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-    <div class="container">
-      <div class="copyright">
-        &copy; Copyright <strong><span>Footer</span></strong>. All Rights Reserved
+    <div class="container mb-2">
+      <div class="copyright" style="margin:1.2rem; font-size:0.8rem; text-align:left; color:#999">
+        &copy; Copyright <strong><span>(주)누림</span></strong>. All Rights Reserved<br>
+        <span>대표자 : 박채연 | 개인정보보호책임자 : 백승용</span><br>
+        <span>사업자등록번호 : 158-86-12345</span><br>
+        <span>통신판매업신고번호 : 2024-서울강남-02345</span><br>
+        <span>사업장소재지 : 서울특별시 강남구 강남대로 405 8층</span><br>
+        <span>대표번호 : 1688-7198 | 이메일 : support@3o3.co.kr</span><br>
+        <span>운영시간 : (평일) 10:00-18:30 (점심) 12:30-13:30 | 주말∙공휴일 휴무</span><br>
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. -->
