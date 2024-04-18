@@ -1,18 +1,14 @@
-// const { defineConfig } = require('@vue/cli-service')
-// module.exports = defineConfig({
-//   transpileDependencies: true
-// })
-// proxy 설정
-const target = 'http://127.0.0.1:3000';
-
-module.exports = {
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  transpileDependencies: true,
+  outputDir:"../src/main/resources/static", // 빌드 타겟 디렉토리
   devServer: {
-    port: 8080,
     proxy: {
-      '^/api': {
-        target,
-        changeOrigin: true
+      '/api':{
+        //'/api'로 들어오면 포트 8080(스프링 서버)로 보낸다.
+        target: 'http://localhost:8080',
+        changeOrigin: true // cross origin 허용
       }
     }
   }
-}
+})

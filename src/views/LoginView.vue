@@ -55,6 +55,28 @@
 
 </template>
 <script>
+// eslint-disable-next-line
+/* eslint-disable */ 
+import axios from 'axios'
+  
+  export default {
+    components: {},
+    data () {
+      return {
+        memberEmail: '',
+        memberPw: '',
+        rememberMe: false
+      }
+    },
+    methods: {
+      async login () {
+        try {
+          const response = await axios.post('/generateToken', {
+            memberEmail: this.memberEmail,
+            memberPw: this.memberPw
+          })
+          // JWT 토큰
+          console.log('서버 응답 데이터:', response.data)
 import axios from 'axios'
 
 export default {
