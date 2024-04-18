@@ -1,7 +1,6 @@
 <template>
 
   <main>
-
     <div class="b-example-divider"></div>
 
     <div class="container">
@@ -26,8 +25,8 @@
         <div class="col-md-3 text-end">
           <!-- 로그인 안했을 때 -->
           <template v-if="!loggedIn">
-            <button type="button" class="btn btn-outline-primary me-2">Login</button>
-            <button type="button" class="btn btn-primary">Sign-up</button>
+            <router-link to="/login" class="btn btn-outline-primary me-2" @click="goToLogin">로그인</router-link>
+            <router-link to="/join" class="btn btn-primary" @click="goToJoin">회원가입</router-link>
           </template>
           <!-- 로그인했을 때 -->
           <template v-else>
@@ -36,11 +35,11 @@
                 <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu dropdown-menu-end text-small">
-                <li style="padding:0.5rem 1rem"><b>{{ member.nickname }}님</b></li>
+                <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><router-link class="dropdown-item" to="/mypage">마이페이지</router-link></li>
-                <li><a class="dropdown-item" href="#">계정 전환</a></li>
-                <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                <li style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
+                <li style="padding:0.5rem 1rem"><router-link to="#">계정 전환</router-link></li>
+                <li style="padding:0.5rem 1rem"><router-link to="#" @click="logout">로그아웃</router-link></li>
               </ul>
             </div>
           </template>
@@ -56,27 +55,57 @@
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
+import axios from 'axios'
+import { mapGetters } from 'vuex'
+
 export default {
-  name: '',
-  components: {},
+  name: 'NurimHeader',
+  computed: {
+    ...mapGetters(['getLoggedIn']),
+    memberNickname() {
+      return this.member.nickname;
+    }
+  },
   data () {
     return {
-      loggedIn: true,
       member: {
-        nickname: '닉네임'
+        memberNickname: ''
       }
     }
   },
-  setup () {},
-  beforeCreate () {},
-  created () {},
-  beforeMount () {},
-  mounted () {},
-  beforeUpdate () {},
-  updated () {},
-  beforeUnmount () {},
-  unmounted () {},
-  methods: {}
+  async created () {
+    // 페이지 생성 시 로그인 상태 확인
+    this.loggedIn = !!localStorage.getItem('accessToken')
+    // 로그인 된 경우 회원 정보 불러오기
+    if (this.loggedIn) {
+      await this.fetchMemberInfo();
+    }
+  },
+  methods: {
+    async fetchMemberInfo () {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+
+        const response = await axios.get('/api/v1/members/mypage', {
+          headers: {
+            'Authorization': 'Bearer ${accessToken}'   // 토큰 헤더에 추가
+          }
+        })
+        this.member = response.data;
+      } catch (error) {
+        console.error('회원정보를 불러오지 못했습니다.', error);
+      }
+    },
+    logout () {
+      // 로그아웃 시 로컬 스토리지 토큰 삭제
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('rememberMe')
+      // 로그아웃 시 헤더 상태 변경;
+      this.loggedIn = false;
+      // 로그아웃 후 리다이렉트
+      this.$router.push('/')
+    } 
+  }
 }
 </script>
 
