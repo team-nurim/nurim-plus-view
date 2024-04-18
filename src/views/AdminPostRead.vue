@@ -78,7 +78,7 @@
         try {
           const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
 
-          const response = await axios.get(`http://localhost:8080/api/v1/posts/post/read${postId}`, {
+          const response = await axios.get(`http://localhost:8080/api/v1/posts/post/read/${postId}`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${tokenValue}`
