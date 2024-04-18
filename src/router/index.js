@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import JoinStep01 from '../views/join/JoinStep01.vue'
 import LoginView from '../views/LoginView.vue'
 import Mypage from '../views/Mypage.vue'
+import UpdateMemberInfo from '../views/UpdateMemberInfo.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/mypage',
     name: 'mypage',
     component: Mypage
+  },
+  {
+    path: '/updateMemberInfo',
+    name: 'updateMemberInfo',
+    component: UpdateMemberInfo
   }
 ]
 

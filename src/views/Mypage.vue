@@ -16,7 +16,7 @@
           <div>ddddd</div>
         </div>
         <div class="col-6 align-items-center">
-          <button type="button" class="btn btn-outline-primary">회원 정보 수정</button>
+          <button type="button" class="btn btn-outline-primary" @click="goForward()">회원 정보 수정</button>
         </div>
       </div>
 
@@ -142,6 +142,10 @@ export default {
   updated () {},
   beforeUnmount () {},
   unmounted () {},
-  methods: {}
+  methods: {
+    goForward () {
+      this.$router.push('/updateMemberInfo')
+    }
+  }
 }
 </script>
