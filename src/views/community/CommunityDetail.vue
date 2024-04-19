@@ -82,7 +82,11 @@
       },
       async axiosCommunityData() {
         try {
-          const response = await axios.get(`http://localhost:8080/api/v1/communityRead/${this.communityId}`);
+          const accessToken = localStorage.getItem('accessToken')
+          const response = await axios.get(`http://localhost:8080/api/v1/communityRead/${this.communityId}`,{
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }})
           this.community = response.data;
         } catch (error) {
           console.error('게시물 정보를 불러올 수 없습니다:', error);
@@ -90,7 +94,11 @@
       },
       async axiosReplyData () {
         try{
-            const response = await axios.get(`http://localhost:8080/api/v1/community/${this.communityId}/replyRead`)
+          const accessToken = localStorage.getItem('accessToken')
+            const response = await axios.get(`http://localhost:8080/api/v1/community/${this.communityId}/replyRead`,{
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }})
             this.replyList = response.data
         }catch (error) {
             console.error('게시물 아이디에 맞는 댓글 리스트를 불러올 수 없습니다:',error)
@@ -98,7 +106,14 @@
       },
       async deleteCommunity () {
         try{
-          const response = await axios.delete(`http://localhost:8080/api/v1/communityDelete/${this.communityId}`)
+          const accessToken = localStorage.getItem('accessToken')
+          if(!accessToken){
+            throw new Error('삭제할 권한이 없습니다.')
+          }
+          const response = await axios.delete(`http://localhost:8080/api/v1/communityDelete/${this.communityId}`,{
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }})
         }catch (error) {
           this.errorMessage = '삭제할 권한이 없습니다.'
           console.error('게시물을 지울 수 없습니다:',error)

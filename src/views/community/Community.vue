@@ -147,8 +147,12 @@ export default {
   },
   methods: {
     async axiosPopularboards () {
-      try {
-        const response = await axios.get('http://localhost:8080/api/v1/popular')
+      try{
+        const accessToken = localStorage.getItem('accessToken') 
+        const response = await axios.get('http://localhost:8080/api/v1/popular',{
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }})
         this.popluarBoards = response.data
       } catch (error) {
         console.error('인기글을 받아올 수 없습니다:', error)
@@ -156,7 +160,11 @@ export default {
     },
     async axiosiquires () {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/community/Inquire')
+        const accessToken = localStorage.getItem('accessToken')
+        const response = await axios.get('http://localhost:8080/api/v1/community/Inquire',{
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }})
         this.inquires = response.data
       } catch (error) {
         console.error('문의글을 받아올 수 없습니다:', error)
@@ -176,11 +184,15 @@ export default {
     },
     async axiosCommunityList(category = '전체') {
   try {
-    let url = `http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`;
+    const accessToken = localStorage.getItem('accessToken')
+    let url = `http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`
     if (category !== '전체') {
       url = `http://localhost:8080/api/v1/categoryPage/${category}?page=${this.currentPage}&size=${this.pageSize}`;
     }
-    const response = await axios.get(url);
+    const response = await axios.get(url,{
+    headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }});
     this.communityList = response.data.content;
     this.totalPages = response.data.totalPages;
   } catch (err) {
@@ -193,11 +205,13 @@ async selectCategory(category) {
 },
 async searchCommunity() {
   try {
-    let url = `http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`;
-    if (this.memberNicknameQuery) {
-      url += `&memberNickname=${this.memberNicknameQuery}`;
-    }
-    const response = await axios.get(url);
+    const accessToken = localStorage.getItem('accessToken')
+    let url = `http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`
+    const response = await axios.get(url,{
+      headers : {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
     this.communityList = response.data.content;
     this.totalPages = response.data.totalPages;
   } catch (err) {
