@@ -1,7 +1,7 @@
 c<template>
       <div class="container">
         <h1 class="title" style="font-weight: bold">무엇이든 물어보세요</h1>
-        <p class="subtitle">어디에 어떻게 물어볼지 모르겠다면 여기에</p>
+        <router-link to="/CommunityCreate" style="text-decoration: none; color: black;"><p class="subtitle">어디에 어떻게 물어볼지 모르겠다면 여기에</p></router-link>
       </div>
       <!--가장많이 본 게시물 -->
       <div class="favorite-container">
@@ -12,12 +12,14 @@ c<template>
         </div>
         <div class="popularContainer">
         <div v-for="(community, index) in popluarVisbleBoards" :key="index" class="mostView-card">
+          <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
           <h2 class="mostViewNickName">{{ community.memberNickname }} </h2>
     <div class="info">
         <p class="date">등록일자:{{ formatDate(community.registerDate) }}</p>
         <p class="counts">조회수:{{ community.counts }}</p>
     </div>
     <p class="content">{{ community.content }}</p>
+  </router-link>
           </div>
         </div>
       </div>
@@ -30,15 +32,15 @@ c<template>
           <a @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
         </div>
       <div class="inquire-card">
-      <div v-for="(inquire, index) in insqireVisbleBoards" :key="index" class="inquireView-card">
-        <div class="info">
-        <p class="category">{{ inquire.category }}</p>
+        <router-link style="text-decoration: none; color: black;" v-for="(inquire, index) in insqireVisbleBoards" :key="index" :to="{ name: 'CommunityDetailView', params: { communityId: inquire.communityId }}" class="inquireView-card">
+        <div class="category-info">
+        <p class="category" style="border-radius: 30px;">{{ inquire.category }}</p>
       </div>
         <h2 class="inquire-title">{{ inquire.title }}</h2>
         <p class="content">{{ inquire.content }}</p>
+        </router-link>
         </div>
       </div>
-    </div>
     <!--답변을 기다리는 게시물-->
     <!--카테고리 및 검색창-->
     <div class="container1">
@@ -51,34 +53,39 @@ c<template>
     <button class="btn btn-outline-secondary" @click="selectCategory('장례')" style="border-radius: 17px;">장례</button>
   </div>
   <div class="search-container">
-  <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요" class="search-input">
+  <input type="text" v-model="searchQuery" placeholder="검색하실 제목을 입력해주세요." class="search-input">
   <i class="fa-solid fa-magnifying-glass search-icon" style="color: skyblue; cursor: pointer;" @click="searchCommunity"></i>
 </div>
 </div>
      <!-- 게시물 리스트 -->
   <div class="list-container" style="display: grid;">
     <div v-for="(community, index) in communityList" :key="index" class="List-card" style="place-items: center;">
+      <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
       <div class="listInfo">
         <p style="margin-right: 20px; margin-left: 10px;">닉네임:{{ community.memberNickname }}</p>
         <p style="margin-right: 20px;">등록일:{{ formatDate(community.registerDate) }}</p>
         <p >조회수:{{ community.counts }}</p>
       </div>
         <p class="list-title" style="margin-left: 10px;">
-          <router-link :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">{{ community.title }}</router-link>
+          {{ community.title }}
         </p>
+        </router-link>
         </div>
       </div>
     <!-- 페이지네이션 -->
     <div class="d-flex justify-content-center mt-3">
-        <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 1" style="margin-bottom: 50px;">‹</button>
+        <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
         <div v-for="pageNumber in totalPages" :key="pageNumber">
           <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
         </div>
         <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
       </div>
-  <button class="btn btn-primary" style="width: 400px;">문의하기</button>
+  <router-link to="/CommunityCreate"><button class="btn btn-primary" style="width: 100px;">문의하기</button></router-link>
 </div>
-
+<!-- 위로가기 버튼 -->
+<p class="fixed_top">
+        <a href="#">위로</a>
+    </p>
   </template>
 <script>
 import axios from 'axios'
@@ -92,6 +99,7 @@ export default {
       filterCommunityList: [],
       selectedCategory: '전체',
       searchQuery: '',
+      memberNicknameQuery:'',
       totalPages: 0,
       pageSize: 20,
       popluarCurrentPage: 0,
@@ -135,6 +143,7 @@ export default {
     this.axiosPopularboards()
     this.axiosiquires()
     this.axiosCommunityList()
+    window.scrollTo(0, 0)
   },
   methods: {
     async axiosPopularboards () {
@@ -182,15 +191,20 @@ async selectCategory(category) {
   this.selectedCategory = category;
   await this.axiosCommunityList(category);
 },
-    async searchCommunity () {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`)
-        this.communityList = response.data.content
-        this.totalPages = response.data.totalPages
-      } catch (err) {
-        console.log('검색 실패:', err)
-      }
-    },
+async searchCommunity() {
+  try {
+    let url = `http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`;
+    if (this.memberNicknameQuery) {
+      url += `&memberNickname=${this.memberNicknameQuery}`;
+    }
+    const response = await axios.get(url);
+    this.communityList = response.data.content;
+    this.totalPages = response.data.totalPages;
+  } catch (err) {
+    console.log('검색 실패:', err);
+  }
+},
+
     nextPopluarPage () {
       if (this.popluarCurrentPage < this.popluarTotalPages - 1 && this.hasNextData) {
         this.popluarCurrentPage++
@@ -228,7 +242,7 @@ async selectCategory(category) {
     width: 30px;
     height: 30px;
     cursor: pointer;
-    background: url('../assets/images/left_arrow.png');
+    background: url('../../assets/images/left_arrow.png');
     text-indent: -9999px;
     margin-right: 5px; /* 화살표 간 간격 조정 */
   }
@@ -236,7 +250,7 @@ async selectCategory(category) {
     width: 30px;
     height: 30px;
     cursor: pointer;
-    background: url('../assets/images/right_arrow.png');
+    background: url('../../assets/images/right_arrow.png');
     text-indent: -9999px;
   }
   /*=======================메인 타이틀 스타일============================================*/
@@ -297,6 +311,12 @@ async selectCategory(category) {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
+}
+.category-info {
+  display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    justify-content: flex-start;
 }
 .counts{
   margin-left: 20px;
@@ -411,7 +431,6 @@ async selectCategory(category) {
 }
 
 .List-card {
-  border: 1px solid #ccc;
   border-radius: 10px;
   margin-bottom: 20px;
   width: 1000px;
@@ -420,8 +439,9 @@ async selectCategory(category) {
   background-color: #f0f0f0;
 }
 .listInfo {
+  margin-top: 10px;
   display: flex;
-  justify-content: left;
+  justify-content: start;
 }
 
 .card-content {
@@ -471,4 +491,28 @@ async selectCategory(category) {
   width: 340px;
   font-size: 16px;
 }
+/* .fixed-button {
+  position: fixed;
+  bottom: 100px;
+  right: 100px;
+  z-index: 999;
+} */
+/*위로가기 스타일*/
+.fixed_top{
+        position: fixed;
+        top: 49%;
+        right: 5%;
+        width: 33px;
+        height: 33px;
+        margin: 0;
+        z-index: 1;
+    }
+    .fixed_top a{
+        display: block;
+        width: 33px;
+        height: 33px;
+        background: url("../../assets/images/img_arr_top.png") no-repeat;
+        text-indent: -99999999px;
+        overflow: hidden;
+    }
   </style>

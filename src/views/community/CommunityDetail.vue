@@ -35,14 +35,24 @@
       <input type="text" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;">
       <button class="btn btn-primary">등록</button>
       <hr>
-      <div class="reply-container" style="display: flex; justify-content: space-between;">
-        <div v-for="(reply, index) in replyList" :key="index" class="replyList">
-            <p>{{ reply.replyer }}</p>
-            <span>{{ formatDate(reply.replyRegisterDate) }}</span>
-        <p>{{ reply.replyText }}</p>
-        </div>
+      <div class="reply-container">
+  <div v-for="(reply, index) in replyList" :key="index" class="replyList">
+    <div class="reply-header">
+      <div class="reply-info">
+        <p class="replyer">{{ reply.replyer }}</p>
+        <span class="reply-date">{{ formatDate(reply.replyRegisterDate) }}</span>
+      </div>
+      <div class="reply-actions">
+        <button class="btn btn-sm" @click="editReply(index)"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button class="btn btn-sm" @click="deleteReply(index)"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
+    <div class="reply-content">
+      <p class="reply-text">{{ reply.replyText }}</p>
+    </div>
+  </div>
+</div>
+</div>
   </template>
   
   <script>
@@ -61,6 +71,7 @@
     mounted() {
       this.axiosCommunityData()
       this.axiosReplyData()
+      window.scrollTo(0, 0)
     },
     methods: {
       openModal(){
@@ -133,7 +144,7 @@
   text-decoration: none;
   cursor: pointer;
 }
-/* 전체 컨테이너 스타일 */
+/* =================전체 컨테이너 스타일============== */
   .detail-container {
     width: 1350px;
     height: 100vh;
@@ -154,9 +165,52 @@
   .register-date {
   margin-left: auto;
 }
-/*게시글 내용*/
+/*===================게시글 내용========================*/
 .content-container p{
   font-family: 'Noto Sans KR', sans-serif;
 }
+/*댓글 스타일*/
+.reply-container {
+  margin-top: 20px;
+}
+
+.replyList {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reply-info {
+  display: flex;
+}
+
+.reply-actions {
+  display: flex;
+  align-items: center;
+}
+
+.replyer {
+  font-weight: bold;
+}
+
+.reply-date {
+  margin-left: 10px;
+  color: #666;
+}
+
+.reply-actions button {
+  margin-left: 5px;
+}
+.reply-text{
+  display: flex;
+}
+
+
   </style>
   

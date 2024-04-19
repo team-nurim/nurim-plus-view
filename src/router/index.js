@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MemberJoin from '../views/MemberJoin.vue'
-import CommunityView from '../views/community.vue'
-import CommunityDetailView from '../views/communityDetail.vue'
+import CommunityView from '../views/community/Community.vue'
+import CommunityDetailView from '../views/community/CommunityDetail.vue'
+import CommunityCreateView from '../views/community/CommunityCreateView.vue'
+import CommunityUpdate from '../views/community/CommunityUpdate.vue'
 
 const routes = [
   {
@@ -25,7 +27,17 @@ const routes = [
     name: 'CommunityDetailView',
     component: CommunityDetailView,
     props: true
-  }
+  },
+  {
+    path: '/CommunityCreate',
+    name: 'CommunityCreate',
+    component: CommunityCreateView,
+  },
+  {
+    path: '/CommunityUpdate',
+    name: 'CommunityUpdate',
+    component: CommunityUpdate,
+  },
 ]
 
 const router = createRouter({
