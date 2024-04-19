@@ -13,6 +13,7 @@
         </div>
       </div>
 
+      <!-- 프로필 이미지 -->
       <div class="row mb-3 align-items-center">
         <div class="col mt-3 align-items-end">
           <input type="file" ref="fileInput" style="display: none" @change="uploadProfileImage">
@@ -21,6 +22,7 @@
         </div>
       </div>
 
+      <!-- 개인 정보 수정 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Email" class="form-label">이메일</label>
         <input class="form-control" type="text" id="Email" v-bind:value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
@@ -28,7 +30,7 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Password" class="form-label">비밀번호</label>
-        <input type="password" id="Password" class="form-control" aria-describedby="passwordHelpBlock">
+        <input type="password" id="Password" class="form-control" v-model="member.memberPw" aria-describedby="passwordHelpBlock">
         <div id="passwordHelpBlock" class="form-text">
           비밀번호 자리수, 문자 숫자 등 얼마나 포함하는지 빈칸,이모지 사용 안됨.
         </div>
@@ -36,11 +38,11 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Nickname" class="form-label">닉네임</label>
-        <input type="text" id="Nickname" class="form-control" v-bind:value="memberNickname">
+        <input type="text" id="Nickname" class="form-control" v-model="member.memberNickname">
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-update">수정하기</button>
+        <button type="button" class="btn btn-update" @click="updateMemberInfo">수정하기</button>
       </div>
 
     </div>
@@ -151,6 +153,27 @@ export default {
         console.error('프로필 이미지 삭제 실패: ', error)
       }
     },
+    async updateMemberInfo() {
+      try {
+        const memberId = this.member.memberId;
+        const accessToken = localStorage.getItem('accessToken');
+        const updateData = {
+          memberPw: this.member.memberPw,
+          memberNickname: this.member.memberNickname
+        }
+        const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': `application/json`
+          }
+        });
+        console.log('회원 정보 수정 성공: ', response.data);
+        alert('회원 정보가 성공적으로 수정되었습니다.');
+      } catch (error) {
+        console.log('회원 정보 수정 실패: ', error)
+        alert('회원 정보 수정에 실패했습니다.');
+      }
+    },
     logout () {
       // 로그아웃 시 로컬 스토리지 토큰 삭제
       localStorage.removeItem('accessToken');
@@ -159,9 +182,6 @@ export default {
       this.loggedIn = false;
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
-    },
-    goForward () {
-      this.$router.push('/updateMemberInfo')
     }
   }
 }
