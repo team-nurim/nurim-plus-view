@@ -32,8 +32,8 @@
         <p>{{community.content}}</p>
       </div>
       <hr>
-      <input type="text" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;">
-      <button class="btn btn-primary">등록</button>
+      <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;">
+      <button class="btn btn-primary" @click="submitReply">등록</button>
       <hr>
       <div class="reply-container">
   <div v-for="(reply, index) in replyList" :key="index" class="replyList">
@@ -65,7 +65,8 @@
         community: [],
         replyList: [],
         showModal: false,
-        errorMessage:''
+        errorMessage:'',
+        newReply:''
       };
     },
     mounted() {
@@ -119,7 +120,29 @@
           console.error('게시물을 지울 수 없습니다:',error)
           this.openModal()
         }
-      }
+      },
+      async submitReply() {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/community/${this.communityId}/replyCreate`,
+        { replyText: this.newReply },
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log('댓글 등록 성공:', response.data);
+      // 등록된 댓글을 화면에 표시하기 위해 댓글 목록을 다시 불러옵니다.
+      this.axiosReplyData();
+      // 입력 폼 초기화
+      this.newReply = '';
+    } catch (error) {
+      console.error('댓글 등록 실패:', error);
+    }
+  }
     }
   };
   </script>
