@@ -12,8 +12,9 @@
 </template>
 
 <script>
-import Header from './components/common/Header.vue'
-import Footer from './components/common/Footer.vue'
+import Header from './components/common/NurimHeader.vue'
+import Footer from './components/common/NurimFooter.vue'
+// import HomeView from './views/HomeView.vue'
 
 export default {
   name: 'App',
@@ -26,11 +27,13 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 98vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #333;
 }
 
 nav {
@@ -42,7 +45,8 @@ nav a {
   color: #2c3e50;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+Footer {
+  margin-top: auto;;
 }
+
 </style>

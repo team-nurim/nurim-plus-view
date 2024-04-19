@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import MemberJoin from '../views/MemberJoin.vue'
+import JoinStep01 from '../views/join/JoinStep01.vue'
+import LoginView from '../views/LoginView.vue'
+import Mypage from '../views/Mypage.vue'
+import UpdateMemberInfo from '../views/UpdateMemberInfo.vue'
 import CommunityView from '../views/community/Community.vue'
 import CommunityDetailView from '../views/community/CommunityDetail.vue'
 import CommunityCreateView from '../views/community/CommunityCreateView.vue'
@@ -15,7 +18,22 @@ const routes = [
   {
     path: '/join',
     name: 'join',
-    component: MemberJoin
+    component: JoinStep01
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: Mypage
+  },
+  {
+    path: '/updateMemberInfo',
+    name: 'updateMemberInfo',
+    component: UpdateMemberInfo
   },
   {
     path: '/community',
