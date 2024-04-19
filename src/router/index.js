@@ -5,6 +5,10 @@ import AdminPostRegister from '../views/AdminPostRegister.vue'
 import AdminPostRead from '../views/AdminPostRead.vue'
 import AdminPostModify from '../views/AdminPostModify.vue'
 import AdminLogin from '../views/AdminLogin.vue'
+import JoinStep01 from '../views/join/JoinStep01.vue'
+import LoginView from '../views/LoginView.vue'
+import Mypage from '../views/Mypage.vue'
+import UpdateMemberInfo from '../views/UpdateMemberInfo.vue'
 
 const routes = [
   {
@@ -39,6 +43,26 @@ const routes = [
     path: '/home',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/join',
+    name: 'join',
+    component: JoinStep01
+},
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: Mypage
+  },
+  {
+    path: '/updateMemberInfo',
+    name: 'updateMemberInfo',
+    component: UpdateMemberInfo
   }
 ]
 
