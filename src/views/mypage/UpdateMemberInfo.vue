@@ -80,7 +80,18 @@ export default {
     return {
       loggedIn: false,
       member: {
-        memberNickname: ''
+        memberId: 0,
+        memberEmail: '',
+        memberPw: '',
+        memberNickname: '',
+        memberAge: '',
+        gender: false,
+        memberResidence: '',
+        memberMarriage: false,
+        memberIncome: '',
+        type: false,
+        memberProfileImage: '',
+        expertFile: ''
       }
     }
   },
@@ -100,6 +111,9 @@ export default {
       await this.fetchMemberInfo();
     }
   },
+  mounted() {
+    this.fetchMemberInfo();
+  },
   methods: {
     async fetchMemberInfo () {
       try {
@@ -109,8 +123,8 @@ export default {
             'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
           }
         })
+        // API 응답에 필요한 데이터 member에 할당
         this.member = response.data;
-        this.member.memberProfileImage = response.data.memberProfileImage;
       } catch (error) {
         console.error('회원정보를 불러오지 못했습니다.', error);
       }
@@ -156,11 +170,11 @@ export default {
     async updateMemberInfo() {
       try {
         const memberId = this.member.memberId;
-        const accessToken = localStorage.getItem('accessToken');
         const updateData = {
           memberPw: this.member.memberPw,
           memberNickname: this.member.memberNickname
-        }
+        };
+        const accessToken = localStorage.getItem('accessToken');
         const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
