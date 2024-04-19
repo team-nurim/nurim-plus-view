@@ -9,19 +9,21 @@
 
       <div class="row align-items-center">
         <div class="col mt-3 align-items-end">
-          <img src="https://github.com/mdo.png" alt="mdo" width="100" height="100" class="rounded-circle">
+          <img v-bind:src="member.memberProfileImage" alt="mdo" width="100" height="100" class="rounded-circle">
         </div>
       </div>
 
       <div class="row mb-3 align-items-center">
         <div class="col mt-3 align-items-end">
-          <button type="button" class="btn btn-profile">프로필 사진 수정</button>
+          <input type="file" ref="fileInput" style="display: none" @change="uploadProfileImage">
+          <button type="button" class="btn btn-profile" @click="$refs.fileInput.click()">프로필 사진 수정</button>
+          <button type="button" class="btn btn-profile" @change="setDefaultImage">기본 이미지로 설정</button>
         </div>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Email" class="form-label">이메일</label>
-        <input class="form-control" type="text" id="Email" value="ssongjiaran@gmail.com" aria-label="Disabled input example" disabled readonly>
+        <input class="form-control" type="text" id="Email" v-bind:value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
@@ -34,7 +36,7 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Nickname" class="form-label">닉네임</label>
-        <input type="text" id="Nickname" class="form-control">
+        <input type="text" id="Nickname" class="form-control" v-bind:value="memberNickname">
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
@@ -45,6 +47,121 @@
   </main>
 
 </template>
+
+<script>
+// eslint-disable-next-line
+/* eslint-disable */
+import axios from 'axios'
+import { mapGetters } from 'vuex'
+
+export default {
+  name: 'UpdateMemberInfo',
+  computed: {
+    ...mapGetters(['getLoggedIn']),
+    memberNickname() {
+      return this.member.memberNickname;
+    },
+    memberEmail() {
+      return this.member.memberEmail;
+    },
+    memberPw() {
+      return this.member.memberPw;
+    },
+    memberProfileImage () {
+      return this.member.memberProfileImage;
+    }
+  },
+  data () {
+    return {
+      loggedIn: false,
+      member: {
+        memberNickname: ''
+      }
+    }
+  },
+  async created () {
+    const accessToken = localStorage.getItem('accessToken')
+
+    // 페이지 생성 시 로그인 상태 확인
+    if(accessToken != null) {
+      this.loggedIn = true;
+    } else {
+      this.loggedIn = false;
+    }
+    console.log('저장된 토큰: ' + accessToken)
+    console.log('로그인 여부: ' + this.loggedIn)
+    // 로그인 된 경우 회원 정보 불러오기
+    if (this.loggedIn) {
+      await this.fetchMemberInfo();
+    }
+  },
+  methods: {
+    async fetchMemberInfo () {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+        const response = await axios.get('/api/v1/members/mypage', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
+          }
+        })
+        this.member = response.data;
+        this.member.memberProfileImage = response.data.memberProfileImage;
+      } catch (error) {
+        console.error('회원정보를 불러오지 못했습니다.', error);
+      }
+    },
+    async uploadProfileImage(event) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('files', file);
+      formData.append('memberId', this.member.memberId);
+
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.post('/api/v1/images/upload', formData, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        this.member.memberProfileImage = response.data.uuid;
+      } catch (error) {
+        console.error('프로필 이미지 업로드 실패:', error);
+      }
+    },
+    async setDefaultImage(memberId) {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.put('api/v1/images/remove/${memberId}', {}, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
+        if(response.data.success) {
+          console.log('프로필 이미지 삭제 성공')
+        } else {
+          console.log('프로필 이미지 삭제 실패')
+        }
+      } catch (error) {
+        console.error('프로필 이미지 삭제 실패: ', error)
+      }
+    },
+    logout () {
+      // 로그아웃 시 로컬 스토리지 토큰 삭제
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('rememberMe')
+      // 로그아웃 시 헤더 상태 변경;
+      this.loggedIn = false;
+      // 로그아웃 후 리다이렉트
+      this.$router.push('/')
+    },
+    goForward () {
+      this.$router.push('/updateMemberInfo')
+    }
+  }
+}
+</script>
+
 <style scoped>
 .custom-divider {
   border: none; /* 테두리 없음 */
@@ -125,24 +242,3 @@
 }
 
 </style>
-<script>
-export default {
-  name: '',
-  components: {},
-  data () {
-    return {
-      sampleData: ''
-    }
-  },
-  props: {},
-  beforeCreate () {},
-  created () {},
-  beforeMount () {},
-  mounted () {},
-  beforeUpdate () {},
-  updated () {},
-  beforeUnmount () {},
-  unmounted () {},
-  methods: {}
-}
-</script>

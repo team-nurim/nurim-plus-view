@@ -9,11 +9,11 @@
 
       <div class="row align-items-center">
         <div class="col-3 mt-3 align-items-end">
-          <img src="https://github.com/mdo.png" alt="mdo" width="70" height="70" class="rounded-circle">
+          <img v-bind:src="member.memberProfileImage" alt="mdo" width="70" height="70" class="rounded-circle">
         </div>
         <div class="col-3 align-items-start">
-          <div class="">ddddd</div><br>
-          <div>ddddd</div>
+          <div>{{ member.memberNickname }}</div><br>
+          <div>{{ member.memberEmail }}</div>
         </div>
         <div class="col-6 align-items-center">
           <button type="button" class="btn btn-outline-primary" @click="goForward()">회원 정보 수정</button>
@@ -87,6 +87,81 @@
   </main>
 
 </template>
+
+<script>
+// eslint-disable-next-line
+/* eslint-disable */
+import axios from 'axios'
+import { mapGetters } from 'vuex'
+
+export default {
+  name: 'NurimHeader',
+  computed: {
+    ...mapGetters(['getLoggedIn']),
+    memberNickname() {
+      return this.member.memberNickname;
+    },
+    memberEmail() {
+      return this.member.memberEmail;
+    },
+    memberProfile () {
+      return this.member.memberProfileImage;
+    }
+  },
+  data () {
+    return {
+      loggedIn: false,
+      member: {
+        memberNickname: ''
+      }
+    }
+  },
+  async created () {
+    const accessToken = localStorage.getItem('accessToken')
+
+    // 페이지 생성 시 로그인 상태 확인
+    if(accessToken != null) {
+      this.loggedIn = true;
+    } else {
+      this.loggedIn = false;
+    }
+    console.log('저장된 토큰: ' + accessToken)
+    console.log('로그인 여부: ' + this.loggedIn)
+    // 로그인 된 경우 회원 정보 불러오기
+    if (this.loggedIn) {
+      await this.fetchMemberInfo();
+    }
+  },
+  methods: {
+    async fetchMemberInfo () {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+        const response = await axios.get('/api/v1/members/mypage', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
+          }
+        })
+        this.member = response.data;
+      } catch (error) {
+        console.error('회원정보를 불러오지 못했습니다.', error);
+      }
+    },
+    logout () {
+      // 로그아웃 시 로컬 스토리지 토큰 삭제
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('rememberMe')
+      // 로그아웃 시 헤더 상태 변경;
+      this.loggedIn = false;
+      // 로그아웃 후 리다이렉트
+      this.$router.push('/')
+    },
+    goForward () {
+      this.$router.push('/updateMemberInfo')
+    }
+  }
+}
+</script>
+
 <style scoped>
 .custom-divider {
   border: none; /* 테두리 없음 */
@@ -123,29 +198,3 @@
 /*} */
 
 </style>
-
-<script>
-export default {
-  name: '',
-  components: {},
-  data () {
-    return {
-      sampleData: ''
-    }
-  },
-  props: {},
-  beforeCreate () {},
-  created () {},
-  beforeMount () {},
-  mounted () {},
-  beforeUpdate () {},
-  updated () {},
-  beforeUnmount () {},
-  unmounted () {},
-  methods: {
-    goForward () {
-      this.$router.push('/updateMemberInfo')
-    }
-  }
-}
-</script>
