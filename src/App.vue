@@ -26,6 +26,8 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
 #app {
   display: flex;
   flex-direction: column;
@@ -34,6 +36,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #333;
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
 }
 
 nav {
@@ -47,6 +51,14 @@ nav a {
 
 Footer {
   margin-top: auto;;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+.btn-primary {
+  font-weight: 500;
 }
 
 </style>
