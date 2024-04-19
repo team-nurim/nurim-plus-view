@@ -43,13 +43,6 @@
                 <textarea v-model="postData.postContent" class="form-control" id="postContent" rows="5"></textarea>
               </div>
             </div>
-             <!-- 이미지 업로드를 위한 input 요소 추가 -->
-            <div class="mb-3 row">
-              <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
-              <div class="col-md-9">
-                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
-              </div>
-            </div>
           </form>
         </div>
       </div>
@@ -98,7 +91,6 @@ export default {
         postWriter: '', // 내용 입력 필드의 데이터
         postContent: '', // 내용 입력 필드의 데이터
       },
-      imageFile: null, // 이미지 파일을 저장할 변수
       modalVisible: false, // 모달의 표시 여부
     }
   },
@@ -115,12 +107,7 @@ export default {
         formData.append('postWriter', this.postData.postWriter);
         formData.append('postContent', this.postData.postContent);
 
-        // 이미지 파일 추가
-        if (this.imageFile) {
-          formData.append('image', this.imageFile);
-        }
-
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+        const accessToken = localStorage.getItem('accessToken')
 
         // API 호출
          const url = `http://localhost:8080/api/v1/posts/post/register/${this.postData.memberId}`;
@@ -128,7 +115,7 @@ export default {
          const response = await axios.post(url, formData, {
           headers: {
             'Content-Type': 'application/json' ,
-            'Authorization': `Bearer ${tokenValue}`
+            'Authorization': `Bearer ${accessToken}`
           }
         });
         
@@ -152,25 +139,11 @@ export default {
       this.savePost(); // 게시물 저장
       this.hideModal(); // 모달 숨김
     },
-    handleImageUpload(event) {
-      this.imageFile = event.target.files[0];
-      console.log('Uploaded image:', this.imageFile);
-    }
   }
 }
 </script>
 
 <style>
-  /* 파일 업로드 요소와 추가 정보 스타일링 */
-  /* 썸네일 이미지와 파일 업로드 요소들의 스타일링 */
-  input[type="file"] {
-    width: 85%; /* 전체 폭을 차지하도록 설정 */
-    padding: 8px;
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    box-sizing: border-box; /* 패딩과 테두리를 포함하여 요소의 전체 크기를 계산합니다 */
-  }
 
   /* textarea 요소를 더 크게 만듭니다 */
   textarea {

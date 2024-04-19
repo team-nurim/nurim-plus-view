@@ -131,16 +131,15 @@ export default {
   methods: {
     async axiosAdminPostList(category = '전체') {
       try {
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+        const accessToken = localStorage.getItem('accessToken')
 
-        
         let url = `http://localhost:8080/api/v1/posts/post/list?page=${this.currentPage}&size=${this.itemsPerPage}`;
         if(category !== '전체') {
           url = `http://localhost:8080/api/v1/posts/post/${category}?page=${this.currentPage}&size=${this.itemsPerPage}`;
         }
         const response = await axios.get(url, {
           headers: {
-            'Authorization': `Bearer ${tokenValue}`
+            'Authorization': `Bearer ${accessToken}`
           }});
         this.postList = response.data.content;
         this.totalPages = response.data.totalPages;
@@ -182,12 +181,12 @@ export default {
     },
     async deletePost(postId) {
       try {
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+        const accessToken = localStorage.getItem('accessToken')
 
         const url = `http://localhost:8080/api/v1/posts/post/${postId}`;
         const response = await axios.delete(url, {
           headers: {
-            'Authorization': `Bearer ${tokenValue}`
+            'Authorization': `Bearer ${accessToken}`
           }
         });
         // 삭제 후 성공 메시지 출력

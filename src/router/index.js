@@ -48,7 +48,7 @@ const routes = [
     path: '/join',
     name: 'join',
     component: JoinStep01
-},
+  },
   {
     path: '/login',
     name: 'login',

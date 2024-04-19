@@ -37,14 +37,22 @@
                 <p class="form-control-plaintext">{{ postRead.postContent }}</p>
               </div>
             </div>
-            <!-- 이미지 업로드를 위한 input 요소 추가 -->
-            <!-- <div class="mb-3 row border">
-              <label for="image" class="col-md-3 col-form-label border">이미지</label>
-              <div class="col-md-9 border">
-              </div>
-            </div> -->
           </form>
         </div>
+        <!-- 이미지 목록 표시 -->
+     <div class="row">
+  <div class="col-md-8 offset-md-2">
+    <div v-if="postRead.postImages && postRead.postImages.length > 0" class="mb-3">
+      <h3 class="text-center mb-3">이미지</h3>
+      <div class="image-list">
+       <div v-for="(image, index) in postRead.postImages" :key="index" class="image-item">
+                  <!-- 이미지가 유효한 URL인 경우에만 출력 -->
+                  <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                </div>
+      </div>
+    </div>
+  </div>
+</div>
       </div>
     </div>
     <div class="row mt-4">
@@ -72,22 +80,28 @@
     mounted() {
       // props로 전달받은 postId를 사용하여 API 요청을 보냅니다.
       this.axiosAdminPostRead(this.postId);
+      // this.axiosAdminPostImage();
     },
     methods: {
       async axiosAdminPostRead(postId) {
         try {
-          const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+          const accessToken = localStorage.getItem('accessToken')
 
           const response = await axios.get(`http://localhost:8080/api/v1/posts/post/read/${postId}`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${tokenValue}`
+            'Authorization': `Bearer ${accessToken}`
           }});
           this.postRead = response.data;
+          console.log('이미지 불로오기 성공:', this.postRead.postImages);
         } catch (error) {
           console.error('Failed to fetch post details:', error);
         }
       },
+  isImageUrl(url) {
+    if (typeof url !== 'string') return false; // URL이 문자열이 아닌 경우 false 반환
+    return url.startsWith("http") && (url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".gif"));
+  }
     },
   };
 </script>
@@ -132,5 +146,20 @@
     background-color: #003f7f; /* 호버 시 배경색 변경 */
     transform: scale(1.05); /* 조금 확대되는 효과 추가 */
   }
+
+  .image-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.image-item {
+  margin: 10px;
+}
+
+.image-item img {
+  max-width: 200px;
+  max-height: 200px;
+}
 </style>
 

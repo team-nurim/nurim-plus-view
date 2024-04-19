@@ -37,12 +37,28 @@
               </div>
             </div>
             <!-- 이미지 업로드를 위한 input 요소 추가 -->
-            <!-- <div class="mb-3 row">
+            <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
                 <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
               </div>
-            </div> -->
+            </div>
+            <!-- 이미지 목록 표시 -->
+            <div class="row">
+              <div class="col-md-8 offset-md-2">
+                <div v-if="postData.postImages && postData.postImages.length > 0" class="mb-3">
+                  <h3 class="text-center mb-3">이미지</h3>
+                    <div class="image-list">
+                      <div v-for="(image, index) in postData.postImages" :key="index" class="image-item">
+                      <!-- 이미지가 유효한 URL인 경우에만 출력 -->
+                      <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                      <!-- 이미지 삭제 버튼 -->
+                      <button class="btn btn-danger btn-sm delete-image-btn" @click="deleteImage(index)">X</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -110,6 +126,7 @@ export default {
         postRegisterDate: '',
         postWriter: '',
         postContent: '',
+        postImages: [] // postImages 속성 추가
       },
       imageFile: null,
       modifyModalVisible: false, // 모달의 표시 여부
@@ -124,12 +141,13 @@ export default {
   methods: {
     async fetchData(postId) {
       try {
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+        const accessToken = localStorage.getItem('accessToken')
 
-        let url = `http://localhost:8080/api/v1/posts/post/read/${postId}`;
+        const url = `http://localhost:8080/api/v1/posts/post/read/${postId}`;
+
         const response = await axios.get(url, {
           headers: {
-            'Authorization': `Bearer ${tokenValue}`
+            'Authorization': `Bearer ${accessToken}`
           }});
 
         const responseData = response.data;
@@ -140,6 +158,7 @@ export default {
         this.postData.postRegisterDate = responseData.postRegisterDate;
         this.postData.postWriter = responseData.postWriter;
         this.postData.postContent = responseData.postContent;
+        this.postData.postImages = responseData.postImages;
       } catch (err) {
         console.error('데이터를 불러올 수 없습니다.', err);
       }
@@ -148,6 +167,8 @@ export default {
     async modifyPost() {
       try {
         const formData = new FormData();
+        // 이미지가 삭제된 후의 postImages를 formData에 추가
+        formData.append('postImages', JSON.stringify(this.postData.postImages));
         formData.append('postTitle', this.postData.postTitle);
         formData.append('postCategory', this.postData.postCategory);
         formData.append('postRegisterDate', this.postData.postRegisterDate);
@@ -158,13 +179,13 @@ export default {
           formData.append('image', this.imageFile);
         }
 
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+        const accessToken = localStorage.getItem('accessToken')
         const url = `http://localhost:8080/api/v1/posts/post/update/${this.postId}`;
 
         const response = await axios.put(url, formData, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${tokenValue}`
+            'Authorization': `Bearer ${accessToken}`
           }
         });
          // 성공 시 alert 메시지 표시
@@ -178,12 +199,12 @@ export default {
     },
     async deletePost() {
       try {
-        const tokenValue = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhYWFhQGdtYWlsLmNvbSI6IjExMTExMSIsImlhdCI6MTcxMzQyNzg0MiwiZXhwIjoxNzEzNTE0MjQyfQ.IaWEtqm1S2OFi7_JmQXJqICEuI84emCTuOMXRFVKfyM';
+        const accessToken = localStorage.getItem('accessToken')
 
         const url = `http://localhost:8080/api/v1/posts/post/${this.postId}`;
         const response = await axios.delete(url, {
           headers: {
-            'Authorization': `Bearer ${tokenValue}`
+            'Authorization': `Bearer ${accessToken}`
           }
         });
         // 삭제 후 성공 메시지 출력
@@ -203,7 +224,9 @@ export default {
       this.modifyModalVisible  = false; // 모달 숨김
     },
     modifyPostAndHideModal() {
+      this.uploadImage(); // 이미지 저장
       this.modifyPost(); // 게시물 저장
+      this.deleteTempImages();
       this.hideModal(); // 모달 숨김
     },
     //  삭제모달
@@ -217,12 +240,88 @@ export default {
       this.deletePost(); // 게시물 삭제
       this.hideModal(); // 모달 숨김
     },
-    handleImageUpload(event) {
+
+    async handleImageUpload(event) {
       this.imageFile = event.target.files[0];
       console.log('Uploaded image:', this.imageFile);
+    },
+    async uploadImage() {
+      const formData = new FormData();
+      formData.append('files', this.imageFile);
+      formData.append('postId', this.postId); // 수정된 부분
+
+      try {
+        console.log('Uploaded image:', this.imageFile);
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.post(`http://localhost:8080/api/v1/posts/post/upload`, formData, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        this.imageFile = response.data.uuid;
+      } catch (error) {
+        console.log('업로드 실패 이유:', this.imageFile)
+        console.error('이미지 업로드 실패:', error);
+      }
+    },
+    isImageUrl(url) {
+    if (typeof url !== 'string') return false; // URL이 문자열이 아닌 경우 false 반환
+    return url.startsWith("http") && (url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".gif"));
+  },
+
+  // 이미지 삭제 메소드
+ async deleteImage(index) {
+  try {
+    const deletedImage = this.postData.postImages[index];
+    if (deletedImage) {
+      // 이미지 목록에서 해당 인덱스의 이미지를 삭제
+      this.postData.postImages.splice(index, 1);
+      alert('이미지가 임시삭제되었습니다.');
     }
+  } catch (error) {
+    console.error('이미지 삭제 실패:', error);
+  }
+},
+
+async deleteTempImages() {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    const deleteRequests = this.postData.postImages
+      .filter(image => !this.isImageUrl(image)) // Filter out non-URL images
+      .map(image => axios.delete(`http://localhost:8080/api/v1/posts/post/delete/image/${this.postId}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        data: {
+          imageUrl: image,
+        }
+      }));
+
+    // Send requests to delete temporarily removed images
+    await axios.all(deleteRequests);
+    
+    // Remove temporarily deleted images from the local data
+    this.postData.postImages = this.postData.postImages.filter(image => this.isImageUrl(image));
+
+    // Additional step to remove deleted images from the database
+    await axios.delete(`http://localhost:8080/api/v1/posts/post/delete/temporary/images/${this.postId}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      data: {
+        images: this.postData.postImages.filter(image => !this.isImageUrl(image)),
+      }
+    });
+
+  } catch (error) {
+    console.error('Failed to delete images:', error);
+  }
+},
+
   }
 }
+
 </script>
 
 <style>
@@ -253,4 +352,6 @@ textarea {
 input[type="text1"] {
   width: 80%;
 }
+
+
 </style>
