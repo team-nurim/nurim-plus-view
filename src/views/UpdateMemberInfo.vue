@@ -17,7 +17,7 @@
         <div class="col mt-3 align-items-end">
           <input type="file" ref="fileInput" style="display: none" @change="uploadProfileImage">
           <button type="button" class="btn btn-profile" @click="$refs.fileInput.click()">프로필 사진 수정</button>
-          <button type="button" class="btn btn-profile" @change="setDefaultImage">기본 이미지로 설정</button>
+          <button type="button" class="btn btn-profile" @click="setDefaultImage">기본 이미지로 설정</button>
         </div>
       </div>
 
@@ -69,6 +69,9 @@ export default {
     },
     memberProfileImage () {
       return this.member.memberProfileImage;
+    },
+    memberId () {
+      return this.member.memberId;
     }
   },
   data () {
@@ -99,7 +102,7 @@ export default {
     async fetchMemberInfo () {
       try {
         const accessToken = localStorage.getItem('accessToken')
-        const response = await axios.get('/api/v1/members/mypage', {
+        const response = await axios.get(`/api/v1/members/mypage`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
           }
@@ -118,7 +121,7 @@ export default {
 
       try {
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.post('/api/v1/images/upload', formData, {
+        const response = await axios.post(`/api/v1/images/upload`, formData, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
             'Content-Type': 'multipart/form-data'
@@ -129,15 +132,17 @@ export default {
         console.error('프로필 이미지 업로드 실패:', error);
       }
     },
-    async setDefaultImage(memberId) {
+    async setDefaultImage() {
       try {
+        const memberId = this.member.memberId;
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.put('api/v1/images/remove/${memberId}', {}, {
+        const response = await axios.put(`api/v1/images/remove/${memberId}`, {}, {
           headers: {
             'Authorization': `Bearer ${accessToken}`
           }
         })
         if(response.data.success) {
+          this.member.memberProfileImage = response.data.memberProfileImage;
           console.log('프로필 이미지 삭제 성공')
         } else {
           console.log('프로필 이미지 삭제 실패')
