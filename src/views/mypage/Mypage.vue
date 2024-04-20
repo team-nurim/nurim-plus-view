@@ -16,47 +16,47 @@
           <div>{{ member.memberEmail }}</div>
         </div>
         <div class="col-6 align-items-center">
-          <button type="button" class="btn btn-outline-primary" @click="goForward()">회원 정보 수정</button>
+          <button type="button" @click="goForward" class="btn btn-outline-primary">회원 정보 수정</button>
         </div>
       </div>
 
       <hr class="custom-divider hr-sm">
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-          <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-            <span class="mx-2">내 맞춤 정보 수정</span>
-            <span class="mx-2">></span>
-          </button>
+        <button type="button" @click="goForward2" class="btn btn-menu d-flex justify-content-between align-items-center">
+          <span class="mx-2">내 맞춤 정보 수정</span>
+          <span class="mx-2">></span>
+        </button>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-          <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-            <span class="mx-2">계정 전환</span>
-            <span class="mx-2">></span>
-          </button>
+        <button type="button" @click="goForward3" class="btn btn-menu d-flex justify-content-between align-items-center">
+          <span class="mx-2">계정 전환</span>
+          <span class="mx-2">></span>
+        </button>
       </div>
 
       <hr class="custom-divider hr-sm">
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-          <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-            <span class="mx-2">내가 받을 수 있는 지원금</span>
-            <span class="mx-2">></span>
-          </button>
+        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
+          <span class="mx-2">내가 받을 수 있는 지원금</span>
+          <span class="mx-2">></span>
+        </button>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-          <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-            <span class="mx-2">정책 정보</span>
-            <span class="mx-2">></span>
-          </button>
+        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
+          <span class="mx-2">정책 정보</span>
+          <span class="mx-2">></span>
+        </button>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-          <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-            <span class="mx-2">지식 커뮤니티</span>
-            <span class="mx-2">></span>
-          </button>
+        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
+          <span class="mx-2">지식 커뮤니티</span>
+          <span class="mx-2">></span>
+        </button>
       </div>
 
       <div class="accordion" id="accordionExample">
@@ -77,10 +77,10 @@
       <hr class="custom-divider hr-sm">
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-          <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-            <span class="mx-2">계정 탈퇴</span>
-            <span class="mx-2">></span>
-          </button>
+        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
+          <span class="mx-2">계정 탈퇴</span>
+          <span class="mx-2">></span>
+        </button>
       </div>
 
     </div>
@@ -157,6 +157,12 @@ export default {
     },
     goForward () {
       this.$router.push('/updateMemberInfo')
+    },
+    goForward2 () {
+      this.$router.push('/updateMemberInfo2')
+    },
+    goForward3 () {
+      this.$router.push('/switchAccount')
     }
   }
 }

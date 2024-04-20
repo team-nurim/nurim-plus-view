@@ -4,6 +4,8 @@ import JoinStep01 from '../views/join/JoinStep01.vue'
 import LoginView from '../views/LoginView.vue'
 import Mypage from '../views/mypage/Mypage.vue'
 import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
+import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
+import SwitchAccount from '../views/mypage/SwitchAccount.vue'
 
 const routes = [
   {
@@ -30,6 +32,16 @@ const routes = [
     path: '/updateMemberInfo',
     name: 'updateMemberInfo',
     component: UpdateMemberInfo
+  },
+  {
+    path: '/updateMemberInfo2',
+    name: 'updateMemberInfo2',
+    component: UpdateMemberInfo2
+  },
+  {
+    path: '/switchAccount',
+    name: 'switchAccount',
+    component: switchAccount
   }
 ]
 
