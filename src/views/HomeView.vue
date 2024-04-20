@@ -53,12 +53,12 @@
       </div><!-- review section end -->
 
       <!-- 최신 정책 콘텐츠 -->
-      <div class="post-contents">
+      <div class="post-contents mt-5 mb-5">
         <h4 class="mb-1">최신 정책 정보</h4>
 
         <div class="row">
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width:18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -69,7 +69,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width:18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -80,7 +80,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width: 18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -91,7 +91,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width: 18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
