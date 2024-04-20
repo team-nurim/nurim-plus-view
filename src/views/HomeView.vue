@@ -20,7 +20,7 @@
         <div class="row">
           <!-- card -->
           <div class="col-md-4">
-            <div class="card-review justify-content-center" style="text-align: left; padding: 1.2rem;">
+            <div class="card-review justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <h6 class="card-title mb-2">Card title</h6>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -30,7 +30,7 @@
           </div>
 
           <div class="col-md-4">
-            <div class="card-review justify-content-center" style="text-align: left; padding: 1.2rem;">
+            <div class="card-review justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <h6 class="card-title mb-2">Card title</h6>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -40,7 +40,7 @@
           </div>
 
           <div class="col-md-4">
-            <div class="card-review justify-content-center" style="text-align: left; padding: 1.2rem;">
+            <div class="card-review justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <h6 class="card-title mb-2">Card title</h6>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -58,7 +58,7 @@
 
         <div class="row">
           <div class="col-md-3">
-            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -69,7 +69,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -80,7 +80,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -91,7 +91,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin-right:1rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -110,7 +110,7 @@
         <div class="row">
           <!-- card -->
           <div class="col-md-4">
-            <div class="card-inquiry justify-content-center" style="margin:0; text-align: left; padding: 1.2rem;">
+            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <div class="row">
                   <div class="col-auto">
@@ -128,7 +128,7 @@
 
           <!-- card -->
           <div class="col-md-4">
-            <div class="card-inquiry justify-content-center" style="margin:0; text-align: left; padding: 1.2rem;">
+            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <div class="row">
                   <div class="col-auto">
@@ -146,7 +146,7 @@
 
           <!-- card -->
           <div class="col-md-4">
-            <div class="card-inquiry justify-content-center" style="margin:0; text-align: left; padding: 1.2rem;">
+            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <div class="row">
                   <div class="col-auto">
@@ -173,10 +173,18 @@
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'HomeView',
-  components: {}
+  components: {},
+  created() {
+    // 홈 화면으로 이동할 때 Vuex 스토어의 loggedIn 상태를 업데이트
+    this.setLoggedIn(true)
+  },
+  methods: {
+    ...mapMutations(['setLoggedIn'])
+  }
 }
 </script>
 
