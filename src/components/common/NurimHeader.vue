@@ -15,17 +15,17 @@
 
         <!-- menu link -->
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><router-link to="/policy" class="nav-link px-2">정책정보</router-link></li>
-          <li><router-link to="/recommend" class="nav-link px-2">나를 위한 정책지원</router-link></li>
-          <li><router-link to="/community" class="nav-link px-2">커뮤니티</router-link></li>
+          <li><router-link to="/policy" class="nav-link px-3">정책정보</router-link></li>
+          <li><router-link to="/recommend" class="nav-link px-3">나를 위한 정책지원</router-link></li>
+          <li><router-link to="/community" class="nav-link px-3">커뮤니티</router-link></li>
           <!-- <li><a href="#" class="nav-link px-2">About</a></li> -->
         </ul>
 
         <div class="col-md-3 text-end">
           <!-- 로그인 안했을 때 -->
           <template v-if="!loggedIn">
-            <router-link to="/login" class="btn btn-outline-primary me-2">로그인</router-link>
-            <router-link to="/join" class="btn btn-primary">회원가입</router-link>
+            <router-link to="/login" class="btn btn-outline-primary btn-sm me-2">로그인</router-link>
+            <router-link to="/join" class="btn btn-primary btn-sm">회원가입</router-link>
           </template>
           <!-- 로그인했을 때 -->
           <template v-else>
@@ -132,5 +132,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.nav-link {
+  color: #333 !important;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  font-weight: 700 !important;
+}
 </style>
