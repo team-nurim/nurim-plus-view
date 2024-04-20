@@ -50,15 +50,15 @@ export default {
     window.scrollTo(0, 0)
   },
   methods: {
-    async register() {
+    async register(communityId) {
   if (this.category === '' || !this.title || !this.content) {
     alert('카테고리, 제목, 내용을 모두 입력해주세요.');
     return;
   }
 
   try {
-    const accessToken = localStorage.getItem('accessToken')
-    const url = `http://localhost:8080/api/v1/communityCreate`;
+    const accessToken = localStorage.getItem('accessToken');
+    const url = `http://localhost:8080/api/v1/communityCreate/${accessToken}`;
     const requestData = {
       category: this.category,
       title: this.title,
@@ -70,10 +70,15 @@ export default {
         'Content-Type': 'application/json' // JSON 형식임을 명시
       }
     });
+    const createdCommunityId = response.data;
+
     console.log('게시물 등록 성공:', response.data);
-  } catch (error) {
+
+    this.$router.push({ name: 'CommunityDetailView', params: { communityId: createdCommunityId.communityId } });
+} catch (error) {
     console.error('게시물 등록 실패:', error);
-  }
+}
+
 },
 cancel() {
   window.history.back();

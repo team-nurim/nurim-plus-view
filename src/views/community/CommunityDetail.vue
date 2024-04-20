@@ -32,23 +32,30 @@
         <p>{{community.content}}</p>
       </div>
       <hr>
-      <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;">
+      <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;" @keyup.enter="submitReply">
       <button class="btn btn-primary" @click="submitReply">등록</button>
       <hr>
       <div class="reply-container">
   <div v-for="(reply, index) in replyList" :key="index" class="replyList">
     <div class="reply-header">
       <div class="reply-info">
-        <p class="replyer">{{ reply.replyer }}</p>
+        <p class="replyer">{{ reply.memberNickname }}</p>
         <span class="reply-date">{{ formatDate(reply.replyRegisterDate) }}</span>
       </div>
       <div class="reply-actions">
-        <button class="btn btn-sm" @click="editReply(index)"><i class="fa-solid fa-pen-to-square"></i></button>
-        <button class="btn btn-sm" @click="deleteReply(index)"><i class="fa-solid fa-trash"></i></button>
+        <button class="btn btn-sm" @click="toggleEditMode(reply)"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button class="btn btn-sm" @click="deleteReply(reply.replyId)"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
     <div class="reply-content">
+      <template v-if="!reply.editMode">
       <p class="reply-text">{{ reply.replyText }}</p>
+      </template>
+      <template v-else>
+        <input type="text" v-model="reply.editedText" rows="3" cols="50" style="width: 93.3%; float: left; border: none; outline: none; border-bottom: 1px solid #ccc;" >
+      <button class="btn btn-sm" @click="saveEdit(reply)">수정</button>
+      <button class="btn btn-sm" @click="cancelEdit(reply)">취소</button>
+    </template>
     </div>
   </div>
 </div>
@@ -56,7 +63,7 @@
   </template>
   
   <script>
-  import axios from 'axios';
+import axios from 'axios';
   export default {
     name: 'CommunityDetailView',
     props: ['communityId'],
@@ -66,7 +73,10 @@
         replyList: [],
         showModal: false,
         errorMessage:'',
-        newReply:''
+        newReply:'',
+        showEditModal: false,
+        editedReplyText: '',
+        editingReplyIndex: null
       };
     },
     mounted() {
@@ -111,21 +121,21 @@
           if(!accessToken){
             throw new Error('삭제할 권한이 없습니다.')
           }
-          const response = await axios.delete(`http://localhost:8080/api/v1/communityDelete/${this.communityId}`,{
+          const response = await axios.delete(`http://localhost:8080/api/v1/communityDelete/${this.communityId}/${accessToken}`,{
           headers: {
             'Authorization': `Bearer ${accessToken}`
         }})
+        this.$router.push("/community")
         }catch (error) {
-          this.errorMessage = '삭제할 권한이 없습니다.'
-          console.error('게시물을 지울 수 없습니다:',error)
-          this.openModal()
+          this.errorMessage = '작성자만 삭제할 수 있습니다.'
+          alert(this.errorMessage)
         }
       },
       async submitReply() {
     try {
       const accessToken = localStorage.getItem('accessToken');
       const response = await axios.post(
-        `http://localhost:8080/api/v1/community/${this.communityId}/replyCreate`,
+        `http://localhost:8080/api/v1/replyCreate/${this.communityId}/${accessToken}`,
         { replyText: this.newReply },
         {
           headers: {
@@ -135,16 +145,64 @@
         }
       );
       console.log('댓글 등록 성공:', response.data);
-      // 등록된 댓글을 화면에 표시하기 위해 댓글 목록을 다시 불러옵니다.
       this.axiosReplyData();
-      // 입력 폼 초기화
       this.newReply = '';
     } catch (error) {
       console.error('댓글 등록 실패:', error);
     }
+  },
+  async deleteReply(replyId){
+    try{
+      const accessToken = localStorage.getItem('accessToken')
+      const response = await axios.delete(
+        `http://localhost:8080/api/v1/replyDelete/${this.communityId}/${replyId}/${accessToken}`,{
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }})
+        this.axiosReplyData();
+    }catch (error){
+      console.error('댓글 삭제 실패',error)
+      this.errorMessage = '댓글 작성자만 삭제할 수 있습니다.'
+      alert(this.errorMessage)
+    }
+  },
+  toggleEditMode(reply){
+    reply.editMode = !reply.editMode
+
+    if(reply.editMode){
+      reply.editedReplyText = reply.replyText
+    }
+  },
+  async saveEdit(reply) {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      // 수정된 내용을 서버에 업데이트합니다.
+      const response = await axios.put(
+        `http://localhost:8080/api/v1/replyUpdate/${reply.replyId}/${accessToken}`,
+        { replyText: reply.editedText },
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log('댓글 수정 성공:', response.data);
+      // 수정이 완료되면 수정 모드를 비활성화합니다.
+      reply.replyText = reply.editedText;
+      reply.editMode = false;
+    } catch (error) {
+      console.error('댓글 수정 실패:', error);
+      this.errorMessage = '댓글 작성자만 수정할 수 있습니다.'
+      alert(this.errorMessage)
+    }
+  },
+  cancelEdit(reply){
+    reply.editMode = false;
+    reply.editedText = '';
   }
     }
-  };
+  }
   </script>
   
   <style>
