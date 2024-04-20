@@ -20,7 +20,7 @@
         <div class="row">
           <!-- card -->
           <div class="col-md-4">
-            <div class="card-review justify-content-center" style="text-align: left; padding: 1.2rem;">
+            <div class="card-review justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <h6 class="card-title mb-2">Card title</h6>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -30,7 +30,7 @@
           </div>
 
           <div class="col-md-4">
-            <div class="card-review justify-content-center" style="text-align: left; padding: 1.2rem;">
+            <div class="card-review justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <h6 class="card-title mb-2">Card title</h6>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -40,7 +40,7 @@
           </div>
 
           <div class="col-md-4">
-            <div class="card-review justify-content-center" style="text-align: left; padding: 1.2rem;">
+            <div class="card-review justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <h6 class="card-title mb-2">Card title</h6>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -53,12 +53,12 @@
       </div><!-- review section end -->
 
       <!-- 최신 정책 콘텐츠 -->
-      <div class="post-contents">
+      <div class="post-contents mt-5 mb-5">
         <h4 class="mb-1">최신 정책 정보</h4>
 
         <div class="row">
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width:18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -69,7 +69,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width:18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -80,7 +80,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width: 18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -91,7 +91,7 @@
           </div>
 
           <div class="col-md-3">
-            <div class="card" style="margin:1.2rem; width: 18rem; border:none; text-align: left; padding-left: 0;">
+            <div class="card" style="margin-right:1rem; margin-bottom:1rem; border:none; text-align: left; padding-left: 0;">
               <img src="../assets/logo.png" class="card-img-top" alt="...">
               <div class="card-body" style="padding-left: 0;">
                 <h5 class="card-title">Card title</h5>
@@ -106,38 +106,58 @@
 
       <!-- 문의 영역 -->
       <div class="inquiry-section mt-5 mb-5">
-        <h4 class="mb-1">가장 많이 본 문의</h4>
+        <h4 class="mb-5">가장 많이 본 문의</h4>
         <div class="row">
           <!-- card -->
           <div class="col-md-4">
-            <div class="card-inquiry justify-content-center" style="margin: 1.2rem; text-align: left; padding: 1.2rem;">
+            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <div class="row">
-                  <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
-                  <h4 class="card-title">문상혁</h4>
-                  <p class="card-subtitle mb-2" style="color:#8FBDFC;">이*민님</p>
+                  <div class="col-auto">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="44" height="44" class="rounded-circle">
+                  </div>
+                  <div class="col">
+                    <h4 class="card-title">문상혁</h4>
+                    <span class="card-subtitle mb-2" style="color:#B4B4B4;">2024-04-20</span>
+                  </div>
                 </div>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text mt-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               </div>
             </div>
           </div>
 
+          <!-- card -->
           <div class="col-md-4">
-            <div class="card-inquiry justify-content-center" style="margin: 1.2rem; text-align: left; padding: 1.2rem;">
+            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
-                <h6 class="card-title">Card title</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <p class="card-subtitle mb-2" style="color:#8FBDFC;">이*민님</p>
+                <div class="row">
+                  <div class="col-auto">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="44" height="44" class="rounded-circle">
+                  </div>
+                  <div class="col">
+                    <h4 class="card-title">문상혁</h4>
+                    <span class="card-subtitle mb-2" style="color:#B4B4B4;">2024-04-20</span>
+                  </div>
+                </div>
+                <p class="card-text mt-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               </div>
             </div>
           </div>
 
+          <!-- card -->
           <div class="col-md-4">
-            <div class="card-inquiry justify-content-center" style="margin: 1.2rem; text-align: left; padding: 1.2rem;">
+            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
-                <h6 class="card-title">Card title</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <p class="card-subtitle mb-2" style="color:#8FBDFC;">이*민님</p>
+                <div class="row">
+                  <div class="col-auto">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="44" height="44" class="rounded-circle">
+                  </div>
+                  <div class="col">
+                    <h4 class="card-title">문상혁</h4>
+                    <span class="card-subtitle mb-2" style="color:#B4B4B4;">2024-04-20</span>
+                  </div>
+                </div>
+                <p class="card-text mt-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               </div>
             </div>
           </div>
@@ -153,10 +173,18 @@
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'HomeView',
-  components: {}
+  components: {},
+  created() {
+    // 홈 화면으로 이동할 때 Vuex 스토어의 loggedIn 상태를 업데이트
+    this.setLoggedIn(true)
+  },
+  methods: {
+    ...mapMutations(['setLoggedIn'])
+  }
 }
 </script>
 
@@ -167,7 +195,7 @@ export default {
 
 .review-section .card-review {
   align-content: left;
-  margin: 1rem;
+  margin: 0;
   background-color: #2F80ED;
   border-radius: 1rem;
   color: #FFF;
@@ -185,12 +213,17 @@ export default {
   display: block;
 }
 
-.inquiry-section .card-inquiry {
+.card-inquiry {
   border: 1px solid #E0E0E0;
   border-radius: 1rem;
+  margin: 0 auto;
 }
 
 p {
   font-size: 0.9rem;
+}
+
+span {
+  font-size: 0.8rem;
 }
 </style>

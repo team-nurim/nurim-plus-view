@@ -15,9 +15,9 @@
 
         <!-- menu link -->
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><router-link to="#" class="nav-link px-2">정책정보</router-link></li>
-          <li><router-link to="#" class="nav-link px-2">나를 위한 정책지원</router-link></li>
-          <li><router-link to="#" class="nav-link px-2">커뮤니티</router-link></li>
+          <li><router-link to="/policy" class="nav-link px-2">정책정보</router-link></li>
+          <li><router-link to="/recommend" class="nav-link px-2">나를 위한 정책지원</router-link></li>
+          <li><router-link to="/community" class="nav-link px-2">커뮤니티</router-link></li>
           <!-- <li><a href="#" class="nav-link px-2">About</a></li> -->
         </ul>
 
@@ -31,7 +31,7 @@
           <template v-else>
             <div class="dropdown text-end">
               <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                <img v-bind:src="member.memberProfileImage" alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu dropdown-menu-end text-small">
                 <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
@@ -73,20 +73,21 @@ export default {
       }
     }
   },
-  async created () {
-    const accessToken = localStorage.getItem('accessToken')
-
-    // 페이지 생성 시 로그인 상태 확인
-    if(accessToken != null) {
-      this.loggedIn = true;
-    } else {
-      this.loggedIn = false;
-    }
-    console.log('저장된 토큰: ' + accessToken)
-    console.log('로그인 여부: ' + this.loggedIn)
-    // 로그인 된 경우 회원 정보 불러오기
+  created () {
+    this.loggedIn = this.getLoggedIn;
+    // 로그인 상태이면 회원정보 fetch
     if (this.loggedIn) {
-      await this.fetchMemberInfo();
+      this.fetchMemberInfo();
+    }
+  },
+  watch: {
+    getLoggedIn(newValue) {
+      // loggedIn 상태가 변경되면 헤더를 업데이트
+      this.loggedIn = newValue
+      // 로그인 상태가 되면 회원 정보를 다시 가져옴
+      if (newValue) {
+        this.fetchMemberInfo()
+      }
     }
   },
   methods: {
@@ -108,8 +109,10 @@ export default {
       // 로그아웃 시 로컬 스토리지 토큰 삭제
       localStorage.removeItem('accessToken');
       localStorage.removeItem('rememberMe')
+      
       // 로그아웃 시 헤더 상태 변경;
-      this.loggedIn = false;
+      this.$store.commit('clearAccessToken')
+
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
     } 
