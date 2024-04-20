@@ -1,15 +1,10 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import axios from 'axios'
+// eslint-disable-next-line
+/* eslint-disable */
+import { createApp } from 'vue'; // Vue를 createApp으로 가져오기
+import App from './App.vue';
+import router from './router';
 
-const app = createApp(App)
+const app = createApp(App); // Vue 애플리케이션을 생성
 
-// Axios를 Vue 인스턴스에 추가
-app.config.globalProperties.$axios = axios
-
-app.use(store)
-app.use(router)
-
-app.mount('#app')
+app.use(router); // Vue 라우터를 앱에 등록
+app.mount('#app'); // 앱을 마운트
