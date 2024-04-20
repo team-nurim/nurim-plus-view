@@ -126,11 +126,13 @@ export default {
         postRegisterDate: '',
         postWriter: '',
         postContent: '',
-        postImages: [] // postImages 속성 추가
+        postImages: [] ,// postImages 속성 추가
+        postImageIds: '',
       },
       imageFile: null,
       modifyModalVisible: false, // 모달의 표시 여부
       deleteModalVisible : false,
+      deletedImages: [], // 삭제된 이미지를 저장할 배열 추가
     }
   },
 
@@ -151,6 +153,8 @@ export default {
           }});
 
         const responseData = response.data;
+        console.log(responseData.postImages);
+        console.log(responseData);
 
         // API 응답에서 필요한 데이터를 추출하여 postData에 할당합니다.
         this.postData.postTitle = responseData.postTitle;
@@ -159,6 +163,8 @@ export default {
         this.postData.postWriter = responseData.postWriter;
         this.postData.postContent = responseData.postContent;
         this.postData.postImages = responseData.postImages;
+        this.postData.postImageIds = responseData.postImageIds;
+
       } catch (err) {
         console.error('데이터를 불러올 수 없습니다.', err);
       }
@@ -226,7 +232,7 @@ export default {
     modifyPostAndHideModal() {
       this.uploadImage(); // 이미지 저장
       this.modifyPost(); // 게시물 저장
-      this.deleteTempImages();
+      this.deleteTempImages(this.deletedImages);
       this.hideModal(); // 모달 숨김
     },
     //  삭제모달
@@ -240,8 +246,7 @@ export default {
       this.deletePost(); // 게시물 삭제
       this.hideModal(); // 모달 숨김
     },
-
-    async handleImageUpload(event) {
+    handleImageUpload(event) {
       this.imageFile = event.target.files[0];
       console.log('Uploaded image:', this.imageFile);
     },
@@ -270,55 +275,49 @@ export default {
     return url.startsWith("http") && (url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".gif"));
   },
 
-  // 이미지 삭제 메소드
- async deleteImage(index) {
-  try {
-    const deletedImage = this.postData.postImages[index];
-    if (deletedImage) {
-      // 이미지 목록에서 해당 인덱스의 이미지를 삭제
-      this.postData.postImages.splice(index, 1);
-      alert('이미지가 임시삭제되었습니다.');
+  // 삭제 버튼 클릭 시 해당 이미지를 삭제하고 deletedImages 배열에 추가하는 메서드
+ deleteImage(index) {
+  const deletedImage = this.postData.postImages[index];
+  if (deletedImage) {
+    this.postData.postImages.splice(index, 1);
+    alert('이미지가 임시 삭제되었습니다.');
+    if (deletedImage.postImageIds) {
+      this.deletedImages.push(deletedImage);
+      console.log('임시 삭제된 상태의 배열:', this.deletedImages);
     }
-  } catch (error) {
-    console.error('이미지 삭제 실패:', error);
+    return deletedImage;
   }
 },
 
 async deleteTempImages() {
+  console.log('임시 삭제된 이미지 목록:', this.deletedImages);
+  const accessToken = localStorage.getItem('accessToken');
   try {
-    const accessToken = localStorage.getItem('accessToken');
-    const deleteRequests = this.postData.postImages
-      .filter(image => !this.isImageUrl(image)) // Filter out non-URL images
-      .map(image => axios.delete(`http://localhost:8080/api/v1/posts/post/delete/image/${this.postId}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        data: {
-          imageUrl: image,
-        }
-      }));
-
-    // Send requests to delete temporarily removed images
-    await axios.all(deleteRequests);
-    
-    // Remove temporarily deleted images from the local data
-    this.postData.postImages = this.postData.postImages.filter(image => this.isImageUrl(image));
-
-    // Additional step to remove deleted images from the database
-    await axios.delete(`http://localhost:8080/api/v1/posts/post/delete/temporary/images/${this.postId}`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      },
-      data: {
-        images: this.postData.postImages.filter(image => !this.isImageUrl(image)),
+    const deletePromises = [];
+    for (const deletedImage of this.deletedImages) {
+      const postImageIds = deletedImage.postImageIds;
+      console.log('postImageIds : ', postImageIds)
+      try {
+        const response = await axios.delete(`http://localhost:8080/api/v1/posts/post/delete/images/${postImageIds}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          }
+        });
+        console.log('Deleted image from database with postImageIds:', postImageIds);
+        deletePromises.push(response);
+        console.log('deletePromises 배열 : ', response)
+      } catch (error) {
+        console.error('Failed to delete image from database with postImageIds:', postImageIds, error);
+        throw error;
       }
-    });
-
+    }
+    await Promise.all(deletePromises);
+    this.deletedImages = [];
   } catch (error) {
-    console.error('Failed to delete images:', error);
+    console.error('Failed to delete images from database:', error);
+    throw error;
   }
-},
-
+}
   }
 }
 
