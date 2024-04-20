@@ -74,15 +74,20 @@ export default {
     }
   },
   created () {
-    this.loggedIn = this.getLoggedIn;
-    // 로그인 상태이면 회원정보 fetch
-    if (this.loggedIn) {
-      this.fetchMemberInfo();
-    }
+    // 
+
+    // this.loggedIn = this.getLoggedIn;
+    // // 로그인 상태이면 회원정보 fetch
+    // if (this.loggedIn) {
+    //   this.fetchMemberInfo();
+    // }
+  },
+  mounted() {
+    console.log('로그인 상태', this.loggedIn)
   },
   watch: {
     getLoggedIn(newValue) {
-      // loggedIn 상태가 변경되면 헤더를 업데이트
+      // Vuex 상태 변경 감지
       this.loggedIn = newValue
       // 로그인 상태가 되면 회원 정보를 다시 가져옴
       if (newValue) {
@@ -91,6 +96,16 @@ export default {
     }
   },
   methods: {
+    async checkLoggedIn() {
+      const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+          // 토큰이 있는 경우 로그인 상태로 설정
+          this.loggedIn = true;
+        } else {
+          // 토큰이 없는 경우 로그아웃 상태로 설정
+          this.loggedIn = false;
+        }
+    },   
     async fetchMemberInfo () {
       try {
         const accessToken = localStorage.getItem('accessToken')
@@ -105,16 +120,21 @@ export default {
         console.error('회원정보를 불러오지 못했습니다.', error);
       }
     },
-    logout () {
+    async logout () {
+      // 로그인 상태 변경
+      this.loggedIn = false;
+
       // 로그아웃 시 로컬 스토리지 토큰 삭제
       localStorage.removeItem('accessToken');
       localStorage.removeItem('rememberMe')
       
-      // 로그아웃 시 헤더 상태 변경;
-      this.$store.commit('clearAccessToken')
+      // Vuex 스토어의 상태 변경
+      this.$store.commit('clearAccessToken');
 
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
+
+      console.log('로그인 상태', this.loggedIn)
     } 
   }
 }
