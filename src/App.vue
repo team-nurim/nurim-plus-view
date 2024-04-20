@@ -1,18 +1,39 @@
 <template>
-  <nav>
+  <!-- <nav>
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/about">정책정보</router-link> |
+    <router-link to="/about">지원추천</router-link> |
+    <router-link to="/about">커뮤니티</router-link>
   </nav>
-  <router-view/>
+  <router-view/> -->
+  <Header></Header>
+  <router-view />
+  <Footer></Footer>
 </template>
+
+<script>
+import Header from './components/common/NurimHeader.vue'
+import Footer from './components/common/NurimFooter.vue'
+// import HomeView from './views/HomeView.vue'
+
+export default {
+  name: 'App',
+  components: {
+    Header,
+    Footer
+  }
+}
+</script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 98vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #333;
 }
 
 nav {
@@ -24,7 +45,8 @@ nav a {
   color: #2c3e50;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+Footer {
+  margin-top: auto;;
 }
+
 </style>

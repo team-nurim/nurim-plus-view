@@ -8,7 +8,7 @@
       />
     </div>
   </template>
-  <!-- <script>
+  <script>
   import SupportFund from '@/components/SupportFund.vue';
   import axios from 'axios';
   export default {
@@ -35,8 +35,8 @@
       }
     }
   };
-  </script> -->
-<script>
+  </script>
+<!-- <script>
 import MessageComponent from '@/components/MessageComponent.vue'
 
 export default {
@@ -61,7 +61,7 @@ export default {
     };
   },
 };
-</script>
+</script> -->
 <style scoped>
 .chat-window {
   display: flex;
