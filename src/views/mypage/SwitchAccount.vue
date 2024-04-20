@@ -3,31 +3,66 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col mb-3">
-          <h4>내 맞춤 정보 수정</h4>
+          <h4>계정 전환</h4>
         </div>
       </div>
 
       <!-- 개인 정보 수정 -->
+      <!-- 이메일 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Email" class="form-label">이메일</label>
-        <input class="form-control" type="text" id="Email" v-bind:value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
+        <input type="text" id="Email" class="form-control" :value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
       </div>
 
+      <!-- 닉네임 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Password" class="form-label">비밀번호</label>
-        <input type="password" id="Password" class="form-control" v-model="member.memberPw" aria-describedby="passwordHelpBlock">
-        <div id="passwordHelpBlock" class="form-text">
-          비밀번호 자리수, 문자 숫자 등 얼마나 포함하는지 빈칸,이모지 사용 안됨.
+        <label for="Nickname" class="form-label">닉네임</label>
+        <input type="text" id="Nickname" class="form-control" :value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
+      </div>
+
+      <!-- 증빙 서류 -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Expertfile" class="form-label">제출 증빙 서류</label>
+        <input type="file" id="Expertfile" class="form-control" ref="fileInput" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
+        <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
+          <p>{{ member.expertFile }}</p>
+        </div>
+        <img v-else :src="member.expertFile" class="custom-padding">
+        <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" @click="cancelUpload">제출 서류 변경</button>
+      </div>
+
+      <!-- Button to Open the Modal -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#termsModal" :disabled="agreed">
+        약관 보기 및 동의
+      </button>
+
+      <!-- The Modal -->
+      <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="termsModalLabel">서비스 약관 동의</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <!-- 약관 내용 -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary" @click="agreeAndCloseModal">동의하기</button>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Nickname" class="form-label">닉네임</label>
-        <input type="text" id="Nickname" class="form-control" v-model="member.memberNickname">
-      </div>
-
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-update" @click="updateMemberInfo">수정하기</button>
+        <div class="col">
+          <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-update" @click="updateMemberInfo">계정전환</button>
+        </div>
       </div>
 
     </div>
@@ -52,6 +87,7 @@ export default {
   data () {
     return {
       loggedIn: false,
+      agreed: false,  // 약관 동의 상태
       member: {
         memberId: 0,
         memberEmail: '',
@@ -106,8 +142,7 @@ export default {
       try {
         const memberId = this.member.memberId;
         const updateData = {
-          memberPw: this.member.memberPw,
-          memberNickname: this.member.memberNickname
+          type: true
         };
         const accessToken = localStorage.getItem('accessToken');
         const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
@@ -116,13 +151,57 @@ export default {
             'Content-Type': `application/json`
           }
         });
-        console.log('회원 정보 수정 성공: ', response.data);
-        alert('회원 정보가 성공적으로 수정되었습니다.');
+        console.log('전문가 전환 수정 성공: ', response.data);
+        alert('전문가 전환이 성공적으로 수정되었습니다.');
       } catch (error) {
-        console.log('회원 정보 수정 실패: ', error)
-        alert('회원 정보 수정에 실패했습니다.');
+        console.log('전문가 전환 수정 실패: ', error)
+        alert('전문가 전환 수정에 실패했습니다.');
       }
     },
+    async uploadExpertFileImage(event) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('files', file);
+      formData.append('memberId', this.member.memberId);
+
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.post(`/api/v1/experts/upload`, formData, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        this.member.expertFile = response.data.url;
+      } catch (error) {
+        console.error('자격증 이미지 업로드 실패:', error);
+      }
+    },
+    async cancelUpload() {
+      try {
+        const memberId = this.member.memberId;
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.put(`api/v1/experts/remove/${memberId}`, {}, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
+        if(response.data.success) {
+          this.member.expertFile = response.data.expertFile;
+          console.log('자격증 이미지 삭제 성공')
+        } else {
+          console.log('자격증 이미지 삭제 실패')
+        }
+      } catch (error) {
+        console.error('자격증 이미지 삭제 실패: ', error)
+      }
+    },
+    // async agreeAndCloseModal() {
+    //   this.agreed = true; // 약관 동의 상태를 true로 변경
+    //   const modalElement = document.getElementById('termsModal');
+    //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    //   modalInstance.hide(); // Bootstrap 5의 모달 인스턴스를 사용하여 모달을 닫음
+    // },
     logout () {
       // 로그아웃 시 로컬 스토리지 토큰 삭제
       localStorage.removeItem('accessToken');
@@ -131,6 +210,9 @@ export default {
       this.loggedIn = false;
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
+    },
+    goBackward () {
+      this.$router.push('/Mypage')
     }
   }
 }
@@ -208,6 +290,7 @@ export default {
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  width: 100%;
 }
 
 .btn-update:hover, .btn-update:focus {

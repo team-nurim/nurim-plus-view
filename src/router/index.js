@@ -41,7 +41,7 @@ const routes = [
   {
     path: '/switchAccount',
     name: 'switchAccount',
-    component: switchAccount
+    component: SwitchAccount
   }
 ]
 
