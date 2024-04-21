@@ -1,74 +1,81 @@
 <template>
-    <div class="chat-window">
-      <message-component
-        v-for="msg in messages"
-        :key="msg.id"
-        :message="msg"
-        :isOwner="msg.senderId === currentUserId"
-      />
-    </div>
-  </template>
-  <script>
-  import SupportFund from '@/components/SupportFund.vue';
-  import axios from 'axios';
-  export default {
-    components: {
-      SupportFund
-    },
-    data() {
-      return {
-        supportFunds: []
-      };
-    },
-    created() {
-      this.fetchSupportFunds();
-    },
-    methods: {
-      fetchSupportFunds() {
-        axios.get('/api/v1/support/list')
-          .then(response => {
-            this.supportFunds = response.data;
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }
-    }
-  };
-  </script>
-<!-- <script>
-import MessageComponent from '@/components/MessageComponent.vue'
+  <div class="chat-container">
+    <message-list :messages="messages"/>
+    <message-input @send="handleSendMessage"/>
+  </div>
+</template>
+
+<script>
+import MessageList from '@/components/MessageList.vue';
+import MessageInput from '@/components/MessageInput.vue';
+import axios from 'axios';
 
 export default {
   components: {
-    MessageComponent
+    MessageList,
+    MessageInput
   },
-   data() {
+  data() {
     return {
-      messages: [
-        { id: 1, text: '안녕하세요! 정책찾아드리기에 잘오셨습니다.', senderId: 'user123' },
-        { id: 2, text: '20대 신혼부부에 맞는 정책을 찾아줘!', senderId: 'user456' },
-        { id: 3, text: '네! 입력하신 정보를 봐선', senderId: 'user123' },
-        { id: 4, text: '2번 선택할게', senderId: 'user456' },
-        { id: 1, text: '', senderId: 'user123' },
-        { id: 2, text: '...', senderId: 'user456' },
-        { id: 1, text: '호출을 받아와야', senderId: 'user123' },
-        { id: 2, text: '큰 의미가 있겠는데', senderId: 'user456' },
-        { id: 1, text: '호출을 받아와야', senderId: 'user123' },
-        { id: 2, text: '큰 의미가 있겠는데', senderId: 'user456' },
-      ], // 가상의 메시지 목록
-      currentUserId: 'user123' // 현재 사용자의 ID
+      messages: [],
+      currentUserId: 'user123'
     };
   },
+  methods: {
+    handleSendMessage(text) {
+      // 사용자 입력을 messages 배열에 추가하고 서버에 쿼리를 보냄
+      this.addMessage(text, this.currentUserId);
+      this.fetchDataFromServer(text);
+    },
+    addMessage(text, senderId) {
+      // 메시지를 messages 배열에 추가하는 함수
+      const newMessage = { id: this.messages.length + 1, text, senderId };
+      this.messages.push(newMessage);
+    },
+    fetchDataFromServer(query) {
+      // 서버에 데이터를 요청하는 함수
+      axios.post('http://localhost:8080/findAll', { query })
+        .then(response => {
+          // 서버로부터 받은 데이터를 메시지로 추가
+          response.data.forEach(item => {
+            this.addMessage(`${item.biz_nm} - ${item.payment}`, 'supportBot');
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }
 };
-</script> -->
-<style scoped>
-.chat-window {
-  display: flex;
-  flex-direction: column;
-  max-height: 600px;
+</script>
+
+<style>
+/* 메시지 목록 스타일 */
+.message-list {
+  padding: 1rem;
   overflow-y: auto;
 }
-</style>
 
+/* 메시지 항목 스타일 */
+.message-item {
+  display: flex;
+  max-width: 80%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 15px;
+  background: #e5e5ea; /* 기본 배경색 */
+}
+
+/* 현재 사용자의 메시지 스타일 */
+.message-item.owner {
+  margin-left: auto;
+  background: #d4edda; /* 현재 사용자 배경색 */
+}
+
+/* 다른 사용자의 메시지 스타일 */
+.message-item:not(.owner) {
+  margin-right: auto;
+  background: #f8f9fa; /* 다른 사용자 배경색 */
+}
+</style>
 

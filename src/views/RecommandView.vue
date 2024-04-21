@@ -26,14 +26,14 @@
       <footer class="app-footer">
         <button class="interview-button">들어갈것</button> <br>
           <!-- '정책 매칭' 링크 버튼 -->
-      <a href="/chat" class="interview-button-link">정책 매칭</a><br>
-      <button @click="getData"> 호출된데이터부분</button><br>
+      <a href="/jh" class="interview-button-link">정책 매칭</a><br>
+      <!-- <button @click="getData"> 호출된데이터부분</button><br> -->
   <!-- 'new' 링크 버튼 -->
   <a href="/Go" class="interview-button-link btn btn-primary">회원가입하고오세요</a>
       </footer>
     </div>
   </template>
-
+<!--
   <script>
   import axios from 'axios'
   export default {
@@ -53,7 +53,7 @@
       }
     }
   }
-  </script>
+  </script> -->
 
   <style scoped>
   /* 전반적인 앱 디자인 */
@@ -162,3 +162,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
   </style>
+
+
+<!-- 이 코드는 API 호출을 통해 데이터를 가져오고, 이를 메시지 형식으로 변환하여 messages 배열에 저장합니다. 이 배열을 v-for 디렉티브를 사용하여 MessageComponent를 통해 화면에 렌더링하게 됩니다. 이러한 방식으로, 동적으로 데이터를 화면에 표시할 수 있습니다. -->

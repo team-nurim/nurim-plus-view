@@ -22,9 +22,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/GoToMyp.vue')
   },
   {
-    path: '/chat',
+    path: '/jh',
     name: 'GoTo',
-    component: () => import(/* webpackChunkName: "about" */ '../views/ChatView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/jh.vue')
   },
   {
     path: '/join',
@@ -45,7 +45,9 @@ const routes = [
     path: '/updateMemberInfo',
     name: 'updateMemberInfo',
     component: UpdateMemberInfo
-  }
+  },
+
+
 ]
 
 const router = createRouter({
