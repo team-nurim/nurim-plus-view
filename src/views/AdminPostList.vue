@@ -1,4 +1,28 @@
 <template>
+<header-admin>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container justify-content-center">
+      <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px;">NurimPlus</a> <!-- Increased font size and added margin-bottom -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a href="/admin/post/list" class="nav-link" style="margin-right: 10px; font-weight: bold;">정책정보 페이지</a>
+          </li>
+          <li class="nav-item">
+            <a href="/home" class="nav-link" style="margin-right: 10px; font-weight: bold;">회원관리 페이지</a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/login" class="nav-link" style="margin-right: 10px;">로그아웃</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header-admin>
+
   <main class="mt-3">
     <div class="container">
       <div class="row mb-2 d-flex justify-content-center">
@@ -105,6 +129,36 @@
         </div>
       </div>
     </div>
+
+<footer class="mt-5 py-5">
+    <div class="container text-center">
+      <div class="row" style="color: white;">
+        <div class="col-md-4">
+          <h5>About Us</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li>Address: 1234 Main St, City, Country</li>
+            <li>Phone: +1234567890</li>
+            <li>Email: info@example.com</li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Follow Us</h5>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <p style="color: white;">&copy; 2024 Your Company. All rights reserved.</p>
+    </div>
+  </footer>
+
 </template>
 
 <script>
@@ -223,5 +277,34 @@ export default {
 </script>
 
 <style>
+
+/* ============푸터 디자인===================== */
+#app {
+   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+.router-view-container {
+  flex: 1;
+}
+
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
 
 </style>

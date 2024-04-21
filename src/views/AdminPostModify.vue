@@ -1,4 +1,28 @@
 <template>
+<header-admin>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container justify-content-center">
+      <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px;">NurimPlus</a> <!-- Increased font size and added margin-bottom -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a href="/admin/post/list" class="nav-link" style="margin-right: 10px; font-weight: bold;">정책정보 페이지</a>
+          </li>
+          <li class="nav-item">
+            <a href="/home" class="nav-link" style="margin-right: 10px; font-weight: bold;">회원관리 페이지</a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/login" class="nav-link" style="margin-right: 10px;">로그아웃</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header-admin>
+
   <main class="mt-5">
     <div class="container">
       <h2 class="text-center mb-5">정책정보 수정</h2>
@@ -53,7 +77,7 @@
                       <!-- 이미지가 유효한 URL인 경우에만 출력 -->
                       <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
                       <!-- 이미지 삭제 버튼 -->
-                      <button class="btn btn-danger btn-sm delete-image-btn" @click="deleteImage(index)">X</button>
+                      <button class="btn btn-danger btn-sm delete-image-btn" @click="deleteImage(postData.postImageIds[index], $event)">X</button>
                     </div>
                   </div>
                 </div>
@@ -108,7 +132,55 @@
         </div>
       </div>
     </div>
+    <!-- 삭제 이미지 모달 -->
+<div v-if="deleteModalImageVisible" class="modal fade show" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">이미지 삭제 확인</h5>
+        <button type="button" class="btn-close" aria-label="Close" @click="hideDeleteImageModal"></button>
+      </div>
+      <div class="modal-body">
+        <p>이미지를 삭제하시겠습니까?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" @click="hideDeleteImageModal">취소</button>
+        <button type="button" class="btn btn-danger confirm-delete-btn" @click="confirmDeleteImage">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="mt-5 py-5">
+    <div class="container text-center">
+      <div class="row" style="color: white;">
+        <div class="col-md-4">
+          <h5>About Us</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li>Address: 1234 Main St, City, Country</li>
+            <li>Phone: +1234567890</li>
+            <li>Email: info@example.com</li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Follow Us</h5>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <p style="color: white;">&copy; 2024 Your Company. All rights reserved.</p>
+    </div>
+  </footer>
 </template>
+
 
 <script>
 import axios from 'axios'
@@ -127,12 +199,13 @@ export default {
         postWriter: '',
         postContent: '',
         postImages: [] ,// postImages 속성 추가
-        postImageIds: '',
+        postImageIds: [],
       },
       imageFile: null,
       modifyModalVisible: false, // 모달의 표시 여부
       deleteModalVisible : false,
-      deletedImages: [], // 삭제된 이미지를 저장할 배열 추가
+      deleteModalImageVisible : false,
+      // deletedImages: [], // 삭제된 이미지를 저장할 배열 추가
     }
   },
 
@@ -154,7 +227,7 @@ export default {
 
         const responseData = response.data;
         console.log(responseData.postImages);
-        console.log(responseData);
+        console.log(responseData.postImageIds);
 
         // API 응답에서 필요한 데이터를 추출하여 postData에 할당합니다.
         this.postData.postTitle = responseData.postTitle;
@@ -232,7 +305,6 @@ export default {
     modifyPostAndHideModal() {
       this.uploadImage(); // 이미지 저장
       this.modifyPost(); // 게시물 저장
-      this.deleteTempImages(this.deletedImages);
       this.hideModal(); // 모달 숨김
     },
     //  삭제모달
@@ -245,6 +317,15 @@ export default {
     deletePostAndHideModal() {
       this.deletePost(); // 게시물 삭제
       this.hideModal(); // 모달 숨김
+    },
+    showDeleteImageModal() {  // 이미지 삭제 모달
+    this.deleteModalImageVisible = true;
+    },
+    confirmDeleteImage(){
+    this.deleteModalImageVisible = false;
+    },
+    hideDeleteImageModal(){
+    this.deleteModalImageVisible = false;
     },
     handleImageUpload(event) {
       this.imageFile = event.target.files[0];
@@ -275,49 +356,51 @@ export default {
     return url.startsWith("http") && (url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".gif"));
   },
 
-  // 삭제 버튼 클릭 시 해당 이미지를 삭제하고 deletedImages 배열에 추가하는 메서드
- deleteImage(index) {
-  const deletedImage = this.postData.postImages[index];
-  if (deletedImage) {
-    this.postData.postImages.splice(index, 1);
-    alert('이미지가 임시 삭제되었습니다.');
-    if (deletedImage.postImageIds) {
-      this.deletedImages.push(deletedImage);
-      console.log('임시 삭제된 상태의 배열:', this.deletedImages);
-    }
-    return deletedImage;
-  }
-},
-
-async deleteTempImages() {
-  console.log('임시 삭제된 이미지 목록:', this.deletedImages);
-  const accessToken = localStorage.getItem('accessToken');
+ async deleteImage(postImageId, event) {
   try {
-    const deletePromises = [];
-    for (const deletedImage of this.deletedImages) {
-      const postImageIds = deletedImage.postImageIds;
-      console.log('postImageIds : ', postImageIds)
-      try {
-        const response = await axios.delete(`http://localhost:8080/api/v1/posts/post/delete/images/${postImageIds}`, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          }
-        });
-        console.log('Deleted image from database with postImageIds:', postImageIds);
-        deletePromises.push(response);
-        console.log('deletePromises 배열 : ', response)
-      } catch (error) {
-        console.error('Failed to delete image from database with postImageIds:', postImageIds, error);
-        throw error;
+    event.preventDefault(); // 기본 동작 방지
+
+    // 모달을 띄웁니다.
+    this.showDeleteImageModal();
+
+    // 모달에서 "삭제" 버튼을 누를 때 이미지를 삭제합니다.
+    const confirmDelete = await new Promise((resolve, reject) => {
+      this.$nextTick(() => {
+        const confirmButton = document.querySelector('.btn-danger.confirm-delete-btn');
+        confirmButton.addEventListener('click', () => resolve(true));
+      });
+    });
+
+    if (confirmDelete) {
+      // postImageId를 사용하여 이미지를 삭제합니다.
+      const accessToken = localStorage.getItem('accessToken');
+
+      const url = `http://localhost:8080/api/v1/posts/post/delete/images/${postImageId}`;
+      
+      const response = await axios.delete(url, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
+      // 성공적으로 이미지가 삭제되면 화면에서도 해당 이미지를 제거합니다.
+      const index = this.postData.postImageIds.indexOf(postImageId);
+      if (index !== -1) {
+        this.postData.postImageIds.splice(index, 1);
+        this.postData.postImages.splice(index, 1);
       }
+
+      console.log('이미지 삭제 완료:', postImageId);
+      alert('이미지가 성공적으로 삭제되었습니다.');
+      
+      return response;
     }
-    await Promise.all(deletePromises);
-    this.deletedImages = [];
   } catch (error) {
-    console.error('Failed to delete images from database:', error);
+    console.error('이미지 삭제에 실패했습니다:', error);
     throw error;
   }
 }
+
   }
 }
 
@@ -352,5 +435,33 @@ input[type="text1"] {
   width: 80%;
 }
 
+/* ============푸터 디자인===================== */
+#app {
+   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+.router-view-container {
+  flex: 1;
+}
+
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
 
 </style>

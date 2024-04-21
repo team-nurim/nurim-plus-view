@@ -1,4 +1,5 @@
 <template>
+<header-admin>
   <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container justify-content-center">
       <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px;">NurimPlus</a> <!-- Increased font size and added margin-bottom -->
@@ -20,14 +21,9 @@
       </div>
     </div>
   </nav>
+</header-admin>
 </template>
 
 <script>
-export default {
-  methods: {
-    getListInfoPageLink () {
-      return '/admin/post/list'
-    }
-  }
-}
+
 </script>
