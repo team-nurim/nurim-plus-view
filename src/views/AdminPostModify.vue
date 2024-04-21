@@ -181,7 +181,6 @@
   </footer>
 </template>
 
-
 <script>
 import axios from 'axios'
 // eslint-disable-next-line
