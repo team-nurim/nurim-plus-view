@@ -2,8 +2,7 @@
   <div id="app">
     <nav>
       <router-link to="/admin/members">Member List</router-link>
-      <router-link to="/admin/search-member">Search Member</router-link>
-      <!-- 다른 페이지 링크도 추가할 수 있습니다. -->
+
     </nav>
     <div class="content">
       <router-view />

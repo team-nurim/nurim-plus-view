@@ -14,7 +14,7 @@
     <div v-else>
       <div class="sort-box">
         <select v-model="sortBy" @change="sortMembers">
-          <option value="joinDate">가입일순</option>
+          <option value="memberId">작성자(ID)</option>
           <option value="memberNickname">이름순</option>
         </select>
       </div>
@@ -22,7 +22,8 @@
         <thead>
           <tr>
             <th>번호</th>
-            <th>작성자(email)</th>
+            <th>작성자(ID)</th>
+            <th>이메일</th>
             <th>회원 이름</th>
             <th>나이</th>
             <th>회원 종류</th>
@@ -31,42 +32,49 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(member, index) in membersList" :key="index">
-  <td>{{ index + 1 }}</td> <!-- 번호 표시 -->
-  <td>{{ member.memberId }}</td>
-  <td>{{ member.memberEmail }}</td>
-  <td>{{ member.memberNickname }}</td>
-  <td>{{ member.memberAge }}</td>
-  <td>{{ member.type }}</td>
-  <td><button class="blue-button" @click="openModal(member)">조회</button></td>
-  <td>
-    <input type="checkbox" :id="'checkbox-' + member.memberId" v-model="selectedMembers" :value="member" class="checkbox" />
-    <label :for="'checkbox-' + member.memberId" class="custom-checkbox"></label>
-  </td>
-</tr>
+          <template v-if="displayedMembers.length === 0">
+            <tr>
+              <td colspan="8">데이터가 없습니다.</td>
+            </tr>
+          </template>
+          <tr v-for="(member, index) in displayedMembers" :key="index">
+            <td>{{ (currentPage - 1) * pageSize + index + 1 }}</td>
+            <td>{{ member.memberId }}</td>
+            <td>{{ member.memberEmail }}</td>
+            <td>{{ member.memberNickname }}</td>
+            <td>{{ member.memberAge }}</td>
+            <td>{{ member.type }}</td>
+            <td><button class="blue-button" @click="openModal(member)">조회</button></td>
+            <td>
+              <input type="checkbox" :id="'checkbox-' + member.memberId" v-model="selectedMembers" :value="member" class="checkbox" />
+              <label :for="'checkbox-' + member.memberId" class="custom-checkbox"></label>
+            </td>
+          </tr>
         </tbody>
       </table>
       <div class="pagination">
-        <button class="blue-button" @click="fetchMembers(previousPage)" :disabled="currentPage === 1">Previous</button>
+        <button class="blue-button" @click="fetchPreviousPage" :disabled="currentPage === 1">Previous</button>
         <span v-for="page in displayedPages" :key="page">
           <button class="blue-button" @click="fetchPage(page)">{{ page }}</button>
         </span>
-        <button class="blue-button" @click="fetchMembers(nextPage)" :disabled="currentPage === totalPages">Next</button>
+        <button class="blue-button" @click="fetchNextPage" :disabled="currentPage === totalPages">Next</button>
       </div>
       <div class="select-all">
         <button class="blue-button" @click="selectAllMembers">전체 선택</button>
       </div>
       <div class="delete-button">
-        <button class="red-button" @click="deleteSelectedMembers">삭제</button>
+        <button class="red-button" @click="confirmDelete">탈퇴</button>
       </div>
     </div>
+    <!-- 모달 부분 -->
     <div class="modal" v-if="showModal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
         <div class="info-box" style="text-align: center;">
           <h2 style="color: black; margin-top: 10px;">{{ selectedMember.memberNickname }} 님의 정보</h2>
+          <!-- 수정 버튼 추가 -->
           <div class="edit-button">
-            <button class="blue-button" @click="goToUpdatePage">수정</button>
+            <button class="blue-button" @click="openEditForm">수정</button>
           </div>
         </div>
         <table class="member-info">
@@ -119,6 +127,7 @@
             <td>{{ selectedMember.isExpert }}</td>
           </tr>
         </table>
+        <!-- 수정 폼 부분 -->
         <div v-if="showEditForm" class="edit-form">
           <h2>회원 정보 수정</h2>
           <form @submit.prevent="submitForm">
@@ -138,8 +147,9 @@
             <input type="text" id="memberIncome" v-model="selectedMember.memberIncome" />
             <label for="isExpert">전문가 변경:</label>
             <input type="text" id="isExpert" v-model="selectedMember.isExpert" />
-            <button type="submit" class="blue-button" @click="closeModal">저장</button>
-            <button type="button" class="red-button" @click="closeModal">취소</button>
+            <!-- 수정 버튼 대신 저장 버튼 사용 -->
+            <button type="button" class="blue-button" @click="saveForm">저장</button>
+            <button type="button" class="red-button" @click="closeEditForm">취소</button>
           </form>
         </div>
       </div>
@@ -150,68 +160,85 @@
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
+
 import axios from 'axios';
 
 export default {
   data() {
-  return {
-    loading: false,
-    searchQuery: '',
-    searchCategory: 'memberNickname',
-    members: [],
-    membersList: [],
-    selectedMembers: [],
-    currentPage: 1,
-    pageSize: 20, // 페이지 크기를 20으로 변경
-    totalPages: 0,
-    sortBy: 'joinDate',
-    showModal: false,
-    selectedMember: null,
-    showEditForm: false
-  };
-},
+    return {
+      loading: false,
+      searchQuery: '',
+      searchCategory: 'memberNickname',
+      membersList: [],
+      selectedMembers: [],
+      currentPage: 1,
+      totalPages: 0,
+      pageSize: 10,
+      sortBy: 'memberId',
+      showModal: false,
+      selectedMember: null,
+      showEditForm: false
+    };
+  },
   computed: {
-    previousPage() {
-      return Math.max(1, this.currentPage - 1);
-    },
-    nextPage() {
-      return Math.min(this.totalPages, this.currentPage + 1);
+    displayedMembers() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = Math.min(startIndex + this.pageSize, this.membersList.length);
+      return this.membersList.slice(startIndex, endIndex);
     },
     displayedPages() {
-      const startPage = Math.max(1, this.currentPage - 2);
-      const endPage = Math.min(startPage + 4, this.totalPages);
+      let startPage;
+      let endPage;
+
+      if (this.totalPages <= 5) {
+        startPage = 1;
+        endPage = this.totalPages;
+      } else {
+        if (this.currentPage >= this.totalPages) {
+          startPage = Math.max(1, this.totalPages - 4);
+          endPage = this.totalPages;
+        } else {
+          startPage = this.currentPage - 2;
+          endPage = Math.min(startPage + 4, this.totalPages);
+        }
+      }
+
       return Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
     }
   },
   mounted() {
-  this.fetchMembers(1); // 첫 화면 로딩 시에도 첫 페이지를 불러옴
-  // this.axiosMember(this.pageSize); // 기존 코드 주석 처리
-},
+    this.fetchMembers(1);
+  },
   methods: {
-    async axiosMember() {
-  try {
-    const pageSize = 10; // 페이지 크기를 10으로 설정
-    const response = await axios.get(`http://localhost:8080/api/v1/members/members?page=1&size=${pageSize}`);
-    this.membersList = response.data.content;
-    this.totalPages = response.data.totalPages;
-    this.pageSize = pageSize;
-  } catch (error) {
-    console.error('멤버를 조회할 수 없습니다:', error);
-  }
-},
-async fetchMembers(page) {
-  try {
-    const pageSize = 20; // 페이지 크기를 20으로 설정
-    const response = await axios.get(`http://localhost:8080/api/v1/members/members?page=${page}&size=${pageSize}`);
-    this.membersList = response.data.content;
-    this.currentPage = page;
-  } catch (error) {
-    console.error('멤버를 조회할 수 없습니다:', error);
-  }
-},
-fetchPage(page) {
-  this.fetchMembers(page - 1); // 페이지 번호를 1부터로 조정하여 전달
-},
+    async fetchMembers(page, lastItemId) {
+      try {
+        this.loading = true;
+        const response = await axios.get(`http://localhost:8080/api/v1/members/members?page=${page - 1}&size=${this.pageSize}&sortBy=${this.sortBy}&lastItemId=${lastItemId}`);
+        this.membersList.push(...response.data.content);
+        this.totalPages = response.data.totalPages;
+        this.currentPage = page;
+        this.loading = false;
+      } catch (error) {
+        console.error('멤버를 조회할 수 없습니다:', error);
+        this.loading = false;
+      }
+    },
+    fetchPreviousPage() {
+      if (this.currentPage > 1) {
+        this.fetchMembers(this.currentPage - 1);
+      }
+    },
+    fetchPage(page) {
+      this.fetchMembers(page);
+    },
+    fetchNextPage() {
+      const nextPage = this.currentPage + 1;
+      if (nextPage <= this.totalPages) {
+        const lastItemIndex = this.currentPage * this.pageSize - 1;
+        const lastItemId = this.membersList[lastItemIndex].memberId;
+        this.fetchMembers(nextPage, lastItemId);
+      }
+    },
     searchMembers() {
       console.log(`Searching members with query: ${this.searchQuery} in category: ${this.searchCategory}`);
     },
@@ -222,12 +249,40 @@ fetchPage(page) {
     selectAllMembers() {
       this.selectedMembers = this.selectedMembers.length === this.membersList.length ? [] : [...this.membersList];
     },
-    deleteSelectedMembers() {
-      console.log('Deleting selected members:', this.selectedMembers);
+    confirmDelete() {
+      if (this.selectedMembers.length === 0) {
+        console.warn('삭제할 회원을 선택해주세요.');
+        return;
+      }
+
+      if (confirm('선택한 회원을 탈퇴하시겠습니까?')) {
+        const memberIdList = this.selectedMembers.map(member => member.memberId);
+
+        axios.delete('http://localhost:8080/api/v1/members', { data: memberIdList })
+          .then(response => {
+            console.log('회원 탈퇴가 성공적으로 처리되었습니다.');
+            this.membersList = this.membersList.filter(member => !memberIdList.includes(member.memberId));
+            this.selectedMembers = [];
+          })
+          .catch(error => {
+            console.error('회원 탈퇴 중 오류가 발생했습니다:', error);
+          });
+      }
     },
     sortMembers() {
-      this.fetchMembers(this.currentPage);
-    },
+  // sortBy 값에 따라 회원 목록을 정렬합니다.
+  // memberId: 작성자(ID)순, joinDate: 가입일순, memberNickname: 이름순
+  switch (this.sortBy) {
+    case 'memberId':
+      this.membersList.sort((a, b) => a.memberId - b.memberId);
+      break;
+    case 'memberNickname':
+      this.membersList.sort((a, b) => a.memberNickname.localeCompare(b.memberNickname));
+      break;
+    default:
+      break;
+  }
+},
     closeModal() {
       this.showModal = false;
       this.selectedMember = null;
@@ -236,12 +291,9 @@ fetchPage(page) {
     goToUpdatePage() {
       this.showEditForm = true;
     },
-    cancelEdit() {
-      this.showEditForm = false;
-    },
-    async submitForm() {
-      try {
-        const response = await axios.put(`http://localhost:8080/api/v1/members/${this.selectedMember.memberId}`, {
+    submitForm() {
+      if (confirm('수정한 내용을 저장하시겠습니까?')) {
+        axios.put(`http://localhost:8080/api/v1/members/${this.selectedMember.memberId}`, {
           memberNickname: this.selectedMember.memberNickname,
           memberEmail: this.selectedMember.memberEmail,
           memberAge: this.selectedMember.memberAge,
@@ -250,28 +302,32 @@ fetchPage(page) {
           memberMarriage: this.selectedMember.memberMarriage,
           memberIncome: this.selectedMember.memberIncome,
           isExpert: this.selectedMember.isExpert
+        }).then(response => {
+          console.log('회원 정보가 성공적으로 수정되었습니다:', response.data);
+          this.closeModal(); // 모달 닫기
+          this.fetchMembers(this.currentPage); // 조회 페이지 갱신
+        }).catch(error => {
+          console.error('회원 정보 수정 중 오류가 발생했습니다:', error);
         });
-
-        if (response.status === 200) {
-          const updatedMember = response.data;
-          this.membersList = this.membersList.map(member => {
-            if (member.memberId === updatedMember.memberId) {
-              return updatedMember;
-            }
-            return member;
-          });
-
-          this.closeModal();
-        } else {
-          console.error('서버에 저장할 수 없습니다.');
-        }
-      } catch (error) {
-        console.error('서버에 저장할 수 없습니다.', error);
       }
     },
+    // 수정 폼 열기
+    openEditForm() {
+      this.showEditForm = true;
+    },
+    // 수정 폼 닫기
+    closeEditForm() {
+      this.showEditForm = false;
+    },
+    // 저장 버튼 클릭 시 처리
+    saveForm() {
+      this.submitForm();
+      this.closeEditForm(); // 확인 메시지는 여기서 표시하지 않음
+    }
   }
 };
 </script>
+
 
 <style scoped>
 .search-bar {
@@ -382,19 +438,22 @@ th {
   overflow: auto;
   background-color: rgba(0,0,0,0.4);
 }
+
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: 10% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 60%;
 }
+
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
+
 .close:hover,
 .close:focus {
   color: black;
@@ -475,4 +534,3 @@ th {
   margin-right: 10px;
 }
 </style>
-
