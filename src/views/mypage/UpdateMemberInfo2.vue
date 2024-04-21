@@ -21,10 +21,14 @@
         <label for="Gender" class="form-label">성별</label>
         <div class="row" id="Gender">
           <div class="col">
-            <button type="button" class="btn btn-update" @click="setGender(0)">남성</button>
+            <button type="button" class="btn btn-update" :class="{'active': activeGender === 0 }" @click="setGender(0)">
+              남성
+            </button>
           </div>
           <div class="col">
-            <button type="button" class="btn btn-update" @click="setGender(1)">여성</button>
+            <button type="button" class="btn btn-update" :class="{'active': activeGender === 1 }" @click="setGender(1)">
+              여성
+            </button>
           </div>
         </div>
       </div>
@@ -158,7 +162,8 @@ export default {
       selectedDistricts: [], // 선택한 시/군/구 목록
       postcode: '',
       address: '',
-      detailAddress: ''
+      detailAddress: '',
+      activeGender: null // 현재 선택된 성별을 나타내는 상태 변수
     }
   },
   async created () {
@@ -241,6 +246,8 @@ export default {
     },
     setGender(gender) {
       this.member.gender = gender;
+      // 현재 선택된 성별을 업데이트
+      this.activeGender = gender;
     },
     setMarriage(memberMarriage) {
       this.member.memberMarriage = memberMarriage;
