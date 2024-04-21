@@ -7,34 +7,112 @@
         </div>
       </div>
 
-      <!-- 개인 정보 수정 -->
+      <!-- 내 맞춤 정보 수정 -->
+      <!-- 이름 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Email" class="form-label">이메일</label>
-        <input class="form-control" type="text" id="Email" v-bind:value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
+        <label for="Email" class="form-label">성함(닉네임,,?)</label>
+        <div class="row">
+          <input class="form-control" type="text" id="Email" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
+        </div>
       </div>
 
+      <!-- 성별 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Password" class="form-label">비밀번호</label>
-        <input type="password" id="Password" class="form-control" v-model="member.memberPw" aria-describedby="passwordHelpBlock">
-        <div id="passwordHelpBlock" class="form-text">
-          비밀번호 자리수, 문자 숫자 등 얼마나 포함하는지 빈칸,이모지 사용 안됨.
+        <label for="Gender" class="form-label">성별</label>
+        <div class="row" id="Gender">
+          <div class="col">
+            <button type="button" class="btn btn-update" @click="cancelUpload">남성</button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-update" @click="updateMemberInfo">여성</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 연령대 -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Age" class="form-label">연령대</label>
+        <div class="row">
+          <div class="accordion" id="Age">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  본인의 연령을 선택해주세요.
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body" style="text-align: left;">
+                  <a class="dropdown-item mt-3 mb-3" href="#">20대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#">30대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#">40대</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 거주지 -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Residence" class="form-label">거주지</label>
+        <div class="row">
+          <label for="postcode" class="form-label">우편번호</label>
+          <input type="text" id="postcode" v-model="postcode" placeholder="우편번호">
+          <button type="button" class="btn btn-update" @click="execDaumPostcode">우편번호 찾기</button>
+        </div>
+        <div class="row align-items-center custom-padding">
+          <label for="address" class="form-label">주소</label>
+          <input type="text" id="address" v-model="address" placeholder="주소" readonly>
+        </div>
+        <div class="row align-items-center custom-padding">
+          <label for="detailAddress" class="form-label">상세주소</label>
+          <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소">
+        </div>
+      </div>
+
+      <!-- 결혼 여부 -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Gender" class="form-label">결혼 여부</label>
+        <div class="row" id="Gender">
+          <div class="col">
+            <button type="button" class="btn btn-update" @click="cancelUpload">기혼</button>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-update" @click="updateMemberInfo">미혼</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 연간 소득 수준 -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Income" class="form-label">연간 소득 수준</label>
+        <div class="row">
+          <div class="accordion" id="Income">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  본인의 연간 소득수준을 선택해주세요.
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body" style="text-align: left;">
+                  <a class="dropdown-item mt-3 mb-3" href="#">20대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#">30대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#">40대</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Nickname" class="form-label">닉네임</label>
-        <input type="text" id="Nickname" class="form-control" v-model="member.memberNickname">
-      </div>
-
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-update" @click="updateMemberInfo">수정하기</button>
+        <button type="button" class="btn btn-update" @click="updateMemberInfo">입력하기</button>
       </div>
 
     </div>
   </main>
-
 </template>
-
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
@@ -65,7 +143,16 @@ export default {
         type: false,
         memberProfileImage: '',
         expertFile: ''
-      }
+      },
+      accordionId: 'Residence', // 아코디언의 부모 요소 ID
+      collapseOne: 'collapseOne', // 첫 번째 아코디언의 collapse ID
+      collapseTwo: 'collapseTwo', // 두 번째 아코디언의 collapse ID
+      selectedRegion: '', // 선택한 도/특별시/광역시
+      selectedDistricts: [], // 선택한 시/군/구 목록
+      postcode: '',
+      address: '',
+      detailAddress: '',
+      extraAddress: ''
     }
   },
   async created () {
@@ -86,6 +173,9 @@ export default {
   },
   mounted() {
     this.fetchMemberInfo();
+    const script = document.createElement('script');
+    script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    document.body.appendChild(script);
   },
   methods: {
     async fetchMemberInfo () {
@@ -106,8 +196,11 @@ export default {
       try {
         const memberId = this.member.memberId;
         const updateData = {
-          memberPw: this.member.memberPw,
-          memberNickname: this.member.memberNickname
+          memberGender: this.member.gender,
+          memberAge: this.member.memberAge,
+          memberResidence: this.member.memberResidence,
+          memberMarriage: this.member.memberMarriage,
+          memberIncome: this.member.memberIncome
         };
         const accessToken = localStorage.getItem('accessToken');
         const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
@@ -131,7 +224,37 @@ export default {
       this.loggedIn = false;
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
+    },
+    execDaumPostcode() {
+      new daum.Postcode({
+        oncomplete: data => {
+          this.postcode = data.zonecode;
+          this.address = data.address;
+        },
+      }).open();
+    },
+    saveMemberResidence() {
+      this.member.memberResidence = `${this.address} ${this.de}`
     }
+        // async selectRegion(region) {
+    //   this.selectedRegion = region; // 선택한 도/특별시/광역시 업데이트
+    //   // 선택한 도/특별시/광역시에 따라 시/군/구 목록 업데이트
+    //   if (region === '서울특별시') {
+    //     this.selectedDistricts = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'];
+    //   } else if (region === '경기도') {
+    //     this.selectedDistricts = ['가평군', '고양시', '과천시', '광명시', '광주시', '구리시', '군포시', '김포시', '남양주시', '동두천시', '부천시', '성남시', '수원시', '시흥시', '안산시', '안성시', '안양시', '양주시', '양평군', '여주시', '연천군', '오산시', '용인시', '의왕시', '의정부시', '이천시', '파주시', '평택시', '포천시', '하남시', '화성시'];
+    //   } else if (region === '부산광역시') {
+    //     this.selectedDistricts = ['강서구', '금정구', '남구', '동구', '동래구', '부산진구', '북구', '사상구', '사하구', '서구', '수영구', '연제구', '영도구', '중구', '해운대구'];
+    //   }
+    // },
+    // async selectDistric(district) {
+    //   // 선택한 시/군/구에 따라 해당하는 읍/면/동 목록 업데이트
+    //   if (district === '강남구') {
+    //     this.selectedTowns = ['역삼동', '개포동', '청담동', /* ... */];
+    //   } else if (district === '강동구') {
+    //     this.selectedTowns = ['강일동', '고덕동', '길동', /* ... */];
+    //   }
+    // },
   }
 }
 </script>
@@ -201,6 +324,7 @@ export default {
 
 .btn-update {
   height: 50px;
+  width: 100%;
   padding: 8;
   background-color: #007bff; /* 기본 배경색 */
   color: white; /* 글씨색 */
@@ -213,6 +337,11 @@ export default {
 .btn-update:hover, .btn-update:focus {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.accordion-collapse {
+  max-height: 168px;
+  overflow-y: auto;
 }
 
 </style>

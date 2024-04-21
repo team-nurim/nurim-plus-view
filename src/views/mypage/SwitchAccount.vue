@@ -28,7 +28,7 @@
           <p>{{ member.expertFile }}</p>
         </div>
         <img v-else :src="member.expertFile" class="custom-padding">
-        <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" @click="cancelUpload">제출 서류 변경</button>
+        <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" @click="cancelImage">제출 서류 변경</button>
       </div>
 
       <!-- Button to Open the Modal -->
@@ -142,7 +142,7 @@ export default {
       try {
         const memberId = this.member.memberId;
         const updateData = {
-          type: true
+          type : true
         };
         const accessToken = localStorage.getItem('accessToken');
         const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
@@ -177,6 +177,25 @@ export default {
         console.error('자격증 이미지 업로드 실패:', error);
       }
     },
+    async cancelImage() {
+      try {
+        const memberId = this.member.memberId;
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.put(`api/v1/experts/remove/${memberId}`, {}, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
+        if(response.data.success) {
+          this.member.expertFile = response.data.expertFile;
+          console.log('자격증 이미지 삭제 성공')
+        } else {
+          console.log('자격증 이미지 삭제 실패')
+        }
+      } catch (error) {
+        console.error('자격증 이미지 삭제 실패: ', error)
+      }
+    },
     async cancelUpload() {
       try {
         const memberId = this.member.memberId;
@@ -189,6 +208,7 @@ export default {
         if(response.data.success) {
           this.member.expertFile = response.data.expertFile;
           console.log('자격증 이미지 삭제 성공')
+          this.$router.push('/Mypage')
         } else {
           console.log('자격증 이미지 삭제 실패')
         }
