@@ -2,7 +2,7 @@
   <main>
     <div class="container">
       <div class="row align-items-center">
-        <div class="col mb-3">
+        <div class="col mt-3 mb-3">
           <h4>내 맞춤 정보 수정</h4>
         </div>
       </div>
