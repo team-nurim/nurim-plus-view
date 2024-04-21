@@ -30,6 +30,7 @@ export default createStore({
       localStorage.setItem('accessToken', accessToken)
     },
     clearAccessToken ({ commit }) {
+      // 로컬 스토리지에서 토큰 제거
       commit('clearAccessToken')
     }
   },

@@ -59,6 +59,7 @@ h1 {
 
 .btn-primary {
   font-weight: 500;
+  background-color: #2F80ED;
 }
 
 </style>
