@@ -12,9 +12,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/recommand',
+    path: '/recommandMain',
     name: 'recommand',
-    component: () => import(/* webpackChunkName: "about" */ '../views/RecommandView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/RecommanMain.vue')
   },
   {
     path: '/Go',
@@ -22,9 +22,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/GoToMyp.vue')
   },
   {
-    path: '/jh',
+    path: '/Recommand',
     name: 'GoTo',
-    component: () => import(/* webpackChunkName: "about" */ '../views/jh.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/Recommand.vue')
   },
   {
     path: '/join',
