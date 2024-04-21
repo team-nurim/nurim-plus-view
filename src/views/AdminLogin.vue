@@ -97,7 +97,7 @@ export default {
         console.log('자동로그인:', localStorage.getItem('rememberMe'))
 
         // 로그인 리다이렉트 처리
-        this.$router.push('/')
+        this.$router.push('/admin/post/list')
       } catch (error) {
         alert('로그인 정보를 확인해주세요.')
         console.error('로그인 실패: ', error)
