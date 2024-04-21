@@ -73,7 +73,7 @@
           <!-- Nickname input -->
           <div data-mdb-input-init class="form-outline mb-4">
             <label class="form-check-label">닉네임</label>
-            <input type="text" v-model="memberPw" class="form-control" />
+            <input type="text" v-model="memberNickname" class="form-control" />
           </div>
         </form>
 
@@ -90,6 +90,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 // eslint-disable-next-line
 /* eslint-disable */
 export default {
@@ -131,9 +133,10 @@ export default {
         this.agreeAll = false
       }
     },
-    async registerMember () {}
-  }
+  async registerMember () {}
 }
+
+  }
 </script>
 
 <style>

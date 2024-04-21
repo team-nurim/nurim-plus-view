@@ -51,14 +51,17 @@ export default {
   },
   methods: {
     async register() {
-  if (this.category === '' || !this.title || !this.content) {
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) {
+    console.error('사용자 정보가 없습니다.');
+    return;
+  }
+  if (!accessToken || this.category === '' || !this.title || !this.content) {
     alert('카테고리, 제목, 내용을 모두 입력해주세요.');
     return;
   }
-
   try {
-    const accessToken = localStorage.getItem('accessToken')
-    const url = `http://localhost:8080/api/v1/communityCreate`;
+    const url = `http://localhost:8080/api/v1/communityCreate/${accessToken}`;
     const requestData = {
       category: this.category,
       title: this.title,
@@ -67,16 +70,13 @@ export default {
     const response = await axios.post(url, requestData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json' // JSON 형식임을 명시
+        'Content-Type': 'application/json'
       }
     });
     console.log('게시물 등록 성공:', response.data);
   } catch (error) {
     console.error('게시물 등록 실패:', error);
   }
-},
-cancel() {
-  window.history.back();
 }
   }
 }
