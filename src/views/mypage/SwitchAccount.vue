@@ -230,9 +230,6 @@ export default {
       this.loggedIn = false;
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
-    },
-    goBackward () {
-      this.$router.push('/Mypage')
     }
   }
 }

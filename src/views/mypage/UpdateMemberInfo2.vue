@@ -10,9 +10,9 @@
       <!-- 내 맞춤 정보 수정 -->
       <!-- 이름 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Email" class="form-label">성함(닉네임,,?)</label>
+        <label for="Nickname" class="form-label">성함(닉네임,,?)</label>
         <div class="row">
-          <input class="form-control" type="text" id="Email" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
+          <input class="form-control" type="text" id="Nickname" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
         </div>
       </div>
 
@@ -21,10 +21,10 @@
         <label for="Gender" class="form-label">성별</label>
         <div class="row" id="Gender">
           <div class="col">
-            <button type="button" class="btn btn-update" @click="cancelUpload">남성</button>
+            <button type="button" class="btn btn-update" @click="setGender(0)">남성</button>
           </div>
           <div class="col">
-            <button type="button" class="btn btn-update" @click="updateMemberInfo">여성</button>
+            <button type="button" class="btn btn-update" @click="setGender(1)">여성</button>
           </div>
         </div>
       </div>
@@ -45,6 +45,7 @@
                   <a class="dropdown-item mt-3 mb-3" href="#">20대</a>
                   <a class="dropdown-item mt-3 mb-3" href="#">30대</a>
                   <a class="dropdown-item mt-3 mb-3" href="#">40대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#">기타</a>
                 </div>
               </div>
             </div>
@@ -75,10 +76,10 @@
         <label for="Gender" class="form-label">결혼 여부</label>
         <div class="row" id="Gender">
           <div class="col">
-            <button type="button" class="btn btn-update" @click="cancelUpload">기혼</button>
+            <button type="button" class="btn btn-update" @click="setMarriage(1)">기혼</button>
           </div>
           <div class="col">
-            <button type="button" class="btn btn-update" @click="updateMemberInfo">미혼</button>
+            <button type="button" class="btn btn-update" @click="setMarriage(0)">미혼</button>
           </div>
         </div>
       </div>
@@ -91,14 +92,20 @@
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  본인의 연간 소득수준을 선택해주세요.
+                  본인의 소득구간를 선택해주세요.
                 </button>
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
-                  <a class="dropdown-item mt-3 mb-3" href="#">20대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">30대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">40대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#"  @click="setIncome('기초/차상위')">기초/차상위</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('1구간')">1구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('2구간')">2구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('3구간')">3구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('4구간')">4구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('5구간')">5구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('6구간')">6구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('7구간')">7구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('8구간')">8구간</a>
                 </div>
               </div>
             </div>
@@ -151,8 +158,7 @@ export default {
       selectedDistricts: [], // 선택한 시/군/구 목록
       postcode: '',
       address: '',
-      detailAddress: '',
-      extraAddress: ''
+      detailAddress: ''
     }
   },
   async created () {
@@ -196,14 +202,14 @@ export default {
       try {
         const memberId = this.member.memberId;
         const updateData = {
-          memberGender: this.member.gender,
+          gender: this.member.gender,
           memberAge: this.member.memberAge,
-          memberResidence: this.member.memberResidence,
+          memberResidence: this.address + ', ' + this.detailAddress,
           memberMarriage: this.member.memberMarriage,
           memberIncome: this.member.memberIncome
         };
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
+        const response = await axios.put(`api/v1/members/memberInfo/${memberId}`, updateData, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': `application/json`
@@ -233,10 +239,17 @@ export default {
         },
       }).open();
     },
-    saveMemberResidence() {
-      this.member.memberResidence = `${this.address} ${this.de}`
-    }
-        // async selectRegion(region) {
+    setGender(gender) {
+      this.member.gender = gender;
+    },
+    setMarriage(memberMarriage) {
+      this.member.memberMarriage = memberMarriage;
+    },
+    setIncome(memberIncome) {
+      this.member.memberIncome = memberIncome;
+    },
+    setA
+    // async selectRegion(region) {
     //   this.selectedRegion = region; // 선택한 도/특별시/광역시 업데이트
     //   // 선택한 도/특별시/광역시에 따라 시/군/구 목록 업데이트
     //   if (region === '서울특별시') {
