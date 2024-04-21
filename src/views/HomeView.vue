@@ -15,7 +15,7 @@
         <img src="../assets/main_01.png" alt="main">
       </div>
 
-      <!-- 리뷰 영역 -->
+      <!-- 커뮤니티 리뷰 영역 -->
       <div class="review-section mt-5 mb-5">
         <div class="row">
 
