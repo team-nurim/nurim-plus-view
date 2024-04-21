@@ -1,32 +1,31 @@
 <template>
 
-  <main>
+  <main class="border-bottom">
     <div class="b-example-divider"></div>
 
     <div class="container">
 
-      <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-1">
         <!-- identity -->
         <div class="col-md-3 mb-2 mb-md-0">
-          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          <router-link to="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <span class="fs-4">Nurim+ BI</span>
-          </a>
+          </router-link>
         </div>
 
         <!-- menu link -->
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><router-link to="#" class="nav-link px-2 link-secondary">Home</router-link></li>
-          <li><router-link to="#" class="nav-link px-2">정책정보</router-link></li>
-          <li><router-link to="#" class="nav-link px-2">지원금 추천</router-link></li>
-          <li><router-link to="#" class="nav-link px-2">커뮤니티</router-link></li>
+          <li><router-link to="/policy" class="nav-link px-3">정책정보</router-link></li>
+          <li><router-link to="/recommend" class="nav-link px-3">나를 위한 정책지원</router-link></li>
+          <li><router-link to="/community" class="nav-link px-3">커뮤니티</router-link></li>
           <!-- <li><a href="#" class="nav-link px-2">About</a></li> -->
         </ul>
 
         <div class="col-md-3 text-end">
           <!-- 로그인 안했을 때 -->
           <template v-if="!loggedIn">
-            <router-link to="/login" class="btn btn-outline-primary me-2" @click="goToLogin">로그인</router-link>
-            <router-link to="/join" class="btn btn-primary" @click="goToJoin">회원가입</router-link>
+            <router-link to="/login" class="btn btn-outline-primary btn-sm me-2">로그인</router-link>
+            <router-link to="/join" class="btn btn-primary btn-sm">회원가입</router-link>
           </template>
           <!-- 로그인했을 때 -->
           <template v-else>
@@ -76,21 +75,29 @@ export default {
   },
   async created () {
     const accessToken = localStorage.getItem('accessToken')
-
-    // 페이지 생성 시 로그인 상태 확인
-    if(accessToken != null) {
-      this.loggedIn = true;
+    if (accessToken) {
+      // 로그인 상태가 있을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', true)
     } else {
-      this.loggedIn = false;
+      // 로그인 상태가 없을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', false)
     }
-    console.log('저장된 토큰: ' + accessToken)
-    console.log('로그인 여부: ' + this.loggedIn)
-    // 로그인 된 경우 회원 정보 불러오기
-    if (this.loggedIn) {
-      await this.fetchMemberInfo();
+    console.log('로그인 상태', this.loggedIn)
+  },
+  watch: {
+    getLoggedIn(newValue) {
+      // Vuex 상태 변경 감지
+      this.loggedIn = newValue
+      // 로그인 상태가 되면 회원 정보를 다시 가져옴
+      if (newValue) {
+        this.fetchMemberInfo()
+      }
     }
   },
   methods: {
+    async checkLoggedIn() {
+      this.loggedIn = this.getLoggedIn;
+    },
     async fetchMemberInfo () {
       try {
         const accessToken = localStorage.getItem('accessToken')
@@ -104,18 +111,33 @@ export default {
         console.error('회원정보를 불러오지 못했습니다.', error);
       }
     },
-    logout () {
+    async logout () {
+      // 로그인 상태 변경
+      this.loggedIn = false;
+
       // 로그아웃 시 로컬 스토리지 토큰 삭제
       localStorage.removeItem('accessToken');
       localStorage.removeItem('rememberMe')
-      // 로그아웃 시 헤더 상태 변경;
-      this.loggedIn = false;
+
+      // Vuex 스토어의 상태 변경
+      this.$store.commit('clearAccessToken');
+
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
-    } 
+
+      console.log('로그인 상태', this.loggedIn)
+    }
   }
 }
 </script>
 
-<style scoped>
+<style>
+.nav-link {
+  color: #333 !important;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  font-weight: 700 !important;
+}
 </style>
