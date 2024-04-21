@@ -17,6 +17,8 @@ export default {
 /* eslint-disable */
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
 #app {
    display: flex;
   flex-direction: column;
@@ -29,6 +31,9 @@ export default {
 }
 .router-view-container {
   flex: 1;
+  color: #333;
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
 }
 
 
@@ -44,4 +49,14 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+h1 {
+  font-weight: 700;
+}
+
+.btn-primary {
+  font-weight: 500;
+  background-color: #2F80ED;
+}
+
 </style>

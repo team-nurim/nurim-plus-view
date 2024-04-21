@@ -56,7 +56,7 @@
 </template>
 <script>
 // eslint-disable-next-line
-/* eslint-disable */ 
+/* eslint-disable */
 import axios from 'axios'
 
 export default {
@@ -87,11 +87,13 @@ export default {
           localStorage.setItem('rememberMe', true)
         }
 
-        this.loggedIn = true
-
         // 토큰과 자동로그인 정보 확인
         console.log('토큰:', localStorage.getItem('accessToken'))
         console.log('자동로그인:', localStorage.getItem('rememberMe'))
+        console.log('로그인 정보 저장 완료')
+
+        this.loggedIn = true
+        this.$store.commit('setLoggedIn', this.loggedIn)
 
         // 로그인 리다이렉트 처리
         this.$router.push('/')
@@ -113,7 +115,7 @@ export default {
 .loginBox {
   min-width: 330px;
   max-width: 28%;
-  margin: 12% auto 0;
+  margin: 10% auto 0;
   text-align: left;
 }
 
