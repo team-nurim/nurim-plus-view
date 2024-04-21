@@ -52,9 +52,10 @@ const routes = [
     component: CommunityCreateView,
   },
   {
-    path: '/CommunityUpdate',
+    path: '/CommunityUpdate/:communityId',
     name: 'CommunityUpdate',
     component: CommunityUpdate,
+    props: true
   },
 ]
 

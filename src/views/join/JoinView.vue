@@ -5,17 +5,17 @@
     <div class="container">
       <!-- 1단계 -->
       <div class="joinBox" v-if="currentStep === 1">
-        <h4>약관에 동의해주세요.</h4>
+        <h4 class="mb-3">약관에 동의해주세요.</h4>
 
-        <div class="mb-3">
+        <div class="mb-4">
           <div class="col">
             <input type="checkbox" v-model="agreeAll" id="agree-all" @change="toggleAllAgreements" />
-            <span for="agree-all"><b>모두 동의</b></span>
+            <label for="agree-all" style="font-size:1.1rem;"><b>모두 동의</b></label>
           </div>
 
           <div class="col">
             <input type="checkbox" v-model="age" id="agree-age" @change="toggleAge" />
-            <label class="form-check-label" for="agree-age">[필수] 만 14세 이상입니다.  <router-link to="#">보기</router-link></label>
+            <label class="form-check-label" for="agree-age">[필수] 만 14세 이상입니다.</label>
           </div>
 
           <div class="col">
@@ -30,7 +30,7 @@
       </div>
 
       <!-- 2단계 -->
-      <div class="joinBox" v-if="currentStep === 2">
+      <!-- <div class="joinBox" v-if="currentStep === 2">
         <h4>회원 유형을 선택해주세요.</h4>
 
         <div class="mb-3">
@@ -51,10 +51,10 @@
           <button type="button" class="btn btn-secondary" @click="goPreviousStep">이전</button>
           <button type="button" class="btn btn-primary" @click="goNextStep">다음</button>
         </div>
-      </div>
+      </div> -->
 
       <!-- 3단계 -->
-      <div class="joinBox" v-if="currentStep === 3">
+      <div class="joinBox" v-if="currentStep === 2">
         <h4>로그인에 사용할 아이디와 <br> 비밀번호, 닉네임을 입력해주세요.</h4>
 
         <form>
@@ -90,10 +90,10 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 // eslint-disable-next-line
 /* eslint-disable */
+import axios from 'axios'
+
 export default {
   name: '',
   components: {},
@@ -112,6 +112,10 @@ export default {
       this.currentStep--
     },
     goNextStep () {
+      if(!this.agreeAll) {
+        alert('약관에 동의해주세요.')
+        return
+      }
       this.currentStep++
     },
     toggleAllAgreements () {
@@ -133,10 +137,25 @@ export default {
         this.agreeAll = false
       }
     },
-  async registerMember () {}
-}
+    async registerMember () {
+      try {
+        const response = await axios.post('/api/v1/members/user', {
+          memberEmail: this.memberEmail,
+          memberPw: this.memberPw,
+          memberNickname: this.memberNickname
+        })
 
+        console.log('회원가입 성공', response.data)
+
+        alert('누림플러스에 오신 것을 환영합니다.')
+        this.$router.push('/login')
+
+      } catch (error) {
+        console.error('회원가입 실패', error)
+      }
+    }
   }
+}
 </script>
 
 <style>
@@ -150,7 +169,7 @@ export default {
 .joinBox {
   min-width: 330px;
   max-width: 30%;
-  margin: auto;
+  margin: 12% auto 0;
   text-align: left;
 }
 

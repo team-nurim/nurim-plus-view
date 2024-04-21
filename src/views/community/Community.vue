@@ -48,7 +48,7 @@ c<template>
     <div class="category-buttons">
       <button class="btn btn-outline-secondary" @click="selectCategory('전체')" style="border-radius: 17px;">전체</button>
       <button class="btn btn-outline-secondary" @click="selectCategory('보육')" style="border-radius: 17px;">보육</button>
-    <button class="btn btn-outline-secondary" @click="selectCategory('양육')" style="border-radius: 17px;">출산/양육</button>
+    <button class="btn btn-outline-secondary" @click="selectCategory('출산')" style="border-radius: 17px;">출산/양육</button>
     <button class="btn btn-outline-secondary" @click="selectCategory('주거')" style="border-radius: 17px;">주거</button>
     <button class="btn btn-outline-secondary" @click="selectCategory('장례')" style="border-radius: 17px;">장례</button>
   </div>
@@ -60,7 +60,7 @@ c<template>
      <!-- 게시물 리스트 -->
   <div class="list-container" style="display: grid;">
     <div v-for="(community, index) in communityList" :key="index" class="List-card" style="place-items: center;">
-      <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
+      <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId}}">
       <div class="listInfo">
         <p style="margin-right: 20px; margin-left: 10px;">닉네임:{{ community.memberNickname }}</p>
         <p style="margin-right: 20px;">등록일:{{ formatDate(community.registerDate) }}</p>
@@ -91,6 +91,7 @@ c<template>
 import axios from 'axios'
 export default {
   name: 'CommunityView',
+
   data () {
     return {
       popluarBoards: [],

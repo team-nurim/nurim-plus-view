@@ -93,11 +93,13 @@ export default {
           localStorage.setItem('rememberMe', true)
         }
 
-        this.loggedIn = true
-
         // 토큰과 자동로그인 정보 확인
         console.log('토큰:', localStorage.getItem('accessToken'))
         console.log('자동로그인:', localStorage.getItem('rememberMe'))
+        console.log('로그인 정보 저장 완료')
+
+        this.loggedIn = true
+        this.$store.commit('setLoggedIn', this.loggedIn)
 
         // 로그인 리다이렉트 처리
         this.$router.push('/')
