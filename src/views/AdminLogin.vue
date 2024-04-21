@@ -35,8 +35,8 @@
         <button type="button" class="btn btn-block btn-primary mb-4" @click="login">로그인</button>
 
         <!-- Register buttons -->
-        <div class="text-center">
-          <label class="form-check-label">아직 회원이 아니신가요?  <a href="/join">회원가입</a></label>
+        <!-- <div class="text-center">
+          <label class="form-check-label">아직 회원이 아니신가요?  <a href="/join">회원가입</a></label> -->
 
           <!-- Social Login -->
           <!-- <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
@@ -50,7 +50,7 @@
           <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
               <i class="fab fa-twitter"></i>
           </button> -->
-        </div>
+        <!-- </div> -->
       </form>
     </div>
     </div>

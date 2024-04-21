@@ -223,5 +223,8 @@ export default {
 </script>
 
 <style>
-
+thead th {
+  border-bottom: 2px solid black; /* 테두리 진하게 설정 */
+  background-color: #f2f2f2; /* 배경색 설정 */
+}
 </style>
