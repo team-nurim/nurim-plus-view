@@ -42,10 +42,10 @@
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
-                  <a class="dropdown-item mt-3 mb-3" href="#">20대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">30대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">40대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">기타</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(20)">20대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(30)">30대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(40)">40대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(100)">기타</a>
                 </div>
               </div>
             </div>
@@ -248,7 +248,9 @@ export default {
     setIncome(memberIncome) {
       this.member.memberIncome = memberIncome;
     },
-    setA
+    setAge(memberAge) {
+      this.member.memberAge = memberAge;
+    }
     // async selectRegion(region) {
     //   this.selectedRegion = region; // 선택한 도/특별시/광역시 업데이트
     //   // 선택한 도/특별시/광역시에 따라 시/군/구 목록 업데이트
