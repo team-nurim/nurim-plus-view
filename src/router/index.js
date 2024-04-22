@@ -51,6 +51,28 @@ const routes = [
     component: UpdateMemberInfo
   },
   {
+    path: '/community',
+    name: 'community',
+    component: CommunityView,
+  },
+  {
+    path: '/community/:communityId',
+    name: 'CommunityDetailView',
+    component: CommunityDetailView,
+    props: true
+  },
+  {
+    path: '/CommunityCreate',
+    name: 'CommunityCreate',
+    component: CommunityCreateView,
+  },
+  {
+    path: '/CommunityUpdate/:communityId',
+    name: 'CommunityUpdate',
+    component: CommunityUpdate,
+    props: true
+  },
+  {
     path: '/updateMemberInfo2',
     name: 'updateMemberInfo2',
     component: UpdateMemberInfo2
