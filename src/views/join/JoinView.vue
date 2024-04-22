@@ -5,7 +5,7 @@
     <div class="container">
       <!-- 1단계 -->
       <div class="joinBox" v-if="currentStep === 1">
-        <h4 class="mb-3">약관에 동의해주세요.</h4>
+        <h4 class="mb-3" style="line-height:1.4;">약관에 동의해주세요.</h4>
 
         <div class="mb-4">
           <div class="col">
@@ -55,7 +55,7 @@
 
       <!-- 3단계 -->
       <div class="joinBox" v-if="currentStep === 2">
-        <h4>로그인에 사용할 아이디와 <br> 비밀번호, 닉네임을 입력해주세요.</h4>
+        <h4 class="mb-3" style="line-height:1.4;">로그인에 사용할 아이디와 <br> 비밀번호, 닉네임을 입력해주세요.</h4>
 
         <form>
           <!-- Email input -->
@@ -78,7 +78,7 @@
         </form>
 
         <div class="col">
-          <button type="button" class="btn btn-secondary" @click="goPreviousStep">이전</button>
+          <button type="button" class="btn btn-secondary me-2" @click="goPreviousStep">이전</button>
           <button type="button" class="btn btn-primary" @click="registerMember">가입하기</button>
         </div>
 
@@ -169,7 +169,7 @@ export default {
 .joinBox {
   min-width: 330px;
   max-width: 30%;
-  margin: 12% auto 0;
+  margin: 10% auto 0;
   text-align: left;
 }
 
@@ -179,6 +179,10 @@ input {
 
 .form-check-label {
   font-size: 0.9rem;
+}
+
+h4 {
+  line-height: 1.6rem;
 }
 
 .span {

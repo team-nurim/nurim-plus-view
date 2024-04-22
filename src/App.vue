@@ -55,10 +55,16 @@ Footer {
 
 h1 {
   font-weight: 700;
+  line-height: 1.5 !important;
+}
+
+h6 {
+  line-height: 1.5 !important;
 }
 
 .btn-primary {
   font-weight: 500;
+  background-color: #2F80ED;
 }
 
 </style>

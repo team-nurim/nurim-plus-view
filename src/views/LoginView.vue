@@ -56,7 +56,7 @@
 </template>
 <script>
 // eslint-disable-next-line
-/* eslint-disable */ 
+/* eslint-disable */
 import axios from 'axios'
 
 function saveUserInfo(userInfo) {
@@ -121,7 +121,7 @@ export default {
 .loginBox {
   min-width: 330px;
   max-width: 28%;
-  margin: 12% auto 0;
+  margin: 10% auto 0;
   text-align: left;
 }
 
