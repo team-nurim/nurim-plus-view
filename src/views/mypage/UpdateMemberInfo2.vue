@@ -21,17 +21,30 @@
         <label for="Gender" class="form-label">성별</label>
         <div class="row" id="Gender">
           <div class="col">
+            <input type="radio" id="male" name="gender" class="btn-check" @click="setGender(0)">
+            <label class="btn btn-update text-center" for="male">남성</label>
+          </div>
+          <div class="col">
+            <input type="radio" id="female" name="gender" class="btn-check" @click="setGender(1)">
+            <label class="btn btn-update text-center" for="female">여성</label>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Gender" class="form-label">성별</label>
+        <div class="row" id="Gender">
+          <div class="col">
             <button type="button" class="btn btn-update" :class="{'active': activeGender === 0 }" @click="setGender(0)">
               남성
             </button>
-          </div>
-          <div class="col">
+          </div> -->
+          <!-- <div class="col">
             <button type="button" class="btn btn-update" :class="{'active': activeGender === 1 }" @click="setGender(1)">
               여성
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- 연령대 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
@@ -49,7 +62,7 @@
                   <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(20)">20대</a>
                   <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(30)">30대</a>
                   <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(40)">40대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(100)">기타</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(99)">기타</a>
                 </div>
               </div>
             </div>
@@ -60,30 +73,33 @@
       <!-- 거주지 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Residence" class="form-label">거주지</label>
-        <div class="row">
-          <label for="postcode" class="form-label">우편번호</label>
-          <input type="text" id="postcode" v-model="postcode" placeholder="우편번호">
-          <button type="button" class="btn btn-update" @click="execDaumPostcode">우편번호 찾기</button>
-        </div>
-        <div class="row align-items-center custom-padding">
-          <label for="address" class="form-label">주소</label>
-          <input type="text" id="address" v-model="address" placeholder="주소" readonly>
-        </div>
-        <div class="row align-items-center custom-padding">
-          <label for="detailAddress" class="form-label">상세주소</label>
-          <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소">
-        </div>
       </div>
+      <div class="row mt-3 mb-3 align-items-center custom-padding">
+        <label for="postcode" class="form-label">우편번호</label>
+        <input type="text" class="mb-3" id="postcode" v-model="postcode" placeholder="우편번호">
+        <button type="button" class="btn btn-update" @click="execDaumPostcode">우편번호 찾기</button>
+      </div>
+      <div class="row mt-3 mb-3 align-items-center custom-padding">
+        <label for="address" class="form-label">주소</label>
+        <input type="text" id="address" v-model="address" placeholder="주소" readonly>
+      </div>
+      <div class="row mt-3 mb-3 align-items-center custom-padding">
+        <label for="detailAddress" class="form-label">상세주소</label>
+        <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소">
+      </div>
+
 
       <!-- 결혼 여부 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Gender" class="form-label">결혼 여부</label>
-        <div class="row" id="Gender">
+        <label for="Marriage" class="form-label">결혼 여부</label>
+        <div class="row" id="Marriage">
           <div class="col">
-            <button type="button" class="btn btn-update" @click="setMarriage(1)">기혼</button>
+            <input type="radio" id="married" name="marriage" class="btn-check" @click="setMarriage(1)">
+            <label class="btn btn-update text-center" for="married">기혼</label>
           </div>
           <div class="col">
-            <button type="button" class="btn btn-update" @click="setMarriage(0)">미혼</button>
+            <input type="radio" id="unmarried" name="marriage" class="btn-check" @click="setMarriage(0)">
+            <label class="btn btn-update text-center" for="unmarried">미혼</label>
           </div>
         </div>
       </div>

@@ -8,17 +8,6 @@
       </div>
 
       <!-- 개인 정보 수정 -->
-      <!-- 내 계정 상태(전문가/일반인) -->
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Status" class="form-label">내 계정 상태</label>
-        <!-- <input type="text" id="Status" class="form-control" value="" aria-label="Disabled input example" disabled readonly> -->
-        <button type="button" class="btn" @click="toggleText">확인하기</button>
-        <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
-          <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
-          <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
-        </div>
-      </div>
-
       <!-- 이메일 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Email" class="form-label">이메일</label>
@@ -73,6 +62,17 @@
         </div>
         <div class="col">
           <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled || member.type === 1">계정전환</button>
+        </div>
+      </div>
+
+      <!-- 내 계정 상태(전문가/일반인) -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Status" class="form-label">내 계정 상태</label>
+        <!-- <input type="text" id="Status" class="form-control" value="" aria-label="Disabled input example" disabled readonly> -->
+        <button v-if="!showHiddenText" type="button" class="btn" @click="toggleText">확인하기</button>
+        <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
+          <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
+          <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
         </div>
       </div>
 
