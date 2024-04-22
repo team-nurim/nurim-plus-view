@@ -2,12 +2,23 @@
   <main>
     <div class="container">
       <div class="row align-items-center">
-        <div class="col mb-3">
+        <div class="col mt-3 mb-3">
           <h4>계정 전환</h4>
         </div>
       </div>
 
       <!-- 개인 정보 수정 -->
+      <!-- 내 계정 상태(전문가/일반인) -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Status" class="form-label">내 계정 상태</label>
+        <!-- <input type="text" id="Status" class="form-control" value="" aria-label="Disabled input example" disabled readonly> -->
+        <button type="button" class="btn" @click="toggleText">확인하기</button>
+        <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
+          <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
+          <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
+        </div>
+      </div>
+
       <!-- 이메일 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Email" class="form-label">이메일</label>
@@ -61,7 +72,7 @@
           <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-update" @click="updateMemberInfo">계정전환</button>
+          <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled || member.type === 1">계정전환</button>
         </div>
       </div>
 
@@ -101,7 +112,8 @@ export default {
         type: false,
         memberProfileImage: '',
         expertFile: ''
-      }
+      },
+      showHiddenText: false
     }
   },
   async created () {
@@ -120,6 +132,12 @@ export default {
       await this.fetchMemberInfo();
     }
   },
+  computed: {
+      // 파일 입력이 활성화되었는지 여부를 반환하는 computed 속성 추가
+    isFileInputEnabled() {
+      return this.member.expertFile !== '증빙서류가 등록되지 않았습니다.';
+    }
+  },
   mounted() {
     this.fetchMemberInfo();
   },
@@ -136,26 +154,6 @@ export default {
         this.member = response.data;
       } catch (error) {
         console.error('회원정보를 불러오지 못했습니다.', error);
-      }
-    },
-    async updateMemberInfo() {
-      try {
-        const memberId = this.member.memberId;
-        const updateData = {
-          type : true
-        };
-        const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': `application/json`
-          }
-        });
-        console.log('전문가 전환 수정 성공: ', response.data);
-        alert('전문가 전환이 성공적으로 수정되었습니다.');
-      } catch (error) {
-        console.log('전문가 전환 수정 실패: ', error)
-        alert('전문가 전환 수정에 실패했습니다.');
       }
     },
     async uploadExpertFileImage(event) {
@@ -216,6 +214,13 @@ export default {
         console.error('자격증 이미지 삭제 실패: ', error)
       }
     },
+    async toggleText() {
+      try {
+        this.showHiddenText = !this.showHiddenText;
+      } catch (error) {
+        console.error('텍스트 숨기기/보이기 실패: ', error)
+      }
+    },
     // async agreeAndCloseModal() {
     //   this.agreed = true; // 약관 동의 상태를 true로 변경
     //   const modalElement = document.getElementById('termsModal');
@@ -230,9 +235,6 @@ export default {
       this.loggedIn = false;
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
-    },
-    goBackward () {
-      this.$router.push('/Mypage')
     }
   }
 }
