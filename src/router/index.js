@@ -14,6 +14,21 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/recommandMain',
+    name: 'recommand',
+    component: () => import(/* webpackChunkName: "about" */ '../views/RecommanMain.vue')
+  },
+  {
+    path: '/Go',
+    name: 'GoTo',
+    component: () => import(/* webpackChunkName: "about" */ '../views/GoToMyp.vue')
+  },
+  {
+    path: '/Recommand',
+    name: 'GoTo',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Recommand.vue')
+  },
+  {
     path: '/join',
     name: 'join',
     component: JoinView
@@ -43,6 +58,7 @@ const routes = [
     name: 'switchAccount',
     component: SwitchAccount
   }
+
 ]
 
 const router = createRouter({
