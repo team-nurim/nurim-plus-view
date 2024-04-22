@@ -62,10 +62,29 @@
       <hr class="custom-divider hr-sm">
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center" @click="deleteMemberInfo">
+        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <span class="mx-2">계정 탈퇴</span>
           <span class="mx-2">></span>
         </button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">계정 탈퇴</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              정말 탈퇴하시겠습니까?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" @click="deleteMemberInfo">탈퇴하기</button>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -103,7 +122,8 @@ export default {
         type: false,
         memberProfileImage: '',
         expertFile: ''
-      }
+      },
+      showModal: false
     }
   },
   async created () {
