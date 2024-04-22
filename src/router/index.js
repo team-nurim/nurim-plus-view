@@ -12,6 +12,10 @@ import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
 import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
 import SwitchAccount from '../views/mypage/SwitchAccount.vue'
 import Policy from '../views/Policy.vue'
+import CommunityView from '../views/community/Community.vue'
+import CommunityDetailView from '../views/community/CommunityDetail.vue'
+import CommunityCreateView from '../views/community/CommunityCreateView.vue'
+import CommunityUpdate from '../views/community/CommunityUpdate.vue'
 
 const routes = [
   {
@@ -76,6 +80,28 @@ const routes = [
     path: '/updateMemberInfo',
     name: 'updateMemberInfo',
     component: UpdateMemberInfo
+  },
+  {
+    path: '/community',
+    name: 'community',
+    component: CommunityView,
+  },
+  {
+    path: '/community/:communityId',
+    name: 'CommunityDetailView',
+    component: CommunityDetailView,
+    props: true
+  },
+  {
+    path: '/CommunityCreate',
+    name: 'CommunityCreate',
+    component: CommunityCreateView,
+  },
+  {
+    path: '/CommunityUpdate/:communityId',
+    name: 'CommunityUpdate',
+    component: CommunityUpdate,
+    props: true
   },
   {
     path: '/updateMemberInfo2',

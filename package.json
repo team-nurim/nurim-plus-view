@@ -11,10 +11,12 @@
     "axion": "^0.1.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "bootstrap-vue": "^2.23.1",
     "bootstrap-vue-3": "^0.5.1",
     "core-js": "^3.8.3",
     "vue": "^3.4.23",
     "vue-router": "^4.0.3",
+    "vue-toasted": "^1.1.28",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
