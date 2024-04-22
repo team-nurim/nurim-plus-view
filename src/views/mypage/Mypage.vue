@@ -8,14 +8,15 @@
       </div>
 
       <div class="row align-items-center">
-        <div class="col-3 mt-3 align-items-end">
+        <div class="col-6 mt-3 align-items-center">
           <img v-bind:src="member.memberProfileImage" alt="mdo" width="70" height="70" class="rounded-circle">
+          <img v-if="member.type == true" src="../../assets/images/expert_badge.png" alt="mdo" width="50" height="50" style="margin-left: 200px;">
         </div>
-        <div class="col-3 align-items-start">
+        <div class="col-2 align-items-center">
           <div>{{ member.memberNickname }}</div><br>
           <div>{{ member.memberEmail }}</div>
         </div>
-        <div class="col-6 align-items-center">
+        <div class="col-4 align-items-center">
           <button type="button" @click="goForward" class="btn btn-outline-primary">회원 정보 수정</button>
         </div>
       </div>

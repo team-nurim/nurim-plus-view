@@ -34,7 +34,7 @@
                 <img :src=member.memberProfileImage alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu dropdown-menu-end text-small">
-                <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
+                <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b><img v-if="member.type == true" src="../../assets/images/expert_badge.png" alt="mdo2" width="32" height="32" style="margin-left: 30px;"></li>
                 <li><hr class="dropdown-divider"></li>
                 <li style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
                 <li style="padding:0.5rem 1rem"><router-link to="#">계정 전환</router-link></li>
