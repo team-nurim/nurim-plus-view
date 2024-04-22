@@ -9,39 +9,27 @@
       </div>
 
       <!-- 최신 정책 콘텐츠 -->
-      <!-- <div class="post-contents mb-5">
-        <div class="row">
-          <div class="col-md-3" v-for="post in posts" :key="post.postId">
-            <div class="card" style="margin:1.2rem; border:none; text-align: left; padding-left: 0;">
-              <img :src=post.thumbImage class="card-img-top" style="height: 100%; object-fit: cover;">
-              <div class="col-9 card-body">
-                <h5 class="card-title">{{ post.postTitle }}</h5>
-                <p class="card-text">{{ post.postContent }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
       <div class="row mb-5">
 
         <div class="col-md-6 mb-2" v-for="post in posts" :key="post.postId">
-          <div class="card mb-3">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="https://blog.kakaocdn.net/dn/bhC6El/btqV8FgdKOI/e0KV4yevS6HKYecciK9el0/img.png" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body" style="text-align:left;">
-                  <h6 class="card-title mb-2">{{ post.postTitle }}</h6>
-                  <span class="card-text">
-                    {{ post.postContent.slice(0, 30) }}
-                    <span v-if="post.postContent.length > 30">...</span>
-                    </span>
+          <router-link :to="{ name: 'PostView', params: { postId: post.postId }}" style="text-decoration: none; color: inherit;">
+            <div class="card mb-3">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img :src=post.thumbImage class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body" style="text-align:left;">
+                    <h6 class="card-title mb-2">{{ post.postTitle }}</h6>
+                    <span class="card-text">
+                      {{ post.postContent.slice(0, 30) }}
+                      <span v-if="post.postContent.length > 30">...</span>
+                      </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </router-link>
         </div>
 
       </div>
