@@ -22,6 +22,10 @@
             <textarea class="form-control" id="contentInput" v-model="communityData.content" rows="5" placeholder="수정할 내용을 입력하세요" style="width: 1000px; height: 500px; margin-left: auto; margin-right: auto;"></textarea>
             <span v-if="!communityData.content" style="color: red; margin-left: 10px;">내용을 입력해주세요.</span>
         </div>
+        <!-- 이미지 필드 -->
+        <div v-for="(image, index) in images" :key="index">
+        <img :src="image" alt="Community Image">
+    </div>
         <!-- 취소하기 및 등록하기 버튼 -->
         <div class="row" style="margin-top: 20px;">
             <div class="col">
@@ -38,14 +42,15 @@
 import axios from 'axios';
 export default {
     name: 'CommunityUpdate',
-    props: ['communityId'],
+    props: ['communityId','communityImages'],
 
     data() {
         return {
             communityData: {
                 title: '',
                 content: '',
-                category: ''
+                category: '',
+                images: this.communityImages,
             }
         }
     },
@@ -68,6 +73,7 @@ export default {
                 this.communityData.title = community.title;
                 this.communityData.content = community.content;
                 this.communityData.category = community.category;
+                this.communityData.communityImages = community.communityImages;
             } catch (error) {
                 console.error('게시물 정보를 불러올 수 없습니다:', error);
             }

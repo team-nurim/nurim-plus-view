@@ -15,7 +15,7 @@
                       <circle cx="2.5" cy="12.5" r="2" fill="black"/>
                     </svg>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
-                      <li><router-link :to="{name: 'CommunityUpdate', params : { communityId: community.communityId}}" class="dropdown-item" href="#">게시물 수정</router-link></li>
+                      <li><router-link :to="{name: 'CommunityUpdate', params : { communityId: community.communityId, communityImages: community.communityImages}}" class="dropdown-item" href="#">게시물 수정</router-link></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" @click="deleteCommunity">게시물 삭제</a></li>
                     </ul>
@@ -29,7 +29,12 @@
       </div>
       <hr>
       <div class="content-container" style="font-size: 17px; text-align: left;">
+        <div v-if="community.communityImages && community.communityImages.length > 0">
+        <div v-for="(image, index) in community.communityImages" :key="index">
+            <img :src="image" alt="Community Image">
+        </div>
         <p>{{community.content}}</p>
+    </div>
       </div>
       <hr>
       <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;" @keyup.enter="submitReply">

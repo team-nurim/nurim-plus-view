@@ -1,5 +1,5 @@
 c<template>
-      <div class="container2">
+      <div class="List-container">
         <h1 class="title" style="font-weight: bold">무엇이든 물어보세요</h1>
         <router-link to="/CommunityCreate" style="text-decoration: none; color: black;"><p class="subtitle">어디에 어떻게 물어볼지 모르겠다면 여기에</p></router-link>
       </div>
@@ -269,7 +269,7 @@ async searchCommunity() {
     text-indent: -9999px;
   }
   /*=======================메인 타이틀 스타일============================================*/
-  .container2 {
+  .List-container {
     width: 100%;
     height: 28vh;
     flex-direction: column;
