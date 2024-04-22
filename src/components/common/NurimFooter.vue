@@ -27,5 +27,6 @@
 .footer {
   padding: 2rem 0rem;
   bottom: 0;
+  background-color: #F5F5F5;
 }
 </style>

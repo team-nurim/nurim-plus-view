@@ -7,12 +7,24 @@ import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
 import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
 import SwitchAccount from '../views/mypage/SwitchAccount.vue'
 import Policy from '../views/Policy.vue'
+import RecommendMain from '../views/RecommendMain.vue'
+import Recommend from '../views/Recommend.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/recommend-main',
+    name: ' RecommendMain',
+    component: () => import('../views/RecommendMain.vue')
+  },
+  {
+    path: '/recommend',
+    name: 'Recommend',
+    component: () => import('../views/Recommend.vue')
   },
   {
     path: '/join',
@@ -49,6 +61,7 @@ const routes = [
     name: 'policy',
     component: Policy
   }
+
 ]
 
 const router = createRouter({
