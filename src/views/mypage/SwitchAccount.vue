@@ -61,7 +61,7 @@
           <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-update" @click="updateMemberInfo">계정전환</button>
+          <button type="button" class="btn btn-update" @click="updateMemberInfo">계정전환신청</button>
         </div>
       </div>
 

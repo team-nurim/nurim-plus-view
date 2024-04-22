@@ -7,7 +7,26 @@
         </div>
       </div>
 
-            <!-- 거주지 -->
+      <!-- 최신 정책 콘텐츠 -->
+      <div class="post-contents">
+        <h4 class="mb-1">최신 정책 정보</h4>
+
+        <div class="row">
+          <div class="col-md-3" v-for="post in posts" :key="post.postId">
+            <div class="card" style="margin:1.2rem; width:18rem; border:none; text-align: left; padding-left: 0;">
+              <img :src="post.firstImage || '../assets/logo.png'" class="col-3 card-img-top" alt="...">
+              <div class="col-9 card-body" style="padding-left: 0;">
+                <h5 class="card-title">{{ post.postTitle }}</h5>
+                <p class="card-text">{{ post.postContent }}</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 카테고리 선택 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <div class="row">
 
@@ -51,7 +70,7 @@
                   카테고리
                 </button>
               </h2>
-              <div :id="collapseThree" class="accordion-collapse collapse" :data-bs-parent="Policy3">
+              <div :id="collapseThree" class="accordion-collapse collapse show" :data-bs-parent="Policy3">
                 <div class="accordion-body" style="text-align: left;">
                   <a class="dropdown-item mt-3 mb-3" href="#" @click="selectCategory('주거지원')">주거지원</a>
                   <a class="dropdown-item mt-3 mb-3" href="#" @click="selectCategory('출산/양육/보육')">출산/양육/보육</a>
@@ -104,9 +123,11 @@ export default {
         memberProfileImage: '',
         expertFile: ''
       },
+      posts: [],
       accordionId: 'Residence', // 아코디언의 부모 요소 ID
       collapseOne: 'collapseOne', // 첫 번째 아코디언의 collapse ID
       collapseTwo: 'collapseTwo', // 두 번째 아코디언의 collapse ID
+      collapseThree: 'collapseThree',
       selectedRegion: '', // 선택한 도/특별시/광역시
       selectedDistricts: [], // 선택한 시/군/구 목록
     }
@@ -129,6 +150,7 @@ export default {
   },
   mounted() {
     this.fetchMemberInfo();
+    this.fetchPosts();
   },
   methods: {
     async fetchMemberInfo () {
@@ -143,6 +165,21 @@ export default {
         this.member = response.data;
       } catch (error) {
         console.error('회원정보를 불러오지 못했습니다.', error);
+      }
+    },
+    async fetchPosts () {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+        const response = await axios.get(`/api/v1/home/postList`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,  // 토큰 헤더에 추가
+            'Content-Type': `application/json`
+          }
+        })
+      // postId에 따라 데이터 필터링하여 할당
+      this.posts = response.data.content;
+      } catch (error) {
+        console.error('게시물을 불러오지 못했습니다.', error);
       }
     },
     logout () {
