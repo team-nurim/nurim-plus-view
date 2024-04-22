@@ -33,8 +33,8 @@
         <div v-for="(image, index) in community.communityImages" :key="index">
             <img :src="image" alt="Community Image">
         </div>
-        <p>{{community.content}}</p>
     </div>
+    <p>{{community.content}}</p>
       </div>
       <hr>
       <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;" @keyup.enter="submitReply">

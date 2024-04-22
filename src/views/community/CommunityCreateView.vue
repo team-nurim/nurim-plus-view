@@ -109,15 +109,18 @@ export default {
       window.history.back();
     },
     async createBoard() {
-      try {
-        const registrationResponse = await this.register();
-        const communityId = registrationResponse.communityId;
-        await this.axiosUploadImages(communityId);
-        this.$router.push({ name: 'CommunityDetailView', params: { communityId: communityId } });
-      } catch (error) {
-        console.error('게시물 등록 및 이미지 업로드 실패:', error);
-      }
+  try {
+    const registrationResponse = await this.register();
+    const communityId = registrationResponse.communityId;
+    // 이미지 파일이 있는 경우에만 업로드하도록 분기 처리
+    if (this.imageFile) {
+      await this.axiosUploadImages(communityId);
     }
+    this.$router.push({ name: 'CommunityDetailView', params: { communityId: communityId } });
+  } catch (error) {
+    console.error('게시물 등록 및 이미지 업로드 실패:', error);
+  }
+}
   }
 }
 </script>

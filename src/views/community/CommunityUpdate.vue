@@ -22,17 +22,39 @@
             <textarea class="form-control" id="contentInput" v-model="communityData.content" rows="5" placeholder="수정할 내용을 입력하세요" style="width: 1000px; height: 500px; margin-left: auto; margin-right: auto;"></textarea>
             <span v-if="!communityData.content" style="color: red; margin-left: 10px;">내용을 입력해주세요.</span>
         </div>
-        <!-- 이미지 필드 -->
-        <div v-for="(image, index) in images" :key="index">
-        <img :src="image" alt="Community Image">
-    </div>
-        <!-- 취소하기 및 등록하기 버튼 -->
+        
+        <!-- 이미지 업로드를 위한 input 요소 추가 -->
+        <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
+        <div class="mb-3 row">
+            <div class="col-md-8">
+                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
+            </div>
+        </div>
+
+        <!-- 이미지 목록 표시 -->
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div v-if="communityData.communityImages && communityData.communityImages.length > 0" class="mb-3">
+                    <h3 class="text-center mb-3">이미지</h3>
+                    <div class="image-list">
+                        <div v-for="(image, index) in communityData.communityImages" :key="index" class="image-item">
+                            <!-- 이미지가 유효한 URL인 경우에만 출력 -->
+                            <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                            <!-- 이미지 삭제 버튼 -->
+                            <button class="btn btn-danger btn-sm delete-image-btn" @click="deleteImage(communityData.communityImageId[index], $event)">X</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 취소하기 및 수정하기 버튼 -->
         <div class="row" style="margin-top: 20px;">
             <div class="col">
                 <button class="btn btn-secondary" @click="cancel">취소하기</button>
             </div>
             <div class="col">
-                <button class="btn btn-primary" @click="modifyCommunity">등록하기</button>
+                <button class="btn btn-primary" @click="modifyCommunity">수정하기</button>
             </div>
         </div>
     </div>
@@ -40,9 +62,10 @@
 
 <script>
 import axios from 'axios';
+
 export default {
     name: 'CommunityUpdate',
-    props: ['communityId','communityImages'],
+    props: ['communityId', 'communityImages'],
 
     data() {
         return {
@@ -50,9 +73,11 @@ export default {
                 title: '',
                 content: '',
                 category: '',
-                images: this.communityImages,
-            }
-        }
+                communityImages: [],
+                communityImageId: [],
+            },
+            imageFile: null, // 이미지 파일을 저장할 변수 추가
+        };
     },
 
     mounted() {
@@ -60,13 +85,35 @@ export default {
     },
 
     methods: {
+        handleImageUpload(event) {
+            this.imageFile = event.target.files[0];
+            console.log('이미지 오냐', this.imageFile);
+        },
+        async axiosUploadImages(communityId) {
+            try {
+                const accessToken = localStorage.getItem('accessToken');
+                const formData = new FormData();
+                formData.append('files', this.imageFile);
+                const url = `http://localhost:8080/api/v1/communityImages/upload/${communityId}`;
+                const response = await axios.post(url, formData, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                console.log('이미지 업로드 성공:', response.data);
+            } catch (error) {
+                console.error('이미지 업로드 실패:', error);
+                throw error;
+            }
+        },
         async axiosCommunityData() {
             try {
                 const accessToken = localStorage.getItem('accessToken');
                 const response = await axios.get(`http://localhost:8080/api/v1/communityRead/${this.communityId}`, {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
                 });
                 const community = response.data;
 
@@ -74,6 +121,7 @@ export default {
                 this.communityData.content = community.content;
                 this.communityData.category = community.category;
                 this.communityData.communityImages = community.communityImages;
+                this.communityData.communityImageId = community.communityImageId;
             } catch (error) {
                 console.error('게시물 정보를 불러올 수 없습니다:', error);
             }
@@ -84,15 +132,22 @@ export default {
                 formData.append('title', this.communityData.title);
                 formData.append('content', this.communityData.content);
                 formData.append('category', this.communityData.category);
+                formData.append('communityId', this.communityData.communityId);
 
                 const accessToken = localStorage.getItem('accessToken');
+
+                // 이미지 파일이 있는 경우에만 이미지 업로드 실행
+                if (this.imageFile) {
+                    await this.axiosUploadImages(this.communityId);
+                }
+
                 const url = `http://localhost:8080/api/v1/communityUpdate/${this.communityId}/${accessToken}`;
 
                 const response = await axios.put(url, formData, {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                    },
                 });
                 alert('게시물이 수정되었습니다.');
                 this.$router.push({ name: 'CommunityDetailView', params: { communityId: this.communityId } });
@@ -101,12 +156,31 @@ export default {
             }
         },
         cancel() {
-            window.history.back()
-        }
-    }
-}
+            window.history.back();
+        },
+        isImageUrl(url) {
+            if (typeof url !== 'string') return false; // URL이 문자열이 아닌 경우 false 반환
+            return url.startsWith('http') && (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.gif'));
+        },
+
+        async deleteImage(communityImageId, event) {
+            try {
+                const accessToken = localStorage.getItem('accessToken');
+                const url = `http://localhost:8080/api/v1/communityImage/${communityImageId}`;
+
+                const response = await axios.delete(url, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                });
+                alert('이미지가 삭제 되었습니다.');
+            } catch (error) {
+                console.error('이미지가 삭제가 안됩니다.', error);
+            }
+        },
+    },
+};
 </script>
 
 <style>
-
 </style>
