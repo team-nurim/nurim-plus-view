@@ -19,34 +19,34 @@
         <!-- 내용 입력 필드 -->
         <div class="form-group">
             <label for="contentInput">내용</label>
-            <textarea class="form-control" id="contentInput" v-model="communityData.content" rows="5" placeholder="수정할 내용을 입력하세요" style="width: 1000px; height: 500px; margin-left: auto; margin-right: auto;"></textarea>
+            <textarea class="form-control" id="contentInput" v-model="communityData.content" rows="5" placeholder="수정할 내용을 입력하세요" style="width: 1000px; height: 250px; margin-left: auto; margin-right: auto;"></textarea>
             <span v-if="!communityData.content" style="color: red; margin-left: 10px;">내용을 입력해주세요.</span>
         </div>
         
         <!-- 이미지 업로드를 위한 input 요소 추가 -->
         <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
-        <div class="mb-3 row">
-            <div class="col-md-8">
+        <div class="mb-3 row justify-content-center">
+            <div class="col-md-9">
                 <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
             </div>
         </div>
 
         <!-- 이미지 목록 표시 -->
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div v-if="communityData.communityImages && communityData.communityImages.length > 0" class="mb-3">
-                    <h3 class="text-center mb-3">이미지</h3>
-                    <div class="image-list">
-                        <div v-for="(image, index) in communityData.communityImages" :key="index" class="image-item">
-                            <!-- 이미지가 유효한 URL인 경우에만 출력 -->
-                            <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
-                            <!-- 이미지 삭제 버튼 -->
-                            <button class="btn btn-danger btn-sm delete-image-btn" @click="deleteImage(communityData.communityImageId[index], $event)">X</button>
-                        </div>
-                    </div>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div v-if="communityData.communityImages && communityData.communityImages.length > 0" class="mb-3">
+            <h3 class="text-center mb-3">이미지</h3>
+            <div class="image-list">
+                <div v-for="(image, index) in communityData.communityImages" :key="index" class="image-item">
+                    <!-- 이미지가 유효한 URL인 경우에만 출력 -->
+                    <img :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                    <!-- 이미지 삭제 버튼 -->
+                    <button class="btn btn-sm delete-image-btn" @click="deleteImage(communityData.communityImageId[index], $event)"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
         </div>
+    </div>
+</div>
         
         <!-- 취소하기 및 수정하기 버튼 -->
         <div class="row" style="margin-top: 20px;">
@@ -86,9 +86,19 @@ export default {
 
     methods: {
         handleImageUpload(event) {
-            this.imageFile = event.target.files[0];
-            console.log('이미지 오냐', this.imageFile);
-        },
+    // 이미지 파일을 저장
+    this.imageFile = event.target.files[0];
+    
+    // 이미지 파일을 업로드하고 URL을 가져와서 미리보기 이미지 배열에 추가
+    this.axiosUploadImages(this.communityId)
+        .then(response => {
+            const imageUrl = response.data.url; // 이미지의 URL
+            this.communityData.communityImages.push(imageUrl); // 미리보기 이미지 배열에 추가
+        })
+        .catch(error => {
+            console.error('이미지 업로드 실패:', error);
+        });
+},
         async axiosUploadImages(communityId) {
             try {
                 const accessToken = localStorage.getItem('accessToken');
@@ -102,6 +112,9 @@ export default {
                     },
                 });
                 console.log('이미지 업로드 성공:', response.data);
+
+                const imageUrl = response.data.url
+                this.communityData.communityImages.push(imageUrl)
             } catch (error) {
                 console.error('이미지 업로드 실패:', error);
                 throw error;
@@ -133,6 +146,7 @@ export default {
                 formData.append('content', this.communityData.content);
                 formData.append('category', this.communityData.category);
                 formData.append('communityId', this.communityData.communityId);
+                formData.append('communityImageId', this.communityData.communityImageId);
 
                 const accessToken = localStorage.getItem('accessToken');
 
@@ -164,20 +178,28 @@ export default {
         },
 
         async deleteImage(communityImageId, event) {
-            try {
-                const accessToken = localStorage.getItem('accessToken');
-                const url = `http://localhost:8080/api/v1/communityImage/${communityImageId}`;
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const url = `http://localhost:8080/api/v1/communityImage/${communityImageId}`;
 
-                const response = await axios.delete(url, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                    },
-                });
-                alert('이미지가 삭제 되었습니다.');
-            } catch (error) {
-                console.error('이미지가 삭제가 안됩니다.', error);
-            }
-        },
+        const response = await axios.delete(url, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        // 이미지 삭제 후 communityData에서 해당 이미지와 이미지 ID 제거
+        const index = this.communityData.communityImageId.indexOf(communityImageId);
+        if (index !== -1) {
+            this.communityData.communityImages.splice(index, 1);
+            this.communityData.communityImageId.splice(index, 1);
+        }
+
+        alert('이미지가 삭제 되었습니다.');
+    } catch (error) {
+        console.error('이미지가 삭제가 안됩니다.', error);
+    }
+},
     },
 };
 </script>
