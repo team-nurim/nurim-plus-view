@@ -73,16 +73,16 @@ const routes = [
     name: 'switchAccount',
     component: SwitchAccount
   },
-  ,
   {
     path: '/policy',
     name: 'policy',
     component: Policy
   },
   {
-    path: '/post/read',
+    path: '/post/read/:postId',
     name: 'PostView',
-    component: () => import('../views/policy/PostView.vue')
+    component: () => import('../views/policy/PostView.vue'),
+    props: true
   },
   {
     path: '/recommend-main',

@@ -1,28 +1,30 @@
 <template>
   <main class="mt-5 mb-5">
+    <div class="container" style="padding:0;">
 
-    <div class="container">
-      
-      <h2 class="text-center mb-5">postRead.postTitle</h2>
-
-      <div class="border">
-        <p class="form-control-plaintext">postRead.postCategory</p>
-      </div>
-
-      <div class="border">
-        <p class="form-control-plaintext">postRead.postRegisterDate</p>
-      </div>
-
+      <!-- 타이틀 이미지 -->
       <div class="mb-5" style="margin:0; padding:0;">
-        <img src="https://www.korea.kr/newsWeb/resources/attaches/2023.12/18/4d1dfe2ada4785a5db8d04cc16db9bb0.jpg">
+        <img :src="post.postImages && post.postImages.length > 0 ? post.postImages[0] : ''" width="100%">
       </div>
 
-      <div class="row">
-        <p class="form-control-plaintext">postRead.postContent</p>
+      <div style="text-align:left;">
+        <div class="mb-5">
+          <button class="btn btn-outline-secondary btn-sm mb-3" style="border-radius:1.5rem; padding: 0.2rem 1rem;">{{ post.postCategory }}</button>
+          <h4 class="text-center mb-3 text-start">{{ post.postTitle }}</h4>
+          <p class="form-control-plaintext">{{ post.postRegisterDate }}</p>
+        </div>
+
+        <div>
+            <p class="form-control-plaintext">{{ post.postContent }}</p>
+        </div>
+      </div>
+      
+      <!-- 본문 이미지 -->
+      <div class="mb-3" v-if="post.postImages && post.postImages.length > 1">
+        <img v-for="(image, index) in post.postImages.slice(1)" :key="index" :src="image" width="100%">
       </div>
 
     </div>
-
   </main>
 </template>
 <script>
