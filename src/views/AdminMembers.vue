@@ -250,25 +250,37 @@ export default {
       this.selectedMembers = this.selectedMembers.length === this.membersList.length ? [] : [...this.membersList];
     },
     confirmDelete() {
-      if (this.selectedMembers.length === 0) {
-        console.warn('삭제할 회원을 선택해주세요.');
-        return;
-      }
+  if (this.selectedMembers.length === 0) {
+    console.warn('삭제할 회원을 선택해주세요.');
+    return;
+  }
 
-      if (confirm('선택한 회원을 탈퇴하시겠습니까?')) {
-        const memberIdList = this.selectedMembers.map(member => member.memberId);
+  if (confirm('선택한 회원을 탈퇴하시겠습니까?')) {
+    const deletePromises = this.selectedMembers.map(member => {
+      axios.delete(`http://localhost:8080/api/v1/admin/${member.memberId}`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        console.log(`${member.memberId} 님의 탈퇴가 성공적으로 처리되었습니다.`);
+      }).catch(error => {
+        console.error('서버 응답 에러:', error.response ? error.response.data : error.message);
+        throw error;
+      });
+    });
 
-        axios.delete('http://localhost:8080/api/v1/members', { data: memberIdList })
-          .then(response => {
-            console.log('회원 탈퇴가 성공적으로 처리되었습니다.');
-            this.membersList = this.membersList.filter(member => !memberIdList.includes(member.memberId));
-            this.selectedMembers = [];
-          })
-          .catch(error => {
-            console.error('회원 탈퇴 중 오류가 발생했습니다:', error);
-          });
-      }
-    },
+    Promise.all(deletePromises)
+      .then(() => {
+        // 선택된 회원 목록에서 삭제
+        this.membersList = this.membersList.filter(member => !this.selectedMembers.includes(member));
+        this.selectedMembers = [];
+      })
+      .catch(error => {
+        console.error('회원 탈퇴 중 오류가 발생했습니다:', error);
+      });
+    }
+  },
     sortMembers() {
   // sortBy 값에 따라 회원 목록을 정렬합니다.
   // memberId: 작성자(ID)순, joinDate: 가입일순, memberNickname: 이름순

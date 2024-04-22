@@ -2,7 +2,7 @@
   <div>
     <h1>전체 회원 리스트</h1>
     <input type="text" v-model="searchKeyword" placeholder="검색어를 입력하세요" />
-    <div class="member-container">
+    <div class="admember-container">
       <div v-if="loading" class="loader">로딩 중...</div>
       <div v-else>
         <table>
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style scoped>
-.member-container {
+.admember-container {
   margin-top: 20px;
 }
 
