@@ -16,7 +16,8 @@ export default createStore({
       state.accessToken = accessToken
     },
     clearAccessToken (state) {
-      state.accessToken = null
+      localStorage.removeItem('accessToken')
+      state.loggedIn = false
     },
     setLoggedIn (state, loggedIn) {
       state.loggedIn = loggedIn
@@ -29,10 +30,8 @@ export default createStore({
       localStorage.setItem('accessToken', accessToken)
     },
     clearAccessToken ({ commit }) {
-      commit('clearToken')
-      commit('setLoggedIn', false)
       // 로컬 스토리지에서 토큰 제거
-      localStorage.removeItem('accessToken')
+      commit('clearAccessToken')
     }
   },
   modules: {

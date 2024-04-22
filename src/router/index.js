@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import JoinView from '../views/join/JoinView.vue'
 import LoginView from '../views/LoginView.vue'
-import Mypage from '../views/Mypage.vue'
-import UpdateMemberInfo from '../views/UpdateMemberInfo.vue'
+import Mypage from '../views/mypage/Mypage.vue'
+import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
+import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
+import SwitchAccount from '../views/mypage/SwitchAccount.vue'
 
 const routes = [
   {
@@ -46,7 +48,16 @@ const routes = [
     name: 'updateMemberInfo',
     component: UpdateMemberInfo
   },
-
+  {
+    path: '/updateMemberInfo2',
+    name: 'updateMemberInfo2',
+    component: UpdateMemberInfo2
+  },
+  {
+    path: '/switchAccount',
+    name: 'switchAccount',
+    component: SwitchAccount
+  }
 
 ]
 
