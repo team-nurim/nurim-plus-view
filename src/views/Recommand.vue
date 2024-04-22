@@ -1,80 +1,89 @@
-<!-- 부모 컴포넌트 -->
 <template>
   <div class="chat-window">
-    <div
-      v-for="msg in messages"
-      :key="msg.id"
-      class="message-card"
-      :class="{ 'owner': msg.senderId === currentUserId }"
-    >
+    <!-- Only the active message will display its options -->
+    <div v-for="(msg, index) in messages" :key="msg.id" class="message-card" :class="{ 'owner': msg.senderId === currentUserId }">
       <div class="message-content">
         <p>{{ msg.text }}</p>
-        <p v-if="msg.details">{{ msg.details }}</p>
-        <!-- 라디오 버튼 옵션을 렌더링합니다 -->
-        <div v-if="msg.options" class="options-group">
+        <div v-if="index === activeMessageIndex" class="options-group">
           <div v-for="option in msg.options" :key="option.id">
-            <input type="radio"
-                   :name="`optionGroup-${msg.id}`"
-                   :id="`option-${option.id}`"
-                   :value="option.id"
-                   v-model="selectedOption"
-                   @change="handleOptionChange">
+            <input type="radio" :id="`option-${option.id}`" :value="option.id" v-model="selectedOption" @change="handleOptionChange">
             <label :for="`option-${option.id}`">{{ option.text }}</label>
           </div>
+          <!-- '다음' 버튼 will only show when an option is selected -->
+          <button v-if="selectedOption" @click="submitSelection">다음</button>
         </div>
-        <!-- 다음 버튼을 렌더링합니다 -->
-        <button v-if="msg.options" @click="submitSelection(msg)">다음</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'; // 이 라인을 추가하세요
-
 export default {
   data() {
     return {
-      allMessages: [
-        { id: 1, text: '안녕하세요! 정책찾아드리기에 잘오셨습니다.', senderId: 'user123' },
-        { id: 2, text: '먼저, 거주하시는 지역을 선택해주세요.', senderId: 'user123', options: [
-          { id: 'seoul', text: '특별시' },
-          { id: 'busan', text: '경기도' },
-          { id: 'seoul', text: '광역시' },
-          { id: 'busan', text: '특별자치도' },
-        ] }
+      // Initialize with only the first message active
+      messages: [
+        { id: 1, text: '안녕하세요! 정책찾아드리기에 잘오셨습니다.', options: getInitialOptions() }
       ],
-      messages: [],
       currentUserId: 'user123',
-      selectedOption: null
+      selectedOption: null,
+      activeMessageIndex: 0
     };
   },
-  mounted() {
-    this.messages = this.allMessages;
-  },
   methods: {
-    submitSelection(msg) {
-      // 다음 질문이나 정보를 로딩
-      axios.get(`/api/childcare`) // 스프링부트 서버의 API를 호출합니다.
-        .then(response => {
-          // API로부터 받은 데이터를 messages 배열에 추가하여 화면에 표시합니다.
-          this.messages.push(...response.data.map(item => ({
-            id: item.id,
-            text: `지역: ${item.sigunNm}, 사업명: ${item.bizNm}, 지원금액: ${item.payment}`,
-            senderId: 'system'
-          })));
-        })
-        .catch(error => {
-          console.error('API 호출 에러:', error);
-        });
+    submitSelection() {
+      // Move to next step or fetch additional info if end of flow
+      if (this.activeMessageIndex === 0) {
+        this.updateMessageForGender();
+      } else if (this.activeMessageIndex === 1) {
+        this.updateMessageForAge();
+      } else {
+        this.fetchAdditionalInfo();
+      }
+      this.selectedOption = null; // Clear selection
     },
     handleOptionChange() {
-      // 추가적인 변화 처리가 필요한 경우 여기에 구현
-    }
+      // You can add additional logic for option change if needed
+    },
+    updateMessageForGender() {
+      const genderOptions = [
+        { id: 'male', text: '남성' },
+        { id: 'female', text: '여성' }
+      ];
+      this.addNewMessage('성별을 선택해주세요.', genderOptions);
+    },
+    updateMessageForAge() {
+      const ageOptions = [
+        { id: '20s', text: '20대' },
+        { id: '30s', text: '30대' },
+        { id: '40s', text: '40대' },
+        { id: '50s', text: '50대 이상' }
+      ];
+      this.addNewMessage('연령대를 선택해주세요.', ageOptions);
+    },
+    addNewMessage(text, options) {
+      this.messages.push({ id: this.messages.length + 1, text, options });
+      this.activeMessageIndex++;
+    },
+    fetchAdditionalInfo() {
+      // ... Axios API call and response handling
+    },
+    processResponse(data) {
+      // ... Process and display the information from API response
+    },
+
   }
 };
-</script>
 
+function getInitialOptions() {
+  return [
+    { id: 'seoul', text: '특별시' },
+    { id: 'gyeonggi', text: '경기도' },
+    { id: 'busan', text: '광역시' },
+    { id: 'jeju', text: '특별자치도' }
+  ];
+}
+</script>
 
 <style scoped>
 .chat-window {

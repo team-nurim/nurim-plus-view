@@ -26,7 +26,7 @@
       <footer class="app-footer">
         <button class="interview-button">들어갈것</button> <br>
           <!-- '정책 매칭' 링크 버튼 -->
-      <a href="/jh" class="interview-button-link">정책 매칭</a><br>
+      <a href="/recommand" class="interview-button-link">정책 매칭</a><br>
       <!-- <button @click="getData"> 호출된데이터부분</button><br> -->
   <!-- 'new' 링크 버튼 -->
   <a href="/Go" class="interview-button-link btn btn-primary">회원가입하고오세요</a>
