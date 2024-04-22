@@ -1,17 +1,26 @@
 <template>
   <div id="app">
-    <HeaderAdmin />
+    <component :is="headerComponent" />
     <div class="router-view-container">
       <router-view/>
     </div>
-    <FooterAdmin />
+    <Footer />
   </div>
 </template>
 <script>
 import HeaderAdmin from './layout/HeaderAdmin.vue'
-import FooterAdmin from './layout/FooterAdmin.vue'
+import Header from './components/common/NurimHeader.vue'
+import Footer from './components/common/NurimFooter.vue'
 export default {
-  components: { HeaderAdmin, FooterAdmin }
+// eslint-disable-next-line
+/* eslint-disable */
+  components: { HeaderAdmin, Footer, Header },
+  computed: {
+    headerComponent() {
+      // 현재 경로에 따라 다른 헤더 컴포넌트를 선택합니다.
+      return this.$route.path.startsWith('/admin') ? 'HeaderAdmin' : 'Header';
+    }
+  }
 }
 // eslint-disable-next-line
 /* eslint-disable */
