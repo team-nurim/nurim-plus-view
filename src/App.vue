@@ -11,14 +11,20 @@
 import HeaderAdmin from './layout/HeaderAdmin.vue'
 import Header from './components/common/NurimHeader.vue'
 import Footer from './components/common/NurimFooter.vue'
+
 export default {
-// eslint-disable-next-line
+  // eslint-disable-next-line
 /* eslint-disable */
   components: { HeaderAdmin, Footer, Header },
   computed: {
     headerComponent() {
-      // 현재 경로에 따라 다른 헤더 컴포넌트를 선택합니다.
-      return this.$route.path.startsWith('/admin') ? 'HeaderAdmin' : 'Header';
+      // '/admin' 경로에 대한 헤더 컴포넌트 선택
+      if (this.$route.path.startsWith('/admin')) {
+        return 'HeaderAdmin';
+      } else {
+        // 기본값으로 헤더 컴포넌트 선택
+        return 'Header';
+      }
     }
   }
 }

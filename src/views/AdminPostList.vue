@@ -1,6 +1,6 @@
 <template>
   <main class="mt-3">
-    <div class="container-post-list">
+    <div class="container">
       <div class="row mb-2 d-flex justify-content-center">
           <h3 class="mt-3" style="font-weight: bold">정책정보관리</h3>
         <div class="col-12 d-flex justify-content-center">
