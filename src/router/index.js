@@ -32,7 +32,7 @@ const routes = [
   },
   {
     path: '/admin/post/read/:postId', // postId를 동적으로 받아오는 부분입니다.
-    name: 'admin/post/read',
+    name: 'AdminPostRead',
     props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
     component: AdminPostRead
   },

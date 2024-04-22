@@ -5,12 +5,12 @@
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
-            <div class="mb-3 row">
+            <!-- <div class="mb-3 row">
               <label for="memberId" class="col-md-3 col-form-label">memberId</label>
               <div class="col-md-9">
                 <input v-model="postData.memberId" type="text" class="form-control" id="memberId">
               </div>
-            </div>
+            </div> -->
             <!-- 입력 요소들을 중앙에 배치 -->
             <div class="mb-3 row">
               <label for="postTitle" class="col-md-3 col-form-label">제목</label>
@@ -41,6 +41,13 @@
               <label for="postContent" class="col-md-3 col-form-label">내용</label>
               <div class="col-md-9">
                 <textarea v-model="postData.postContent" class="form-control" id="postContent" rows="5"></textarea>
+              </div>
+            </div>
+                        <!-- 이미지 업로드를 위한 input 요소 추가 -->
+            <div class="mb-3 row">
+              <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
+              <div class="col-md-9">
+                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
               </div>
             </div>
           </form>
@@ -84,13 +91,15 @@ export default {
   data () {
     return {
       postData: {
-        memberId: '',
+        // memberId: '',
         postTitle: '', // 제목 입력 필드의 데이터
         postCategory: '',
         postRegisterDate: '', // 내용 입력 필드의 데이터
         postWriter: '', // 내용 입력 필드의 데이터
         postContent: '', // 내용 입력 필드의 데이터
+        postId:'',
       },
+      imageFile: null,
       modalVisible: false, // 모달의 표시 여부
     }
   },
@@ -100,7 +109,7 @@ export default {
         // FormData 객체 생성
         const formData = new FormData();
         // 입력 데이터 추가
-        formData.append('memberId', this.postData.memberId);
+        // formData.append('memberId', this.postData.memberId);
         formData.append('postTitle', this.postData.postTitle);
         formData.append('postCategory', this.postData.postCategory);
         formData.append('postRegisterDate', this.postData.postRegisterDate);
@@ -110,7 +119,7 @@ export default {
         const accessToken = localStorage.getItem('accessToken')
 
         // API 호출
-         const url = `http://localhost:8080/api/v1/posts/post/register/${this.postData.memberId}`;
+         const url = `http://localhost:8080/api/v1/posts/post/register/${accessToken}`;
 
          const response = await axios.post(url, formData, {
           headers: {
@@ -118,16 +127,43 @@ export default {
             'Authorization': `Bearer ${accessToken}`
           }
         });
+        return response.data; // 게시물 정보 반환
         
         // 성공 시 처리
         // 성공 시 alert 메시지 표시
         alert('게시물이 등록되었습니다.');
         console.log('게시물 등록 완료:', response.data);
+        // console.log('token :', accessToken)
         // 리스트 페이지로 이동
         this.$router.push('/admin/post/list');
       } catch (error) {
         console.error('게시물 등록 실패:', error);
       }
+    },
+     async uploadImage(postId) {
+      const formData = new FormData();
+      formData.append('files', this.imageFile);
+      formData.append('postId', this.postId); // 수정된 부분
+
+      try {
+        console.log('Uploaded image:', this.imageFile);
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.post(`http://localhost:8080/api/v1/posts/post/upload/${postId}`, formData, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        this.imageFile = response.data.uuid;
+      } catch (error) {
+        console.log('업로드 실패 이유:', this.imageFile)
+        console.error('이미지 업로드 실패:', error);
+      }
+    },
+    
+    handleImageUpload(event){
+      this.imageFile = event.target.files[0];
+      console.log('Uploaded image:', this.imageFile);
     },
     showModal() {
       this.modalVisible = true; // 모달 표시
@@ -135,10 +171,18 @@ export default {
     hideModal() {
       this.modalVisible = false; // 모달 숨김
     },
-    savePostAndHideModal() {
-      this.savePost(); // 게시물 저장
-      this.hideModal(); // 모달 숨김
-    },
+   async savePostAndHideModal() {
+      try {
+        const registerResponse = await this.savePost();
+        const postId = registerResponse.postId;
+
+        await this.uploadImage(postId);
+        this.$router.push({ name: 'AdminPostRead', params: { postId: postId } });
+        this.hideModal();
+      } catch(error) {
+        console.error('이미지 업로드 실패 이유:', error);
+      }
+    }
   }
 }
 </script>

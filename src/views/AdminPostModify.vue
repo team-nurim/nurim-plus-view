@@ -249,7 +249,7 @@ export default {
       this.modifyModalVisible  = false; // 모달 숨김
     },
     modifyPostAndHideModal() {
-      this.uploadImage(); // 이미지 저장
+      this.uploadImage(this.postId); // 이미지 저장
       this.modifyPost(); // 게시물 저장
       this.hideModal(); // 모달 숨김
     },
@@ -277,7 +277,7 @@ export default {
       this.imageFile = event.target.files[0];
       console.log('Uploaded image:', this.imageFile);
     },
-    async uploadImage() {
+    async uploadImage(postId) {
       const formData = new FormData();
       formData.append('files', this.imageFile);
       formData.append('postId', this.postId); // 수정된 부분
@@ -285,7 +285,7 @@ export default {
       try {
         console.log('Uploaded image:', this.imageFile);
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.post(`http://localhost:8080/api/v1/posts/post/upload`, formData, {
+        const response = await axios.post(`http://localhost:8080/api/v1/posts/post/upload/${postId}`, formData, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'multipart/form-data'
