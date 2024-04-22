@@ -65,6 +65,12 @@ export default {
       }
     }
   },
+  async mounted() {
+    await this.checkLoggedIn(); // 마운트 후 로그인 상태 확인
+    if (this.loggedIn) {
+      await this.fetchMemberInfo(); // 로그인된 경우 회원 정보 가져오기
+    }
+  },
   async created () {
     const accessToken = localStorage.getItem('accessToken')
     if (accessToken) {

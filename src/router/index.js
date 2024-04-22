@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AdminPostList from '../views/AdminPostList.vue'
-import AdminPostRegister from '../views/AdminPostRegister.vue'
-import AdminPostRead from '../views/AdminPostRead.vue'
-import AdminPostModify from '../views/AdminPostModify.vue'
+import AdminPostList from '../views/post/AdminPostList.vue'
+import AdminPostRegister from '../views/post/AdminPostRegister.vue'
+import AdminPostRead from '../views/post/AdminPostRead.vue'
+import AdminPostModify from '../views/post/AdminPostModify.vue'
 import AdminLogin from '../views/AdminLogin.vue'
 import JoinView from '../views/join/JoinView.vue'
 import LoginView from '../views/LoginView.vue'
@@ -20,18 +20,18 @@ import CommunityUpdate from '../views/community/CommunityUpdate.vue'
 const routes = [
   {
     path: '/admin/post/list',
-    name: 'admin/post/list',
+    name: 'AdminPostList',
     props: true,
     component: AdminPostList
   },
   {
     path: '/admin/post/register',
-    name: 'admin/post/register',
+    name: 'AdminPostRegister',
     component: AdminPostRegister
   },
   {
     path: '/admin/post/modify/:postId',
-    name: 'admin/post/modify',
+    name: 'AdminPostModify',
     props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
     component: AdminPostModify
   },
