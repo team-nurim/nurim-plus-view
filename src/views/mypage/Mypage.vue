@@ -170,7 +170,8 @@ export default {
           }
         });
         console.log('계정 삭제 성공: ', response.data);
-        alert('계정 삭제가 성공적으로 수정되었습니다.');
+        alert('정상적으로 탈퇴되었습니다.');
+        this.$router.push('/')
       } catch (error) {
         console.log('계정 삭제 실패: ', error)
         alert('계정 삭제에 실패했습니다.');
