@@ -1,16 +1,15 @@
 <template>
   <div class="chat-window">
-    <!-- Only the active message will display its options -->
-    <div v-for="(msg, index) in messages" :key="msg.id" class="message-card" :class="{ 'owner': msg.senderId === currentUserId }">
+    <div v-for="msg in messages" :key="msg.id" class="message-card" :class="{ 'owner': msg.senderId === currentUserId }">
       <div class="message-content">
         <p>{{ msg.text }}</p>
-        <div v-if="index === activeMessageIndex" class="options-group">
+        <div v-if="msg.options.length" class="options-group">
           <div v-for="option in msg.options" :key="option.id">
-            <input type="radio" :id="`option-${option.id}`" :value="option.id" v-model="selectedOption" @change="handleOptionChange">
+            <input type="radio" :id="`option-${option.id}`" :value="option.id" v-model="selectedOption">
             <label :for="`option-${option.id}`">{{ option.text }}</label>
           </div>
-          <!-- '다음' 버튼 will only show when an option is selected -->
-          <button v-if="selectedOption" @click="submitSelection">다음</button>
+          <!-- '다음' 버튼은 첫 번째 메시지에서만 보이지 않도록 설정 -->
+        <button v-if="msg.id !== 1 || selectedOption" @click="submitSelection">다음</button>
         </div>
       </div>
     </div>
@@ -18,71 +17,88 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      // Initialize with only the first message active
       messages: [
-        { id: 1, text: '안녕하세요! 정책찾아드리기에 잘오셨습니다.', options: getInitialOptions() }
+        { id: 1, senderId: 'system', text: '먼저 지역을 선택해주세요!', options: [
+          { id: 'seoul', text: '특별시' },
+          { id: 'gyeonggi', text: '경기도' },
+          { id: 'busan', text: '광역시' },
+          { id: 'jeju', text: '특별자치도' }
+        ]}
       ],
       currentUserId: 'user123',
-      selectedOption: null,
-      activeMessageIndex: 0
+      selectedOption: null
     };
   },
   methods: {
     submitSelection() {
-      // Move to next step or fetch additional info if end of flow
-      if (this.activeMessageIndex === 0) {
-        this.updateMessageForGender();
-      } else if (this.activeMessageIndex === 1) {
-        this.updateMessageForAge();
-      } else {
-        this.fetchAdditionalInfo();
+      let nextMsg = {
+        id: this.messages.length + 1,
+        senderId: 'system',
+        text: '',
+        options: []
+      };
+
+      switch (this.selectedOption) {
+        case 'seoul':
+        case 'gyeonggi':
+        case 'busan':
+        case 'jeju':
+          nextMsg.options = [
+            { id: 'male', text: '남성' },
+            { id: 'female', text: '여성' }
+          ];
+          nextMsg.text = `지역 선택: ${this.selectedOption}`;
+          break;
+        case 'male':
+        case 'female':
+          nextMsg.options = [
+            { id: '20s', text: '20대' },
+            { id: '30s', text: '30대' },
+            { id: '40s', text: '40대' },
+            { id: '50s', text: '50대 이상' }
+          ];
+          nextMsg.text = `성별 선택: ${this.selectedOption}`;
+          break;
+        case '20s':
+        case '30s':
+        case '40s':
+        case '50s':
+          this.fetchAdditionalInfo();
+          return;
       }
-      this.selectedOption = null; // Clear selection
+
+      this.messages.push(nextMsg);
+      this.selectedOption = null; // 선택 초기화
     },
     handleOptionChange() {
-      // You can add additional logic for option change if needed
-    },
-    updateMessageForGender() {
-      const genderOptions = [
-        { id: 'male', text: '남성' },
-        { id: 'female', text: '여성' }
-      ];
-      this.addNewMessage('성별을 선택해주세요.', genderOptions);
-    },
-    updateMessageForAge() {
-      const ageOptions = [
-        { id: '20s', text: '20대' },
-        { id: '30s', text: '30대' },
-        { id: '40s', text: '40대' },
-        { id: '50s', text: '50대 이상' }
-      ];
-      this.addNewMessage('연령대를 선택해주세요.', ageOptions);
-    },
-    addNewMessage(text, options) {
-      this.messages.push({ id: this.messages.length + 1, text, options });
-      this.activeMessageIndex++;
+      // 선택이 변경되면 여기에서 추가 로직을 구현할 수 있습니다.
     },
     fetchAdditionalInfo() {
-      // ... Axios API call and response handling
+      const accessToken = localStorage.getItem('accessToken');
+      axios.get('/api/v1/recommend/childCare', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }).then(response => {
+        this.processResponse(response.data);
+      }).catch(error => {
+        console.error('API 호출 에러:', error);
+      });
     },
     processResponse(data) {
-      // ... Process and display the information from API response
-    },
-
+      this.messages.push(...data.map(item => ({
+        id: this.messages.length + 1,
+        text: `지역: ${item.sigunNm}, 사업명: ${item.bizNm}, 지원금액: ${item.payment}`,
+        options: []
+      })));
+    }
   }
 };
-
-function getInitialOptions() {
-  return [
-    { id: 'seoul', text: '특별시' },
-    { id: 'gyeonggi', text: '경기도' },
-    { id: 'busan', text: '광역시' },
-    { id: 'jeju', text: '특별자치도' }
-  ];
-}
 </script>
 
 <style scoped>
