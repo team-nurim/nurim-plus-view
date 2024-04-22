@@ -6,6 +6,7 @@ import Mypage from '../views/mypage/Mypage.vue'
 import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
 import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
 import SwitchAccount from '../views/mypage/SwitchAccount.vue'
+import Policy from '../views/Policy.vue'
 import RecommendMain from '../views/RecommendMain.vue'
 import Recommend from '../views/Recommend.vue'
 
@@ -54,6 +55,11 @@ const routes = [
     path: '/switchAccount',
     name: 'switchAccount',
     component: SwitchAccount
+  },
+  {
+    path: '/policy',
+    name: 'policy',
+    component: Policy
   }
 
 ]

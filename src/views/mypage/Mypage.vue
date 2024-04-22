@@ -2,7 +2,7 @@
   <main>
     <div class="container">
       <div class="row align-items-center">
-        <div class="col mb-3">
+        <div class="col mt-3 mb-3">
           <h4>마이페이지</h4>
         </div>
       </div>
@@ -59,28 +59,32 @@
         </button>
       </div>
 
-      <div class="accordion" id="accordionExample">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button btn-menu d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              지식 커뮤니티
-            </button>
-          </h2>
-          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-              <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-            </div>
-          </div>
-        </div>
-      </div>
-
       <hr class="custom-divider hr-sm">
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <span class="mx-2">계정 탈퇴</span>
           <span class="mx-2">></span>
         </button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">계정 탈퇴</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              정말 탈퇴하시겠습니까?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" @click="deleteMemberInfo">탈퇴하기</button>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -100,20 +104,26 @@ export default {
     ...mapGetters(['getLoggedIn']),
     memberNickname() {
       return this.member.memberNickname;
-    },
-    memberEmail() {
-      return this.member.memberEmail;
-    },
-    memberProfile () {
-      return this.member.memberProfileImage;
     }
   },
   data () {
     return {
       loggedIn: false,
       member: {
-        memberNickname: ''
-      }
+        memberId: 0,
+        memberEmail: '',
+        memberPw: '',
+        memberNickname: '',
+        memberAge: '',
+        gender: false,
+        memberResidence: '',
+        memberMarriage: false,
+        memberIncome: '',
+        type: false,
+        memberProfileImage: '',
+        expertFile: ''
+      },
+      showModal: false
     }
   },
   async created () {
@@ -132,6 +142,9 @@ export default {
       await this.fetchMemberInfo();
     }
   },
+  mounted() {
+    this.fetchMemberInfo();
+  },
   methods: {
     async fetchMemberInfo () {
       try {
@@ -144,6 +157,23 @@ export default {
         this.member = response.data;
       } catch (error) {
         console.error('회원정보를 불러오지 못했습니다.', error);
+      }
+    },
+    async deleteMemberInfo () {
+      try {
+        const memberId = this.member.memberId;
+        const accessToken = localStorage.getItem('accessToken')
+        const response = await axios.delete(`/api/v1/members/${memberId}`, {}, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
+            'Content-Type': `application/json`
+          }
+        });
+        console.log('계정 삭제 성공: ', response.data);
+        alert('계정 삭제가 성공적으로 수정되었습니다.');
+      } catch (error) {
+        console.log('계정 삭제 실패: ', error)
+        alert('계정 삭제에 실패했습니다.');
       }
     },
     logout () {
