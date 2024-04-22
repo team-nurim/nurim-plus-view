@@ -4,7 +4,7 @@
 
       <!-- 타이틀 이미지 -->
       <div class="mb-5" style="margin:0; padding:0;">
-        <img :src="post.postImages && post.postImages.length > 0 ? post.postImages[0] : ''" width="100%">
+        <img :src=post.postImages[0] width="100%">
       </div>
 
       <div style="text-align:left;">
