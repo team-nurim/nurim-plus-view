@@ -59,10 +59,14 @@
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(20)">20대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(30)">30대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(40)">40대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(99)">기타</a>
+                  <input type="radio" class="btn-check" id="20" name="age" @click="setAge(20)">
+                  <label class="btn btn-income" for="20">20대</label>
+                  <input type="radio" class="btn-check" id="30" name="age" @click="setAge(30)">
+                  <label class="btn btn-income" for="30">30대</label>
+                  <input type="radio" class="btn-check" id="40" name="age" @click="setAge(40)">
+                  <label class="btn btn-income" for="40">40대</label>
+                  <input type="radio" class="btn-check" id="etc" name="age" @click="setAge(99)">
+                  <label class="btn btn-income" for="etc">기타</label>
                 </div>
               </div>
             </div>
@@ -117,15 +121,24 @@
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
-                  <a class="dropdown-item mt-3 mb-3" href="#"  @click="setIncome('기초/차상위')">기초/차상위</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('1구간')">1구간</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('2구간')">2구간</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('3구간')">3구간</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('4구간')">4구간</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('5구간')">5구간</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('6구간')">6구간</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('7구간')">7구간</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('8구간')">8구간</a>
+                  <input type="radio" class="btn-check" id="0" name="income" @click="setIncome('기초/차상위')">
+                  <label class="btn btn-income" for="0">기초/차상위</label>
+                  <input type="radio" class="btn-check" id="1" name="income" @click="setIncome('1구간')">
+                  <label class="btn btn-income" for="1">1구간</label>
+                  <input type="radio" class="btn-check" id="2" name="income" @click="setIncome('2구간')">
+                  <label class="btn btn-income" for="2">2구간</label>
+                  <input type="radio" class="btn-check" id="3" name="income" @click="setIncome('3구간')">
+                  <label class="btn btn-income" for="3">3구간</label>
+                  <input type="radio" class="btn-check" id="4" name="income" @click="setIncome('4구간')">
+                  <label class="btn btn-income" for="4">4구간</label>
+                  <input type="radio" class="btn-check" id="5" name="income" @click="setIncome('5구간')">
+                  <label class="btn btn-income" for="5">5구간</label>
+                  <input type="radio" class="btn-check" id="6" name="income" @click="setIncome('6구간')">
+                  <label class="btn btn-income" for="6">6구간</label>
+                  <input type="radio" class="btn-check" id="7" name="income" @click="setIncome('7구간')">
+                  <label class="btn btn-income" for="7">7구간</label>
+                  <input type="radio" class="btn-check" id="8" name="income" @click="setIncome('8구간')">
+                  <label class="btn btn-income" for="8">8구간</label>
                 </div>
               </div>
             </div>
@@ -134,7 +147,29 @@
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-update" @click="updateMemberInfo">입력하기</button>
+        <!-- <button type="button" class="btn btn-update" @click="updateMemberInfo">입력하기</button> -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          수정하기
+        </button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">내 맞춤 정보 수정</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" @click="updateMemberInfo">수정</button>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -174,8 +209,6 @@ export default {
       accordionId: 'Residence', // 아코디언의 부모 요소 ID
       collapseOne: 'collapseOne', // 첫 번째 아코디언의 collapse ID
       collapseTwo: 'collapseTwo', // 두 번째 아코디언의 collapse ID
-      selectedRegion: '', // 선택한 도/특별시/광역시
-      selectedDistricts: [], // 선택한 시/군/구 목록
       postcode: '',
       address: '',
       detailAddress: '',
@@ -238,6 +271,7 @@ export default {
         });
         console.log('회원 정보 수정 성공: ', response.data);
         alert('회원 정보가 성공적으로 수정되었습니다.');
+        this.$router.push('/Mypage')
       } catch (error) {
         console.log('회원 정보 수정 실패: ', error)
         alert('회원 정보 수정에 실패했습니다.');
@@ -356,6 +390,31 @@ export default {
 .btn-update:hover, .btn-update:focus {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+/* 선택되지 않은 라디오 버튼의 스타일 */
+.btn-check:not(:checked) + .btn-income {
+  color: #000; /* 버튼의 글자색 */
+  background-color: #fff; /* 버튼의 배경색 */
+  border-color: #ccc; /* 버튼의 테두리 색 */
+  height: 50px;
+  width: 100%;
+  padding: 8;
+}
+
+/* 선택된 라디오 버튼의 스타일 */
+.btn-check:checked + .btn-income {
+  color: #fff; /* 선택된 버튼의 글자색 */
+  background-color: #aaa; /* 선택된 버튼의 배경색 */
+  border-color: #aaa; /* 선택된 버튼의 테두리 색 */
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  color: white; /* 글씨색 */
+  font-size: 16px; /* 글씨크기 */
+  height: 50px;
+  width: 100%;
+  padding: 8;
 }
 
 .accordion-collapse {

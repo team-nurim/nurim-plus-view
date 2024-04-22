@@ -38,13 +38,25 @@
 
       <!-- The Modal -->
       <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="termsModalLabel">서비스 약관 동의</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
               <!-- 약관 내용 -->
             </div>
@@ -56,12 +68,12 @@
         </div>
       </div>
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div class="row mt-3 mb-10 align-items-center custom-padding" v-if="!member.type">
         <div class="col">
           <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled || member.type === 1">계정전환</button>
+          <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled">계정 전환 신청</button>
         </div>
       </div>
 
