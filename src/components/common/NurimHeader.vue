@@ -16,7 +16,7 @@
         <!-- menu link -->
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
           <li><router-link to="/policy" class="nav-link px-3">정책정보</router-link></li>
-          <li><router-link to="/recommend" class="nav-link px-3">나를 위한 정책지원</router-link></li>
+          <li><router-link to="/recommend-main" class="nav-link px-3">나를 위한 정책지원</router-link></li>
           <li><router-link to="/community" class="nav-link px-3">커뮤니티</router-link></li>
           <!-- <li><a href="#" class="nav-link px-2">About</a></li> -->
         </ul>

@@ -2,7 +2,7 @@
   <main>
     <div class="container">
       <div class="row align-items-center">
-        <div class="col mb-3">
+        <div class="col mt-3 mb-3">
           <h4>내 맞춤 정보 수정</h4>
         </div>
       </div>
@@ -10,9 +10,9 @@
       <!-- 내 맞춤 정보 수정 -->
       <!-- 이름 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Email" class="form-label">성함(닉네임,,?)</label>
+        <label for="Nickname" class="form-label">성함(닉네임,,?)</label>
         <div class="row">
-          <input class="form-control" type="text" id="Email" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
+          <input class="form-control" type="text" id="Nickname" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
         </div>
       </div>
 
@@ -21,10 +21,14 @@
         <label for="Gender" class="form-label">성별</label>
         <div class="row" id="Gender">
           <div class="col">
-            <button type="button" class="btn btn-update" @click="cancelUpload">남성</button>
+            <button type="button" class="btn btn-update" :class="{'active': activeGender === 0 }" @click="setGender(0)">
+              남성
+            </button>
           </div>
           <div class="col">
-            <button type="button" class="btn btn-update" @click="updateMemberInfo">여성</button>
+            <button type="button" class="btn btn-update" :class="{'active': activeGender === 1 }" @click="setGender(1)">
+              여성
+            </button>
           </div>
         </div>
       </div>
@@ -42,9 +46,10 @@
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
-                  <a class="dropdown-item mt-3 mb-3" href="#">20대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">30대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">40대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(20)">20대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(30)">30대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(40)">40대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setAge(100)">기타</a>
                 </div>
               </div>
             </div>
@@ -75,10 +80,10 @@
         <label for="Gender" class="form-label">결혼 여부</label>
         <div class="row" id="Gender">
           <div class="col">
-            <button type="button" class="btn btn-update" @click="cancelUpload">기혼</button>
+            <button type="button" class="btn btn-update" @click="setMarriage(1)">기혼</button>
           </div>
           <div class="col">
-            <button type="button" class="btn btn-update" @click="updateMemberInfo">미혼</button>
+            <button type="button" class="btn btn-update" @click="setMarriage(0)">미혼</button>
           </div>
         </div>
       </div>
@@ -91,14 +96,20 @@
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  본인의 연간 소득수준을 선택해주세요.
+                  본인의 소득구간를 선택해주세요.
                 </button>
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
-                  <a class="dropdown-item mt-3 mb-3" href="#">20대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">30대</a>
-                  <a class="dropdown-item mt-3 mb-3" href="#">40대</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#"  @click="setIncome('기초/차상위')">기초/차상위</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('1구간')">1구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('2구간')">2구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('3구간')">3구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('4구간')">4구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('5구간')">5구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('6구간')">6구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('7구간')">7구간</a>
+                  <a class="dropdown-item mt-3 mb-3" href="#" @click="setIncome('8구간')">8구간</a>
                 </div>
               </div>
             </div>
@@ -152,7 +163,7 @@ export default {
       postcode: '',
       address: '',
       detailAddress: '',
-      extraAddress: ''
+      activeGender: null // 현재 선택된 성별을 나타내는 상태 변수
     }
   },
   async created () {
@@ -196,14 +207,14 @@ export default {
       try {
         const memberId = this.member.memberId;
         const updateData = {
-          memberGender: this.member.gender,
+          gender: this.member.gender,
           memberAge: this.member.memberAge,
-          memberResidence: this.member.memberResidence,
+          memberResidence: this.address + ', ' + this.detailAddress,
           memberMarriage: this.member.memberMarriage,
           memberIncome: this.member.memberIncome
         };
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
+        const response = await axios.put(`api/v1/members/memberInfo/${memberId}`, updateData, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': `application/json`
@@ -233,28 +244,20 @@ export default {
         },
       }).open();
     },
-    saveMemberResidence() {
-      this.member.memberResidence = `${this.address} ${this.de}`
+    setGender(gender) {
+      this.member.gender = gender;
+      // 현재 선택된 성별을 업데이트
+      this.activeGender = gender;
+    },
+    setMarriage(memberMarriage) {
+      this.member.memberMarriage = memberMarriage;
+    },
+    setIncome(memberIncome) {
+      this.member.memberIncome = memberIncome;
+    },
+    setAge(memberAge) {
+      this.member.memberAge = memberAge;
     }
-        // async selectRegion(region) {
-    //   this.selectedRegion = region; // 선택한 도/특별시/광역시 업데이트
-    //   // 선택한 도/특별시/광역시에 따라 시/군/구 목록 업데이트
-    //   if (region === '서울특별시') {
-    //     this.selectedDistricts = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'];
-    //   } else if (region === '경기도') {
-    //     this.selectedDistricts = ['가평군', '고양시', '과천시', '광명시', '광주시', '구리시', '군포시', '김포시', '남양주시', '동두천시', '부천시', '성남시', '수원시', '시흥시', '안산시', '안성시', '안양시', '양주시', '양평군', '여주시', '연천군', '오산시', '용인시', '의왕시', '의정부시', '이천시', '파주시', '평택시', '포천시', '하남시', '화성시'];
-    //   } else if (region === '부산광역시') {
-    //     this.selectedDistricts = ['강서구', '금정구', '남구', '동구', '동래구', '부산진구', '북구', '사상구', '사하구', '서구', '수영구', '연제구', '영도구', '중구', '해운대구'];
-    //   }
-    // },
-    // async selectDistric(district) {
-    //   // 선택한 시/군/구에 따라 해당하는 읍/면/동 목록 업데이트
-    //   if (district === '강남구') {
-    //     this.selectedTowns = ['역삼동', '개포동', '청담동', /* ... */];
-    //   } else if (district === '강동구') {
-    //     this.selectedTowns = ['강일동', '고덕동', '길동', /* ... */];
-    //   }
-    // },
   }
 }
 </script>

@@ -36,7 +36,7 @@
       <!-- 2단 카드 레이아웃 -->
       <div class="row" style="margin:4rem 0;">
 
-        <div class="col-md-6 d-flex">
+        <div class="col-md-6 d-flex" style="padding:0 1rem 0 0;">
           <div class="card" style="margin-bottom:1rem; border-radius: 1rem; border:none; background-color:#F0F0F0; text-align:left; padding:1.2rem 1.2rem 0 1.2rem;">
             <div class="card-body" style="padding-bottom:0;">
               <h6 class="card-title mb-4">신혼부부라면 누구나,<br>궁금했던 정부 지원 조회</h6>
@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" style="padding:0;">
           <div class="d-grid">
             <div class="card" style="margin-bottom:1rem; border-radius: 1rem; border:none; background-color:#F0F0F0; text-align:left; padding:1.2rem 1.2rem 0 1.2rem;">
               <div class="card-body" style="padding-bottom:0;">
@@ -81,7 +81,7 @@
                   {{ post.postContent.slice(0, 60) }}
                   <span v-if="post.postContent.length > 60">...</span>
                 </p>
-                <router-link to="#" class="btn btn-primary">정책 보러가기</router-link>
+                <!-- <router-link :to="{ name: 'PostView', params: { postId: post.id }}" class="btn btn-primary">정책 보러가기</router-link> -->
               </div>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default {
     },
     async fetchPopular () {
       try {
-        const response = await axios.get('/api/v1/popular');
+        const response = await axios.get('/api/v1/home/popularCommunityList');
         this.popularList = response.data;
 
       } catch (err) {
@@ -224,3 +224,6 @@ span {
   font-size: 0.8rem;
 }
 </style>
+
+
+
