@@ -1,11 +1,9 @@
 <template>
-
-  <b-button variant="danger">Button</b-button>
-
+<div></div>
 </template>
 <script>
 export default {
-  name: '',
+  name: 'MemberJoin',
   components: {},
   data () {
     return {
@@ -24,3 +22,4 @@ export default {
   methods: {}
 }
 </script>
+
