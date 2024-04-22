@@ -1,6 +1,6 @@
 <template>
   <main class="mt-2">
-    <div class="container">
+    <div class="containerpostread">
       <h2 class="text-center mb-5">{{ postRead.postTitle }}</h2>
       <div class="row">
   <div class="col-md-8 offset-md-2">
@@ -108,7 +108,7 @@
 
 <style scoped>
   /* 컨테이너 스타일링 */
-  .container {
+  .containerpostread {
     padding: 50px;
     border-radius: 15px;
     background-color: #f8f9fa;
