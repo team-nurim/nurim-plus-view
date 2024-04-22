@@ -1,33 +1,30 @@
 <template>
-  <main>
+  <main class="mt-5">
     <div class="container">
+
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4>정책 정보</h4>
+          <h4>이번 달 가장 인기있는 소식</h4>
         </div>
       </div>
 
       <!-- 최신 정책 콘텐츠 -->
-      <div class="post-contents">
-        <h4 class="mb-1">최신 정책 정보</h4>
-
+      <div class="post-contents mb-5">
         <div class="row">
           <div class="col-md-3" v-for="post in posts" :key="post.postId">
-            <div class="card" style="margin:1.2rem; width:18rem; border:none; text-align: left; padding-left: 0;">
-              <img :src="post.firstImage || '../assets/logo.png'" class="col-3 card-img-top" alt="...">
-              <div class="col-9 card-body" style="padding-left: 0;">
+            <div class="card" style="margin:1.2rem; border:none; text-align: left; padding-left: 0;">
+              <img :src=post.thumbImage class="card-img-top" style="height: 100%; object-fit: cover;">
+              <div class="col-9 card-body">
                 <h5 class="card-title">{{ post.postTitle }}</h5>
                 <p class="card-text">{{ post.postContent }}</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
               </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- 카테고리 선택 -->
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div class="row mt-3 mb-5 align-items-center">
         <div class="row">
 
           <div class="col-6 accordion" id="Policy1">

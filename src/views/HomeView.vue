@@ -178,7 +178,7 @@ export default {
       }
     },
     goToRecommend () {
-      this.$router.push('/recommend')
+      this.$router.push('/recommend-main')
     }
   }
 }
