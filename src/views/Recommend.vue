@@ -64,29 +64,29 @@
             <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
             <div class="chat ml-2 p-4">
               <p>
-                주제를 선택해주세요. (복수선택 가능)
+                주제를 선택해주세요.
               </p>
               <div class="subject mt-3">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="주거지원" id="subject1" @change="checkSubject">
+                  <input class="form-check-input" type="radio" value="주거지원" id="subject1" @change="selectSubject('주거지원')">
                   <label class="form-check-label" for="subject1">
                     주거지원
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="출산" id="subject2" @change="checkSubject">
+                  <input class="form-check-input" type="radio" value="출산" id="subject2" @change="selectSubject('출산')">
                   <label class="form-check-label" for="subject2">
                     출산
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="양육" id="subject3" @change="checkSubject">
+                  <input class="form-check-input" type="radio" value="양육" id="subject3" @change="selectSubject('양육')">
                   <label class="form-check-label" for="subject3">
                     양육
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="보육" id="subject4" @change="checkSubject">
+                  <input class="form-check-input" type="radio" value="보육" id="subject4" @change="selectSubject('보육')">
                   <label class="form-check-label" for="subject4">
                     보육
                   </label>
@@ -100,10 +100,10 @@
         </div>
 
 
-        <div v-if="selectedSubjects.length > 0">
+        <div v-if="selectedSubject">
           <div class="d-flex flex-row p-3 justify-content-end">
             <div class="bg-white answer mr-2 p-4">
-              <p class="text-muted">{{ selectedSubjects.join(', ') }}</p>
+              <p class="text-muted">{{ selectedSubject }}</p>
             </div>
             <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
           </div>
@@ -153,7 +153,7 @@ export default {
     return {
       messages: [],
       selectedLocation: null,
-      selectedSubjects: [],
+      selectedSubject: null,
       submittedKeyword: ''
     };
   },
@@ -161,16 +161,8 @@ export default {
     selectLocation(location) {
       this.selectedLocation = location;
     },
-    checkSubject(event) {
-      const subject = event.target.value;
-      if (event.target.checked) {
-        this.selectedSubjects.push(subject);
-      } else {
-        const index = this.selectedSubjects.indexOf(subject);
-        if (index !== -1) {
-          this.selectedSubjects.splice(index, 1);
-        }
-      }
+    selectSubject(subject) {
+      this.selectedSubject = subject;
     },
     submitKeyword() {
       // 제출 버튼 클릭 시 호출되는 메서드
