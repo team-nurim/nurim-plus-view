@@ -1,7 +1,7 @@
 <!-- // eslint-disable-next-line
 /* eslint-disable */ -->
 <template>
-  <main>
+  <main v-if="postList.length && communityList">
 
     <div class="container mt-5">
 
@@ -70,20 +70,21 @@
 
         <div class="row">
           <div class="col-md-3" v-for="post in postList" :key="post.id">
-            <div class="card" style="margin-right:1rem; margin-bottom:1.4rem; border:none; text-align: left; padding-left: 0;">
-              <img :src=post.thumbImage class="card-img-top" style="height: 100%; object-fit: cover;">
-              <div class="card-body" style="padding-left: 0;">
-                <h5 class="card-title mb-2">
-                  {{ post.postTitle.slice(0, 24) }}
-                  <span v-if="post.postContent.length > 30">...</span>
-                </h5>
-                <p class="card-text">
-                  {{ post.postContent.slice(0, 60) }}
-                  <span v-if="post.postContent.length > 60">...</span>
-                </p>
-                <!-- <router-link :to="{ name: 'PostView', params: { postId: post.id }}" class="btn btn-primary">정책 보러가기</router-link> -->
+            <router-link :to="{ name: 'PostView', params: { postId: post.postId }}" style="text-decoration: none; color: inherit;">
+              <div class="card" style="margin-right:1rem; margin-bottom:1.5rem; border:none; text-align: left; padding-left: 0;">
+                <img :src=post.thumbImage class="card-img-top" style="height: 100%; object-fit: cover;">
+                <div class="card-body" style="padding-left: 0;">
+                  <h5 class="card-title mb-2">
+                    {{ post.postTitle.slice(0, 24) }}
+                    <span v-if="post.postContent.length > 24">...</span>
+                  </h5>
+                  <p class="card-text">
+                    {{ post.postContent.slice(0, 60) }}
+                    <span v-if="post.postContent.length > 60">...</span>
+                  </p>
+                </div>
               </div>
-            </div>
+            </router-link>
           </div>
 
         </div>
