@@ -1,30 +1,15 @@
 const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
+  lintOnSave: false,
   transpileDependencies: true,
-});
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-module.exports = {
-  configureWebpack: {
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, "css-loader"],
-        },
-      ],
+  lintOnSave: false,
+  outputDir: "../src/main/resources/static", // 빌드 타겟 디렉토리
+  devServer: {
+    proxy: {
+      "^/api": {
+        target: "http://localhost:8080", // '/api'로 들어오면 포트 8080(스프링 서버)로 보낸다.
+        changeOrigin: true, // cross origin 허용
+      },
     },
-    plugins: [new MiniCssExtractPlugin()],
   },
-};
-module.exports = {
-  chainWebpack: (config) => {
-    config.plugin("define").tap((definitions) => {
-      Object.assign(definitions[0], {
-        __VUE_OPTIONS_API__: JSON.stringify(true),
-        __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
-        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(true),
-      });
-      return definitions;
-    });
-  },
-};
+});

@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-/* eslint-disable */
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -9,16 +7,31 @@ import { BootstrapVue3 } from "bootstrap-vue-3";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 
-// Vue 애플리케이션 인스턴스를 생성
 const app = createApp(App);
 
-// 글로벌로 사용할 수 있게 axios를 설정
-app.config.globalProperties.$axios = axios;
+axios.defaults.baseURL = "http://localhost:8080";
 
-// Vue 애플리케이션에 플러그인과 스토어 추가
+// Axios 인스턴스 생성 및 기본 설정
+const axiosInstance = axios.create({
+  baseURL: "http://localhost:8080/api/v1",
+  timeout: 10000,
+});
+
+// Vue 인스턴스에 Axios 주입
+app.config.globalProperties.$axios = axiosInstance;
+
+// 글로벌 mixin 정의
+app.mixin({
+  methods: {
+    formatDate(dateString) {
+      if (!dateString) return "";
+      return dateString.split("T")[0];
+    },
+  },
+});
+
 app.use(store);
 app.use(router);
 app.use(BootstrapVue3);
 
-// 애플리케이션을 페이지에 마운트
 app.mount("#app");

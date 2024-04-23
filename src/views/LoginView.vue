@@ -56,65 +56,80 @@
 </template>
 <script>
 // eslint-disable-next-line
-/* eslint-disable */ 
+/* eslint-disable */
 import axios from 'axios'
 
-  export default {
-    components: {},
-    data () {
-      return {
-        memberEmail: '',
-        memberPw: '',
-        rememberMe: false
-      }
-    },
-    methods: {
-      async login () {
-        try {
-          const response = await axios.post('/generateToken', {
-            memberEmail: this.memberEmail,
-            memberPw: this.memberPw
-          })
-          // JWT 토큰
-          console.log('서버 응답 데이터:', response.data)
+function saveUserInfo(userInfo) {
+  localStorage.setItem('userInfo', JSON.stringify(userInfo))
+}
 
-          // JWT 토큰 스토리지 저장 처리
-          localStorage.setItem('accessToken', response.data.accessToken);
+export default {
+  components: {},
+  data () {
+    return {
+      loggedIn: false,
+      memberEmail: '',
+      memberPw: '',
+      rememberMe: false
+    }
+  },
+  methods: {
+    async login () {
+      try {
+        const response = await axios.post('/generateToken', {
+          memberEmail: this.memberEmail,
+          memberPw: this.memberPw
+        })
+        const userInfo = response.data
+        saveUserInfo(userInfo)
+        // JWT 토큰 출력
+        console.log('서버 응답 데이터:', response.data.accessToken)
 
-          // 로그인 리다이렉트 처리
-  
-          
-          // 자동로그인 설정
-          // 로컬스토리지에 자동로그인 정보 저장
-          if (this.rememberMe) {
-            localStorage.setItem('rememberMe', true)
-          }
-        } catch (error) {
-          console.error('로그인 실패: ', error)
+        // JWT 토큰 로컬스토리지에 저장
+        localStorage.setItem('accessToken', response.data.accessToken)
+
+        // 로컬스토리지에 자동로그인 정보 저장
+        if (this.rememberMe) {
+          localStorage.setItem('rememberMe', true)
         }
+
+        // 토큰과 자동로그인 정보 확인
+        console.log('토큰:', localStorage.getItem('accessToken'))
+        console.log('자동로그인:', localStorage.getItem('rememberMe'))
+        console.log('로그인 정보 저장 완료')
+
+        this.loggedIn = true
+        this.$store.commit('setLoggedIn', this.loggedIn)
+
+        // 로그인 리다이렉트 처리
+        this.$router.push('/')
+      } catch (error) {
+        alert('로그인 정보를 확인해주세요.')
+        console.error('로그인 실패: ', error)
       }
     }
   }
-  </script>
-  <style>
-  .container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .loginBox {
-    min-width: 330px;
-    max-width: 28%;
-    margin: 12% auto 0;
-    text-align: left;
-  }
-  
-  .form-check-label {
-    font-size: 0.8rem;
-  }
-  
-  .btn-block {
-    width: 100%;
-  }
-  </style>
+}
+</script>
+<style>
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginBox {
+  min-width: 330px;
+  max-width: 28%;
+  margin: 10% auto 0;
+  text-align: left;
+}
+
+.form-check-label {
+  font-size: 0.8rem;
+}
+
+.btn-block {
+  width: 100%;
+}
+</style>
