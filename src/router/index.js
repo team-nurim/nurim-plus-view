@@ -14,6 +14,7 @@ import CommunityView from '../views/community/Community.vue'
 import CommunityDetailView from '../views/community/CommunityDetail.vue'
 import CommunityCreateView from '../views/community/CommunityCreateView.vue'
 import CommunityUpdate from '../views/community/CommunityUpdate.vue'
+import RecommendResult from '../views/RecommendResult.vue'
 
 const routes = [
   {
@@ -93,6 +94,11 @@ const routes = [
     path: '/recommend',
     name: 'Recommend',
     component: () => import('../views/Recommend.vue')
+  },
+  {
+    path: '/recommend-result',
+    name: 'RecommendResult',
+    component: () => import('../views/RecommendResult.vue')
   }
 ]
 
