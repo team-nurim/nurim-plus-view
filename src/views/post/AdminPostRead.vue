@@ -1,58 +1,57 @@
 <template>
-  <main class="mt-2">
+ <main class="mt-2">
     <div class="containerpostread">
-      <h2 class="text-center mb-5">{{ postRead.postTitle }}</h2>
       <div class="row">
-  <div class="col-md-8 offset-md-2">
+        <div class="col-md-7">
+          <h2 class="text mb-5">{{ postRead.postTitle }}</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
           <form>
             <!-- 입력 요소들을 중앙에 배치 -->
             <div class="mb-3 row border">
               <label for="postTitle" class="col-md-3 col-form-label border">제목</label>
               <div class="col-md-9 border">
-                <p class="form-control-plaintext">{{ postRead.postTitle }}</p>
+                <p class="form-control-plaintext" style="font-size: 18px; font-weight: bold;">{{ postRead.postTitle }}</p>
               </div>
             </div>
             <div class="mb-3 row border">
               <label for="postTitle" class="col-md-3 col-form-label border">카테고리</label>
               <div class="col-md-9 border">
-                <p class="form-control-plaintext">{{ postRead.postCategory }}</p>
+                <p class="form-control-plaintext" style="font-size: 18px; font-weight: bold;">{{ postRead.postCategory }}</p>
               </div>
             </div>
             <!-- 다른 입력 요소들도 동일하게 구성 -->
             <div class="mb-3 row border">
               <label for="postRegisterDate" class="col-md-3 col-form-label border">등록일자</label>
               <div class="col-md-9 border">
-                <p class="form-control-plaintext">{{ postRead.postRegisterDate }}</p>
+                <p class="form-control-plaintext" style="font-size: 18px; font-weight: bold;">{{ postRead.postRegisterDate }}</p>
               </div>
             </div>
             <div class="mb-3 row border">
               <label for="postWriter" class="col-md-3 col-form-label border">작성자</label>
               <div class="col-md-9 border">
-                <p class="form-control-plaintext">{{ postRead.postWriter }}</p>
+                <p class="form-control-plaintext" style="font-size: 18px; font-weight: bold;">{{ postRead.postWriter }}</p>
               </div>
             </div>
             <div class="mb-3 row border">
               <label for="postContent" class="col-md-3 col-form-label border">내용</label>
               <div class="col-md-9 border">
-                <p class="form-control-plaintext">{{ postRead.postContent }}</p>
+                <p class="form-control-plaintext" style="font-size: 18px; font-weight: bold;">{{ postRead.postContent }}</p>
+              </div>
+            </div>
+            <!-- 이미지 목록 표시 -->
+            <div class="col-md-12">
+              <div v-if="postRead.postImages && postRead.postImages.length > 0" class="mb-3 row">
+                <div v-for="(image, index) in postRead.postImages" :key="index" class="image-thumbnail">
+                  <!-- 이미지가 유효한 URL인 경우에만 출력 -->
+                  <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="image-thumbnail" loading="lazy" style="max-width: 100%; height: auto;">
+                </div>
               </div>
             </div>
           </form>
         </div>
-        <!-- 이미지 목록 표시 -->
-     <div class="row">
-  <div class="col-md-8 offset-md-2">
-    <div v-if="postRead.postImages && postRead.postImages.length > 0" class="mb-3">
-      <h3 class="text-center mb-3">이미지</h3>
-      <div class="image-list">
-       <div v-for="(image, index) in postRead.postImages" :key="index" class="image-item">
-                  <!-- 이미지가 유효한 URL인 경우에만 출력 -->
-                  <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
-                </div>
-      </div>
-    </div>
-  </div>
-</div>
       </div>
     </div>
     <div class="row mt-4">
@@ -117,7 +116,7 @@
 
   /* 제목 스타일링 */
   h2 {
-    color: #0056b3;
+    color: rgb(91, 93, 95);
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;

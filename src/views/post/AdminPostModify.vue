@@ -21,39 +21,57 @@
             <div class="mb-3 row">
               <label for="postRegisterDate" class="col-md-3 col-form-label">등록일자</label>
               <div class="col-md-9">
-                <input v-model="postData.postRegisterDate" type="text1" class="form-control" id="postRegisterDate">
+                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate">
               </div>
             </div>
             <div class="mb-3 row">
               <label for="postWriter" class="col-md-3 col-form-label">작성자</label>
               <div class="col-md-9">
-                <input v-model="postData.postWriter" type="text1" class="form-control" id="postWriter">
+                <input v-model="postData.postWriter" type="text1" class="form-control" id="postWriter" readonly>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="postContent" class="col-md-3 col-form-label">내용</label>
               <div class="col-md-9">
-                <textarea v-model="postData.postContent" class="form-control" id="postContent" rows="5"></textarea>
+                <textarea v-model="postData.postContent" class="form-control" id="postContent" style="height: 200px;"></textarea>
               </div>
             </div>
             <!-- 이미지 업로드를 위한 input 요소 추가 -->
             <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
-                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
+                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload">
               </div>
             </div>
             <!-- 이미지 목록 표시 -->
             <div class="row">
-              <div class="col-md-8 offset-md-2">
+              <div class="col-md-12">
                 <div v-if="postData.postImages && postData.postImages.length > 0" class="mb-3">
-                  <h3 class="text-center mb-3">이미지</h3>
-                    <div class="image-list">
-                      <div v-for="(image, index) in postData.postImages" :key="index" class="image-item">
+                  <div class="row mb-3">
+                  <label class="col-md-3 col-form-label" style="font-size: 18px; font-weight: bold;">이미지 목록</label>
+                  </div>
+                    <div class="image-list d-flex flex-wrap justify-content-start align-items-center">
+                      <div v-for="(image, index) in postData.postImages" :key="index" class="image-item mx-2 mb-2">
                       <!-- 이미지가 유효한 URL인 경우에만 출력 -->
                       <img v-if="isImageUrl(image)" :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
                       <!-- 이미지 삭제 버튼 -->
-                      <button class="btn btn-danger btn-sm delete-image-btn" @click="deleteImage(postData.postImageIds[index], $event)">X</button>
+                      <button class="btn btn-sm" @click="deleteImage(postData.postImageIds[index], $event)"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 이미지 미리보기 -->
+            <div class="row">
+              <div class="col-md-12">
+            <div v-if="previewImages.length > 0" class="mb-3">
+              <div class="row mb-3">
+              <label class="col-md-3 col-form-label" style="font-size: 18px; font-weight: bold;">추가한 이미지 목록</label>
+            </div>
+              <div class="image-list d-flex flex-wrap justify-content-start align-items-center">
+                <div v-for="(previewImage, index) in previewImages" :key="index" class="image-item mx-2 mb-2">
+                    <img :src="previewImage" alt="미리보기 이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                    <button type="button" class="btn btn-sm" @click="removePreviewImage(index)"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                   </div>
                 </div>
@@ -67,7 +85,7 @@
           <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
           <!-- 수정하기 버튼에 savePost 메서드 연결 -->
           <button type="button" class="btn btn-lg btn-primary me-3" @click="showModifyModal">수정하기</button>
-          <button type="button" class="btn btn-lg btn-danger" @click="showDeleteModal">삭제</button>
+          <button type="button" class="btn btn-lg btn-danger" @click="showDeleteModal">삭제하기</button>
         </div>
       </div>
     </div>
@@ -132,6 +150,7 @@
 import axios from 'axios'
 // eslint-disable-next-line
 /* eslint-disable */
+
 export default {
   name: 'AdminModify',
   props: ['postId'],
@@ -147,7 +166,8 @@ export default {
         postImages: [] ,// postImages 속성 추가
         postImageIds: [],
       },
-      imageFile: null,
+      imageFile: [],
+      previewImages: [],
       modifyModalVisible: false, // 모달의 표시 여부
       deleteModalVisible : false,
       deleteModalImageVisible : false,
@@ -274,29 +294,71 @@ export default {
     this.deleteModalImageVisible = false;
     },
     handleImageUpload(event) {
-      this.imageFile = event.target.files[0];
-      console.log('Uploaded image:', this.imageFile);
-    },
-    async uploadImage(postId) {
-      const formData = new FormData();
-      formData.append('files', this.imageFile);
-      formData.append('postId', this.postId); // 수정된 부분
+      // 선택된 파일이 있는지 확인
+    if (event.target.files && event.target.files.length > 0) {
+      // 선택된 파일을 배열로 가져옴
+      const files = event.target.files;
+      // 각 파일을 FormData에 추가
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+          // 이미지 파일을 미리보기 배열에 추가
+          this.imageFile.push(file);
+          this.previewImages.push(URL.createObjectURL(file));
+        }
+        // 인풋 요소에 남은 이미지들을 설정
+        const inputElement = document.getElementById('image');
+        const combinedImages = [...this.imageFile]; // 새로 업로드한 이미지만 있는 배열로 복사
+        inputElement.value = ''; // 인풋 요소의 값 초기화
 
-      try {
-        console.log('Uploaded image:', this.imageFile);
-        const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.post(`http://localhost:8080/api/v1/posts/post/upload/${postId}`, formData, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        this.imageFile = response.data.uuid;
-      } catch (error) {
-        console.log('업로드 실패 이유:', this.imageFile)
-        console.error('이미지 업로드 실패:', error);
+        // 기존 이미지와 새로 업로드한 이미지를 모두 포함한 파일 리스트를 만듭니다.
+        const fileList = new DataTransfer();
+        combinedImages.forEach(file => {
+        fileList.items.add(file); // 각 파일을 FileList에 추가
+      });
+      inputElement.files = fileList.files; // FileList를 인풋 요소의 files 속성에 설정
+      this.$forceUpdate(); // 컴포넌트 강제 업데이트
       }
     },
+    removePreviewImage(index) {
+      // 미리보기 이미지를 삭제하면 실행될 로직
+      this.imageFile.splice(index, 1); // 이미지 파일 배열에서 삭제
+      this.previewImages.splice(index, 1); // 미리보기 배열에서 삭제
+       // 인풋 요소에 남은 이미지들을 설정
+       const inputElement = document.getElementById('image');
+      const remainingImages = this.imageFile.map(file => file); // 파일 배열을 복사하여 사용
+      inputElement.value = ''; // 인풋 요소의 값 초기화
+
+      // FileList 객체 생성
+      const fileList = new DataTransfer();
+      remainingImages.forEach(file => {
+      fileList.items.add(file); // 각 파일을 FileList에 추가
+      });
+      inputElement.files = fileList.files; // FileList를 인풋 요소의 files 속성에 설정
+      this.$forceUpdate(); // 컴포넌트 강제 업데이트
+    },
+    
+      async uploadImage(postId) {
+        const formData = new FormData();
+        for (let i = 0; i < this.imageFile.length; i++) {
+          formData.append('files', this.imageFile[i]);
+        }
+        formData.append('postId', this.postId); // 수정된 부분
+
+        try {
+          console.log('Uploaded image:', this.imageFile);
+          const accessToken = localStorage.getItem('accessToken');
+          const response = await axios.post(`http://localhost:8080/api/v1/posts/post/upload/${postId}`, formData, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          // this.imageFile = response.data.uuid;
+        } catch (error) {
+          console.log('업로드 실패 이유:', this.imageFile)
+          console.error('이미지 업로드 실패:', error);
+        }
+      },
     isImageUrl(url) {
     if (typeof url !== 'string') return false; // URL이 문자열이 아닌 경우 false 반환
     return url.startsWith("http") && (url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".gif"));
@@ -378,6 +440,9 @@ textarea {
 
 /* 입력 요소들의 폭을 조절합니다 */
 input[type="text1"] {
+  width: 80%;
+}
+input[type="date"] {
   width: 80%;
 }
 

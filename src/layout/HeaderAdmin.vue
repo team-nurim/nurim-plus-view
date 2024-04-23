@@ -27,7 +27,7 @@
           <template v-if="loggedIn">
             <div class="dropdown text-end">
               <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img :src="'https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'" alt="mdo" width="40" height="40" class="rounded-circle">
+                <img :src="'https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'" alt="mdo" width="45" class="rounded-circle" style="border-radius: 50%;">
               </a>
               <ul class="dropdown-menu dropdown-menu-end text-small">
                 <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>

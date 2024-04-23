@@ -28,32 +28,46 @@
              <div class="mb-3 row">
               <label for="postRegisterDate" class="col-md-3 col-form-label">등록일자</label>
               <div class="col-md-9">
-                <input v-model="postData.postRegisterDate" type="text" class="form-control" id="postRegisterDate">
+                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate">
               </div>
             </div>
              <div class="mb-3 row">
               <label for="postWriter" class="col-md-3 col-form-label">작성자</label>
               <div class="col-md-9">
-                <input v-model="postData.postWriter" type="text" class="form-control" id="postWriter">
+                <input v-model="postData.postWriter" type="text" class="form-control" id="postWriter" readonly>
               </div>
             </div>
              <div class="mb-3 row">
               <label for="postContent" class="col-md-3 col-form-label">내용</label>
               <div class="col-md-9">
-                <textarea v-model="postData.postContent" class="form-control" id="postContent" rows="5"></textarea>
+                <textarea v-model="postData.postContent" class="form-control" id="postContent" style="height: 390px;"></textarea>
               </div>
             </div>
-                        <!-- 이미지 업로드를 위한 input 요소 추가 -->
+            <!-- 이미지 업로드를 위한 input 요소 추가 -->
             <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
-                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
+                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload">
+              </div>
+            </div>
+            <!-- 이미지 미리보기 -->
+            <div class="row mb-4">
+              <div class="col-md-12">
+            <div v-if="previewImages.length > 0" class="mb-3">
+              <label class="col-md-3 mb-3 col-form-label" style="font-size: 18px; font-weight: bold;">이미지 미리보기</label>
+              <div class="image-list d-flex flex-wrap justify-content-start align-items-center">
+                <div v-for="(previewImage, index) in previewImages" :key="index" class="image-item mx-2 mb-2">
+                    <img :src="previewImage" alt="미리보기 이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                    <button type="button" class="btn btn-sm" @click="removePreviewImage(index)"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
         </div>
       </div>
-      <div class="row mt-4">
+      <div class="row mb-5">
         <div class="col-md-8 offset-md-2 d-flex justify-content-center">
           <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
   <!-- 저장하기 버튼에 savePost 메서드 연결 -->
@@ -86,6 +100,7 @@
 import axios from 'axios'
 // eslint-disable-next-line
 /* eslint-disable */
+
 export default {
   name: 'AdminRegister',
   data () {
@@ -99,11 +114,24 @@ export default {
         postContent: '', // 내용 입력 필드의 데이터
         postId:'',
       },
-      imageFile: null,
+      imageFile: [],
+      previewImages: [], // 이미지 파일들의 미리보기 URL을 저장할 배열
       modalVisible: false, // 모달의 표시 여부
     }
   },
+  mounted() {
+    this.setPostWriter(); // 컴포넌트가 마운트될 때 작성자 정보 설정
+  },
   methods: {
+    setPostWriter() {
+      const adminNickname = localStorage.getItem('getLoggedIn'); // 로컬 스토리지에서 관리자 닉네임 가져오기
+      if (adminNickname) {
+        this.postData.postWriter = adminNickname; // 작성자 정보 설정
+      } else {
+        // 닉네임이 없으면 기본 값으로 설정
+        this.postData.postWriter = 'admin'; 
+      }
+    },
     async savePost() {
       try {
         // FormData 객체 생성
@@ -129,24 +157,21 @@ export default {
         });
         return response.data; // 게시물 정보 반환
         
-        // 성공 시 처리
-        // 성공 시 alert 메시지 표시
-        alert('게시물이 등록되었습니다.');
-        console.log('게시물 등록 완료:', response.data);
-        // console.log('token :', accessToken)
-        // 리스트 페이지로 이동
-        this.$router.push('/admin/post/list');
       } catch (error) {
         console.error('게시물 등록 실패:', error);
       }
     },
      async uploadImage(postId) {
       const formData = new FormData();
-      formData.append('files', this.imageFile);
-      formData.append('postId', this.postId); // 수정된 부분
+      // 이미지 파일들의 배열을 FormData에 추가
+      for (let i = 0; i < this.imageFile.length; i++) {
+        formData.append('files', this.imageFile[i]);
+      }
+      formData.append('postId', postId); // 수정된 부분
 
       try {
         console.log('Uploaded image:', this.imageFile);
+        console.log('postId 왔는지 확인 : ', postId);
         const accessToken = localStorage.getItem('accessToken');
         const response = await axios.post(`http://localhost:8080/api/v1/posts/post/upload/${postId}`, formData, {
           headers: {
@@ -154,17 +179,68 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         });
-        this.imageFile = response.data.uuid;
+        // this.imageFile = response.data.uuid;
       } catch (error) {
         console.log('업로드 실패 이유:', this.imageFile)
         console.error('이미지 업로드 실패:', error);
       }
     },
     
-    handleImageUpload(event){
-      this.imageFile = event.target.files[0];
-      console.log('Uploaded image:', this.imageFile);
+    handleImageUpload(event) {
+  // 파일 선택 창이 열렸을 때의 파일 개수를 저장합니다.
+  const initialFileCount = this.imageFile.length;
+
+  // 선택된 파일이 있는지 확인
+  if (event.target.files && event.target.files.length > 0) {
+    // 선택된 파일을 배열로 가져옴
+    const files = event.target.files;
+    // 각 파일을 FormData에 추가하고 미리보기 배열에 추가
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      // 이미지 파일을 미리보기 배열에 추가
+      this.imageFile.push(file);
+      this.previewImages.push(URL.createObjectURL(file));
+    }
+    // 인풋 요소에 남은 이미지들을 설정
+    const inputElement = document.getElementById('image');
+    const combinedImages = [...this.imageFile]; // 새로 업로드한 이미지만 있는 배열로 복사
+    inputElement.value = ''; // 인풋 요소의 값 초기화
+
+    // 기존 이미지와 새로 업로드한 이미지를 모두 포함한 파일 리스트를 만듭니다.
+    const fileList = new DataTransfer();
+    combinedImages.forEach(file => {
+      fileList.items.add(file); // 각 파일을 FileList에 추가
+    });
+    inputElement.files = fileList.files; // FileList를 인풋 요소의 files 속성에 설정
+    this.$forceUpdate(); // 컴포넌트 강제 업데이트
+  } else {
+    // 파일 선택 창에서 취소를 눌렀을 때의 로직을 수행합니다.
+    // 이전에 선택한 파일들이 있는지 확인하고, 있으면 초기화하지 않습니다.
+    if (initialFileCount === 0) {
+      // 이전에 선택한 파일이 없으면 선택한 파일 없음으로 초기화합니다.
+      this.imageFile = [];
+      this.previewImages = [];
+    }
+  }
+},
+    removePreviewImage(index) {
+      // 미리보기 이미지를 삭제하면 실행될 로직
+      this.imageFile.splice(index, 1); // 이미지 파일 배열에서 삭제
+      this.previewImages.splice(index, 1); // 미리보기 배열에서 삭제
+      // 인풋 요소에 남은 이미지들을 설정
+      const inputElement = document.getElementById('image');
+      const remainingImages = this.imageFile.map(file => file); // 파일 배열을 복사하여 사용
+      inputElement.value = ''; // 인풋 요소의 값 초기화
+
+      // FileList 객체 생성
+      const fileList = new DataTransfer();
+      remainingImages.forEach(file => {
+      fileList.items.add(file); // 각 파일을 FileList에 추가
+      });
+      inputElement.files = fileList.files; // FileList를 인풋 요소의 files 속성에 설정
+      this.$forceUpdate(); // 컴포넌트 강제 업데이트
     },
+
     showModal() {
       this.modalVisible = true; // 모달 표시
     },
@@ -173,12 +249,25 @@ export default {
     },
    async savePostAndHideModal() {
       try {
+        // 필수 입력값 확인
+    if (!this.postData.postTitle || !this.postData.postCategory || !this.postData.postRegisterDate || !this.postData.postContent) {
+      alert('모든 필수 입력값을 입력해주세요.');
+      this.hideModal();
+      return; // 필수 입력값이 비어있으면 함수 종료
+    }
         const registerResponse = await this.savePost();
         const postId = registerResponse.postId;
 
         await this.uploadImage(postId);
         this.$router.push({ name: 'AdminPostRead', params: { postId: postId } });
+        // 성공 시 처리
+        // 성공 시 alert 메시지 표시
+        alert('게시물이 등록되었습니다.');
+        console.log('게시물 등록 완료:', response.data);
+        // console.log('token :', accessToken)
         this.hideModal();
+        // 리스트 페이지로 이동
+        // this.$router.push('/admin/post/list');
       } catch(error) {
         console.error('이미지 업로드 실패 이유:', error);
       }
@@ -204,6 +293,10 @@ export default {
 
   /* 입력 요소들의 폭을 조절합니다 */
 input[type="text"] {
+  width: 80%; /* 전체 폭을 차지하도록 설정 */
+}
+
+input[type="date"] {
   width: 80%; /* 전체 폭을 차지하도록 설정 */
 }
 
