@@ -1,36 +1,50 @@
 <template>
-  <main>
+  <main class="mt-5">
     <div class="container">
+
       <div class="row align-items-center">
-        <div class="col mt-3 mb-3">
-          <h4>정책 정보</h4>
+        <div class="col mt-3 mb-4">
+          <h4>이번 달 가장 인기있는 소식</h4>
         </div>
       </div>
 
       <!-- 최신 정책 콘텐츠 -->
-      <div class="post-contents">
-        <h4 class="mb-1">최신 정책 정보</h4>
+      <div class="row mb-5">
 
-        <div class="row">
-          <div class="col-md-3" v-for="post in posts" :key="post.postId">
-            <div class="card" style="margin:1.2rem; width:18rem; border:none; text-align: left; padding-left: 0;">
-              <img :src="post.firstImage || '../assets/logo.png'" class="col-3 card-img-top" alt="...">
-              <div class="col-9 card-body" style="padding-left: 0;">
-                <h5 class="card-title">{{ post.postTitle }}</h5>
-                <p class="card-text">{{ post.postContent }}</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+        <div class="col-md-6 mb-2" v-for="post in posts" :key="post.postId">
+          <router-link :to="{ name: 'PostView', params: { postId: post.postId }}" style="text-decoration: none; color: inherit;">
+            <div class="card mb-3">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img :src=post.thumbImage class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body" style="text-align:left;">
+                    <h6 class="card-title mb-2">{{ post.postTitle }}</h6>
+                    <span class="card-text">
+                      {{ post.postContent.slice(0, 30) }}
+                      <span v-if="post.postContent.length > 30">...</span>
+                      </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </router-link>
         </div>
 
       </div>
 
-      <!-- 카테고리 선택 -->
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <div class="row">
+      <div class="row align-items-center mt-3 mb-3">
+        <div class="col mt-3 mb-3">
+          <h4>한눈에 보는 정부정책</h4>
+        </div>
+      </div>
 
-          <div class="col-6 accordion" id="Policy1">
+      <!-- 카테고리 선택 -->
+      <div class="mt-3 mb-5">
+
+        <div class="row">
+          <div class="col-6 accordion" id="city">
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -46,7 +60,7 @@
             </div>
           </div>
 
-          <div class="col-6 accordion" id="Policy2">
+          <div class="col-6 accordion" id="district">
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -60,8 +74,8 @@
               </div>
             </div>
           </div>
-
         </div>
+
         <div class="row mt-3 mb-3">
           <div class="col accordion" id="Policy3">
             <div class="accordion-item">
@@ -78,10 +92,6 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="row">
-          <hr class="custom-divider hr-sm">
         </div>
 
         <div class="row mt-3 mb-3">
@@ -208,12 +218,6 @@ export default {
 </script>
 
 <style scoped>
-.custom-divider {
-  border: none; /* 테두리 없음 */
-  height: 4px; /* 높이 조절 (원하는 높이로 변경) */
-  background-color: blue; /* 배경색 지정 */
-  margin: 1px 0; /* 위아래 여백 지정 (원하는 여백으로 변경) */
-}
 
 .custom-padding {
   padding-right: 100px;
@@ -243,6 +247,10 @@ export default {
 
 .form-control {
   height: 50px;
+}
+
+h6 {
+  font-size: 1.2rem;
 }
 
 .row {
