@@ -15,7 +15,7 @@
                       <circle cx="2.5" cy="12.5" r="2" fill="black"/>
                     </svg>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
-                      <li><router-link :to="{name: 'CommunityUpdate', params : { communityId: community.communityId, communityImages: community.communityImages}}" class="dropdown-item" href="#">게시물 수정</router-link></li>
+                      <li><a class="dropdown-item" @click="modifybutton(community)">게시물 수정</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" @click="deleteCommunity">게시물 삭제</a></li>
                     </ul>
@@ -172,10 +172,15 @@ import axios from 'axios';
     }
   },
   toggleEditMode(reply){
+    const currentUserEmail = localStorage.getItem('memberEmail')
+    if(reply.memberEmail === currentUserEmail){
     reply.editMode = !reply.editMode
 
     if(reply.editMode){
       reply.editedReplyText = reply.replyText
+    }
+    }else{
+      alert('댓글 작성자만 수정할 수 있습니다.')
     }
   },
   async saveEdit(reply) {
@@ -206,7 +211,19 @@ import axios from 'axios';
   cancelEdit(reply){
     reply.editMode = false;
     reply.editedText = '';
+  },
+  modifybutton(community) {
+    const currentUser = community.memberEmail
+    console.log('이메일 오심????????????????',currentUser)
+    const currentUserEmail = localStorage.getItem('memberEmail')
+    console.log('이메일 오냐ㅑㅑㅑㅑㅑㅑㅑㅑㅑㅑㅑ',currentUserEmail)
+  if(currentUser === currentUserEmail){
+    this.$router.push({ name: 'CommunityUpdate', params: { communityId: community.communityId, communityImages: community.communityImages } })
+  }else{
+    alert('게시물 작성자만 수정 가능합니다.')
   }
+}
+
     }
   }
   </script>
