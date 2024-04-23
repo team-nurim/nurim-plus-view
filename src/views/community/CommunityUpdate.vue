@@ -36,12 +36,12 @@
     <div class="col-md-8 offset-md-2">
         <div v-if="communityData.communityImages && communityData.communityImages.length > 0" class="mb-3">
             <h3 class="text-center mb-3">이미지</h3>
-            <div class="image-list">
+            <div class="image-list d-flex flex-wrap justify-content-start">
                 <div v-for="(image, index) in communityData.communityImages" :key="index" class="image-item">
                     <!-- 이미지가 유효한 URL인 경우에만 출력 -->
                     <img :src="image" alt="이미지" class="img-fluid" style="max-width: 200px; max-height: 200px;">
                     <!-- 이미지 삭제 버튼 -->
-                    <button class="btn btn-sm delete-image-btn" @click="deleteImage(communityData.communityImageId[index], $event)"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-sm delete-image-btn" @click="deleteImage(communityData.communityImageId[index], $event, index)"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
         </div>
@@ -91,10 +91,12 @@ export default {
         
         try {
             // 이미지 파일을 업로드하고 이미지 URL을 받아옴
-            const imageUrl = await this.axiosUploadImage(imageFile, this.communityId);
-            
+            const imageUrl = URL.createObjectURL(imageFile);
+            const imageId = await this.axiosUploadImage(imageFile, this.communityId);
             // 받아온 이미지 URL을 미리보기 배열에 추가
             this.communityData.communityImages.push(imageUrl);
+            this.communityData.communityImageId.push(imageId);
+
         } catch (error) {
             console.error('이미지 업로드 실패:', error);
         }
@@ -111,11 +113,9 @@ export default {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('이미지 업로드 성공:', response.data);
-            // 이미지 업로드가 성공하면 이미지 URL을 반환하여 미리보기 배열에 추가
-        const imageUrl = response.data.url;
-        
-        return imageUrl; // 이미지 URL 반환
+            const communityImageId = response.data.communityImageId
+            console.log('이미지 업로드 성공ㅎ:', response.data.content);
+            return communityImageId
         } catch (error) {
             console.error('이미지 업로드 실패:', error);
             throw error;
@@ -130,6 +130,8 @@ export default {
                     },
                 });
                 const community = response.data;
+
+                this.originalCommunityData = { ...community };
 
                 this.communityData.title = community.title;
                 this.communityData.content = community.content;
@@ -171,15 +173,17 @@ export default {
             }
         },
         cancel() {
-            window.history.back();
+            this.communityData = { ...this.originalCommunityData };
+            this.$router.go(-1);
         },
         isImageUrl(url) {
             if (typeof url !== 'string') return false; // URL이 문자열이 아닌 경우 false 반환
             return url.startsWith('http') && (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.gif'));
         },
 
-        async deleteImage(communityImageId, event) {
+        async deleteImage(communityImageId, event, index) {
     try {
+        
         const accessToken = localStorage.getItem('accessToken');
         const url = `http://localhost:8080/api/v1/communityImage/${communityImageId}`;
 
@@ -189,12 +193,9 @@ export default {
             },
         });
 
-        // 이미지 삭제 후 communityData에서 해당 이미지와 이미지 ID 제거
-        const index = this.communityData.communityImageId.indexOf(communityImageId);
-        if (index !== -1) {
             this.communityData.communityImages.splice(index, 1);
             this.communityData.communityImageId.splice(index, 1);
-        }
+
 
         alert('이미지가 삭제 되었습니다.');
     } catch (error) {
