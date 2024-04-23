@@ -12,6 +12,10 @@ import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
 import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
 import SwitchAccount from '../views/mypage/SwitchAccount.vue'
 import Policy from '../views/Policy.vue'
+import Policy from '../views/policy/Policy.vue'
+import RecommendMain from '../views/RecommendMain.vue'
+import Recommend from '../views/Recommend.vue'
+import PostView from '../views/policy/PostView.vue'
 import CommunityView from '../views/community/Community.vue'
 import CommunityDetailView from '../views/community/CommunityDetail.vue'
 import CommunityCreateView from '../views/community/CommunityCreateView.vue'
@@ -50,16 +54,6 @@ const routes = [
     path: '/home',
     name: 'home',
     component: HomeView
-  },
-  {
-    path: '/recommend-main',
-    name: ' RecommendMain',
-    component: () => import('../views/RecommendMain.vue')
-  },
-  {
-    path: '/recommend',
-    name: 'Recommend',
-    component: () => import('../views/Recommend.vue')
   },
   {
     path: '/join',
@@ -117,8 +111,23 @@ const routes = [
     path: '/policy',
     name: 'policy',
     component: Policy
+  },
+  {
+    path: '/post/read/:postId',
+    name: 'PostView',
+    component: () => import('../views/policy/PostView.vue'),
+    props: true
+  },
+  {
+    path: '/recommend-main',
+    name: ' RecommendMain',
+    component: () => import('../views/RecommendMain.vue')
+  },
+  {
+    path: '/recommend',
+    name: 'Recommend',
+    component: () => import('../views/Recommend.vue')
   }
-
 ]
 
 const router = createRouter({
