@@ -16,7 +16,7 @@
         <!-- menu link -->
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
           <li><router-link to="#" class="nav-link px-2 link-secondary">Home</router-link></li>
-          <li><router-link to="#" class="nav-link px-2">정책정보</router-link></li>
+          <li><router-link to="/mcihousingpolicy" class="nav-link px-2">정책정보</router-link></li>
           <li><router-link to="#" class="nav-link px-2">지원금 추천</router-link></li>
           <li><router-link to="#" class="nav-link px-2">커뮤니티</router-link></li>
           <!-- <li><a href="#" class="nav-link px-2">About</a></li> -->
@@ -51,10 +51,10 @@
 
   </main>
 
-  <b-button variant="danger">Button</b-button>
-
 </template>
 <script>
+// eslint-disable-next-line
+/* eslint-disable */
 export default {
   name: '',
   components: {},

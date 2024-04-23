@@ -1,4 +1,6 @@
 <template>
+<!-- // eslint-disable-next-line
+/* eslint-disable */ -->
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="container">
