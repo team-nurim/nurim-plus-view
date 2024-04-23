@@ -39,7 +39,7 @@
             <div class="image-list">
                 <div v-for="(image, index) in communityData.communityImages" :key="index" class="image-item">
                     <!-- 이미지가 유효한 URL인 경우에만 출력 -->
-                    <img :src="image" alt="이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                    <img :src="image" alt="이미지" class="img-fluid" style="max-width: 200px; max-height: 200px;">
                     <!-- 이미지 삭제 버튼 -->
                     <button class="btn btn-sm delete-image-btn" @click="deleteImage(communityData.communityImageId[index], $event)"><i class="fa-solid fa-trash"></i></button>
                 </div>
@@ -85,41 +85,42 @@ export default {
     },
 
     methods: {
-        handleImageUpload(event) {
-    // 이미지 파일을 저장
-    this.imageFile = event.target.files[0];
-    
-    // 이미지 파일을 업로드하고 URL을 가져와서 미리보기 이미지 배열에 추가
-    this.axiosUploadImages(this.communityId)
-        .then(response => {
-            const imageUrl = response.data.url; // 이미지의 URL
-            this.communityData.communityImages.push(imageUrl); // 미리보기 이미지 배열에 추가
-        })
-        .catch(error => {
+        async handleImageUpload(event) {
+        // 이미지 파일을 저장
+        const imageFile = event.target.files[0];
+        
+        try {
+            // 이미지 파일을 업로드하고 이미지 URL을 받아옴
+            const imageUrl = await this.axiosUploadImage(imageFile, this.communityId);
+            
+            // 받아온 이미지 URL을 미리보기 배열에 추가
+            this.communityData.communityImages.push(imageUrl);
+        } catch (error) {
             console.error('이미지 업로드 실패:', error);
-        });
-},
-        async axiosUploadImages(communityId) {
-            try {
-                const accessToken = localStorage.getItem('accessToken');
-                const formData = new FormData();
-                formData.append('files', this.imageFile);
-                const url = `http://localhost:8080/api/v1/communityImages/upload/${communityId}`;
-                const response = await axios.post(url, formData, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-                console.log('이미지 업로드 성공:', response.data);
-
-                const imageUrl = response.data.url
-                this.communityData.communityImages.push(imageUrl)
-            } catch (error) {
-                console.error('이미지 업로드 실패:', error);
-                throw error;
-            }
-        },
+        }
+    },
+    async axiosUploadImage(imageFile, communityId) {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const formData = new FormData();
+            formData.append('files', imageFile);
+            const url = `http://localhost:8080/api/v1/communityImages/upload/${communityId}`;
+            const response = await axios.post(url, formData, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('이미지 업로드 성공:', response.data);
+            // 이미지 업로드가 성공하면 이미지 URL을 반환하여 미리보기 배열에 추가
+        const imageUrl = response.data.url;
+        
+        return imageUrl; // 이미지 URL 반환
+        } catch (error) {
+            console.error('이미지 업로드 실패:', error);
+            throw error;
+        }
+    },
         async axiosCommunityData() {
             try {
                 const accessToken = localStorage.getItem('accessToken');
