@@ -1,141 +1,237 @@
 <template>
-  <div class="chat-window">
-    <div v-for="msg in messages" :key="msg.id" class="message-card" :class="{ 'owner': msg.senderId === currentUserId }">
-      <div class="message-content">
-        <p>{{ msg.text }}</p>
-        <div v-if="msg.options.length" class="options-group">
-          <div v-for="option in msg.options" :key="option.id">
-            <input type="radio" :id="`option-${option.id}`" :value="option.id" v-model="selectedOption">
-            <label :for="`option-${option.id}`">{{ option.text }}</label>
+  <main style="background-color: #F5F5F5;">
+    
+    <div class="container mt-5 mb-5">
+      <div style="padding:0;">
+
+
+        <div class="d-flex flex-row p-3">
+          <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
+          <div class="chat ml-2 p-4">
+            <p>
+              몇 가지 정보만 알려주시면<br>
+              적합한 지원정책을 알려드릴게요.
+            </p>
           </div>
-          <!-- '다음' 버튼은 첫 번째 메시지에서만 보이지 않도록 설정 -->
-        <button v-if="msg.id !== 1 || selectedOption" @click="submitSelection">다음</button>
         </div>
+        
+        <!-- 1단계 -->
+        <div class="d-flex flex-row p-3" v-if="true">
+          <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
+          <div class="chat ml-2 p-4">
+            <p>
+              어디에 살고 계신가요?<br>
+            </p>
+            <!-- 지역구 드롭다운 / 선택 후 다음 클릭 시 hidden 처리 -->
+            <div class="btn-group mt-3" style="width:100%;">
+              <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:#FFF; border:none; color:#333;">
+                {{ selectedLocation ? selectedLocation : '거주지역을 선택하세요.' }}
+              </button>
+              <ul class="dropdown-menu" style="font-size: 0.9rem;">
+                <li><a class="dropdown-item" href="#" @click="selectLocation('서울특별시')">서울특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('부산광역시')">부산광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('대구광역시')">대구광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('인천광역시')">인천광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('광주광역시')">광주광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('대전광역시')">대전광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('경기도')">경기도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('충청북도')">충청북도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('충청남도')">충청남도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('전라남도')">전라남도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('경상북도')">경상북도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('경상남도')">경상남도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('세종특별시')">세종특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('제주특별시')">제주특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('강원특별시')">강원특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectLocation('전북특별시')">전북특별시</a></li>                
+              </ul>
+            </div>
+
+            <!-- <button class="btn-primary" @click="saveLocation">다음</button> -->
+          </div>
+        </div>
+        
+        <div v-if="selectedLocation">
+          <div class="d-flex flex-row p-3 justify-content-end" >
+            <div class="bg-white answer mr-2 p-4">
+              <p class="text-muted">{{ selectedLocation }}</p>
+            </div>
+            <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
+          </div>
+          
+          <!-- 2단계 -->
+          <div class="d-flex flex-row p-3">
+            <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
+            <div class="chat ml-2 p-4">
+              <p>
+                주제를 선택해주세요. (복수선택 가능)
+              </p>
+              <div class="subject mt-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="주거지원" id="subject1" @change="checkSubject">
+                  <label class="form-check-label" for="subject1">
+                    주거지원
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="출산" id="subject2" @change="checkSubject">
+                  <label class="form-check-label" for="subject2">
+                    출산
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="양육" id="subject3" @change="checkSubject">
+                  <label class="form-check-label" for="subject3">
+                    양육
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="보육" id="subject4" @change="checkSubject">
+                  <label class="form-check-label" for="subject4">
+                    보육
+                  </label>
+                </div>
+              </div>
+
+              <!-- <button class="btn-primary" @click="saveSubject">다음</button> -->
+
+            </div>
+          </div>
+        </div>
+
+
+        <div v-if="selectedSubjects.length > 0">
+          <div class="d-flex flex-row p-3 justify-content-end">
+            <div class="bg-white answer mr-2 p-4">
+              <p class="text-muted">{{ selectedSubjects.join(', ') }}</p>
+            </div>
+            <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
+          </div>
+
+          <!-- 3단계 -->
+          <div class="d-flex flex-row p-3">
+            <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
+            <div class="chat ml-2 p-4">
+              <p>
+                선택하신 주제와 관련하여<br>
+                관심있는 키워드를 입력하세요.
+              </p>
+              <!-- 키워드 입력필드 -->
+              <div class="input-group input-group-sm mt-3 mb-3">
+                <input type="text" class="form-control" style="height:2rem;" v-model="keyword">
+              </div>
+
+              <button class="btn-primary" @click="submitKeyword">입력하기</button>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="submittedKeyword">
+          <div class="d-flex flex-row p-3 justify-content-end">
+            <div class="bg-white answer mr-2 p-4">
+              <p class="text-muted">{{ submittedKeyword }}</p>
+            </div>
+            <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
+          </div>
+
+          <!-- '정책 매칭' 링크 버튼 -->
+          <div class="mt-5 mb-5">
+            <button class="btn btn-primary mb-2" style="padding:0.75rem 2rem; border-radius:1.5rem;" @click="getResult">조회하고 지원받기</button>
+          </div>
+        </div>
+        
       </div>
     </div>
-  </div>
-</template>
 
+  </main>
+</template>
 <script>
 import axios from 'axios';
 
 export default {
   data() {
     return {
-      messages: [
-        { id: 1, senderId: 'system', text: '먼저 지역을 선택해주세요!', options: [
-          { id: 'seoul', text: '특별시' },
-          { id: 'gyeonggi', text: '경기도' },
-          { id: 'busan', text: '광역시' },
-          { id: 'jeju', text: '특별자치도' }
-        ]}
-      ],
-      currentUserId: 'user123',
-      selectedOption: null
+      messages: [],
+      selectedLocation: null,
+      selectedSubjects: [],
+      submittedKeyword: ''
     };
   },
   methods: {
-    submitSelection() {
-      let nextMsg = {
-        id: this.messages.length + 1,
-        senderId: 'system',
-        text: '',
-        options: []
-      };
-
-      switch (this.selectedOption) {
-        case 'seoul':
-        case 'gyeonggi':
-        case 'busan':
-        case 'jeju':
-          nextMsg.options = [
-            { id: 'male', text: '남성' },
-            { id: 'female', text: '여성' }
-          ];
-          nextMsg.text = `지역 선택: ${this.selectedOption}`;
-          break;
-        case 'male':
-        case 'female':
-          nextMsg.options = [
-            { id: '20s', text: '20대' },
-            { id: '30s', text: '30대' },
-            { id: '40s', text: '40대' },
-            { id: '50s', text: '50대 이상' }
-          ];
-          nextMsg.text = `성별 선택: ${this.selectedOption}`;
-          break;
-        case '20s':
-        case '30s':
-        case '40s':
-        case '50s':
-          this.fetchAdditionalInfo();
-          return;
-      }
-
-      this.messages.push(nextMsg);
-      this.selectedOption = null; // 선택 초기화
+    selectLocation(location) {
+      this.selectedLocation = location;
     },
-    handleOptionChange() {
-      // 선택이 변경되면 여기에서 추가 로직을 구현할 수 있습니다.
-    },
-    fetchAdditionalInfo() {
-      const accessToken = localStorage.getItem('accessToken');
-      axios.get('/api/v1/recommend/childCare', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
+    checkSubject(event) {
+      const subject = event.target.value;
+      if (event.target.checked) {
+        this.selectedSubjects.push(subject);
+      } else {
+        const index = this.selectedSubjects.indexOf(subject);
+        if (index !== -1) {
+          this.selectedSubjects.splice(index, 1);
         }
-      }).then(response => {
-        this.processResponse(response.data);
-      }).catch(error => {
-        console.error('API 호출 에러:', error);
-      });
+      }
     },
-    processResponse(data) {
-      this.messages.push(...data.map(item => ({
-        id: this.messages.length + 1,
-        text: `지역: ${item.sigunNm}, 사업명: ${item.bizNm}, 지원금액: ${item.payment}`,
-        options: []
-      })));
-    }
+    submitKeyword() {
+      // 제출 버튼 클릭 시 호출되는 메서드
+      // submittedKeyword에 입력한 키워드 할당
+      this.submittedKeyword = this.keyword;
+    },
   }
-};
+}
 </script>
 
 <style scoped>
-.chat-window {
-  max-width: 600px;
-  margin: auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  overflow: hidden;
+.container {
+  max-width: 820px;
+  min-height: 520px;
 }
-.message-card {
-  border-bottom: 1px solid #e0e0e0;
-  padding: 20px;
-  background-color: #fff;
-  transition: background-color 0.3s;
+.card{
+	width: 300px;
+	border: none;
+	border-radius: 1rem;
 }
-.message-card:hover {
-  background-color: #f9f9f9;
+.chat{
+	border: none;
+	background: #E2FFE8;
+	font-size: 0.85rem;
+	border-radius: 1rem;
+  text-align: left;
+  background-color: #CCE5FF;
 }
-.message-content {
-  background-color: #f4f4f7;
-  padding: 15px;
-  border-radius: 8px;
+
+.bg-white{
+	font-size: 0.85rem;
+	border-radius: 1rem;
 }
-.options-group {
-  margin-top: 10px;
+.dot{
+	font-weight: bold;
 }
-.owner .message-content {
-  background-color: #d4edda;
+.form-control{
+	border-radius: 12px;
+	border: 1px solid #F0F0F0;
+	font-size: 8px;
 }
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
+.form-control:focus{
+	box-shadow: none;
+	}
+.form-control::placeholder{
+	font-size: 8px;
+	color: #C4C4C4;
+}
+p {
+  margin: 0;
+}
+.btn-primary {
   border: none;
-  border-radius: 4px;
-  background-color: #4caf50;
-  color: white;
-  cursor: pointer;
+  margin-top: 0.3rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.3rem;
+  width: 100%;
+  color: #FFF;
+  font-weight: 400;
+}
+footer {
+  margin: 0;
 }
 </style>
