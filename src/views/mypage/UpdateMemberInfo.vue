@@ -59,7 +59,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'UpdateMemberInfo',
   computed: {
-    ...mapGetters(['getLoggedIn']),
+    ...mapGetters(['getLoggedIn', 'getMemberInfo']),
     memberNickname() {
       return this.member.memberNickname;
     }
@@ -85,18 +85,30 @@ export default {
   },
   async created () {
     const accessToken = localStorage.getItem('accessToken')
-
-    // 페이지 생성 시 로그인 상태 확인
-    if(accessToken != null) {
-      this.loggedIn = true;
+    if (accessToken) {
+      // 로그인 상태가 있을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', true)
+      this.$store.commit('setMemberInfo', this.member)
     } else {
-      this.loggedIn = false;
+      // 로그인 상태가 없을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', false)
     }
-    console.log('저장된 토큰: ' + accessToken)
-    console.log('로그인 여부: ' + this.loggedIn)
-    // 로그인 된 경우 회원 정보 불러오기
-    if (this.loggedIn) {
-      await this.fetchMemberInfo();
+    console.log('로그인 상태', this.loggedIn)
+  },
+  watch: {
+    getLoggedIn(newValue) {
+      // Vuex 상태 변경 감지
+      this.loggedIn = newValue
+      // 로그인 상태가 되면 회원 정보를 다시 가져옴
+      if (newValue) {
+        this.fetchMemberInfo()
+      }
+    },
+    getmemberInfo(newValue) {
+      this.member = newValue
+      if(newValue) {
+        this.fetchMemberInfo()
+      }
     }
   },
   mounted() {

@@ -32,7 +32,7 @@
       </div>
 
       <!-- Modal -->
-      <div class="modal fade" v-if="showModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -45,7 +45,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" @click="cancelImage">변경하기</button>
+              <button type="button" class="btn btn-primary" @click="cancelImage" data-bs-dismiss="modal">변경하기</button>
             </div>
           </div>
         </div>
@@ -172,7 +172,6 @@ export default {
         if(response.data.success) {
           this.member.expertFile = response.data.expertFile;
           this.$router.push('/updateExpertInfo')
-          this.showModal = false;
           console.log('자격증 이미지 삭제 성공')
         } else {
           console.log('자격증 이미지 삭제 실패')
@@ -220,14 +219,6 @@ export default {
     goForward () {
       this.$router.push('/mypage')
       alert('증빙서류 수정이 완료되었습니다.')
-    },
-    closeModalAndRedirect() {
-      // Bootstrap 5 모달 닫기
-      const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
-      modal.hide();
-
-      // Vue Router를 사용하여 페이지 리디렉션
-      this.$router.push('/updateExpertInfo');
     }
   }
 }

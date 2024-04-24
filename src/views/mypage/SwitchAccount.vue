@@ -45,14 +45,14 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" @click="cancelImage">변경하기</button>
+              <button type="button" class="btn btn-primary" @click="cancelImage" data-bs-dismiss="modal">변경하기</button>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Button to Open the Modal -->
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#termsModal" :disabled="agreed">
+      <button v-if="!agreed" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#termsModal" :disabled="agreed">
         약관 보기 및 동의
       </button>
 
@@ -82,7 +82,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-              <button type="button" class="btn btn-primary" @click="agreeAndCloseModal">동의하기</button>
+              <button type="button" class="btn btn-primary" @click="agreedModal" data-bs-dismiss="modal">동의하기</button>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@
           <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled || agreed == false">계정 전환 신청</button>
+          <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == false">계정 전환 신청</button>
         </div>
       </div>
 
@@ -101,7 +101,7 @@
       <div v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Status" class="form-label">내 계정 상태</label>
         <!-- <input type="text" id="Status" class="form-control" value="" aria-label="Disabled input example" disabled readonly> -->
-        <button v-if="!showHiddenText" type="button" class="btn" @click="toggleText" :disabled="!isFileInputEnabled || agreed == false">확인하기</button>
+        <button v-if="!showHiddenText" type="button" class="btn" @click="toggleText" :disabled="!isFileInputEnabled || agreed == false || !applyforAccount">확인하기</button>
         <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
           <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
           <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
@@ -120,17 +120,18 @@ import axios from 'axios'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'UpdateMemberInfo',
+  name: 'SwitchAccount',
   computed: {
-    ...mapGetters(['getLoggedIn']),
+    ...mapGetters(['getLoggedIn'], ['getAgreed']),
     memberNickname() {
       return this.member.memberNickname;
-    }
+    },
   },
   data () {
     return {
       loggedIn: false,
       agreed: false,  // 약관 동의 상태
+      applied: false,
       member: {
         memberId: 0,
         memberEmail: '',
@@ -150,30 +151,58 @@ export default {
   },
   async created () {
     const accessToken = localStorage.getItem('accessToken')
-
-    // 페이지 생성 시 로그인 상태 확인
-    if(accessToken != null) {
-      this.loggedIn = true;
+    if (accessToken) {
+      // 로그인 상태가 있을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', true)
     } else {
-      this.loggedIn = false;
+      // 로그인 상태가 없을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', false)
     }
-    console.log('저장된 토큰: ' + accessToken)
-    console.log('로그인 여부: ' + this.loggedIn)
-    // 로그인 된 경우 회원 정보 불러오기
-    if (this.loggedIn) {
-      await this.fetchMemberInfo();
+    console.log('로그인 상태', this.loggedIn)
+  },
+  watch: {
+    getLoggedIn(newValue) {
+      // Vuex 상태 변경 감지
+      this.loggedIn = newValue
+      // 로그인 상태가 되면 회원 정보를 다시 가져옴
+      if (newValue) {
+        this.fetchMemberInfo()
+      }
     }
   },
   computed: {
-      // 파일 입력이 활성화되었는지 여부를 반환하는 computed 속성 추가
+    // 파일 입력이 활성화되었는지 여부를 반환하는 computed 속성 추가
     isFileInputEnabled() {
       return this.member.expertFile !== '증빙서류가 등록되지 않았습니다.';
+    },
+    agreed() {
+      return this.$store.state.agreed;
+    },
+    applied() {
+      return this.$store.state.applied;
+    }
+  },
+  mutations: {
+    setAgreed(state, agreed) {
+      state.agreed = agreed;
+      localStorage.setItem('agreed', agreed)
+    },
+    setApplied(state, applied) {
+      state.applied = applied;
+      localStorage.setItem('applied', applied)
     }
   },
   mounted() {
     this.fetchMemberInfo();
   },
   methods: {
+    async agreedModal() {
+      this.$store.commit('setAgreed', true)
+    },
+    async applyforAccount() {
+      this.$store.commit('setApplied', true)
+      alert('계정 전환 신청이 완료되었습니다.')
+    },
     async fetchMemberInfo () {
       try {
         const accessToken = localStorage.getItem('accessToken')
@@ -254,12 +283,6 @@ export default {
       } catch (error) {
         console.error('텍스트 숨기기/보이기 실패: ', error)
       }
-    },
-    async agreeAndCloseModal() {
-      this.agreed = true; // 약관 동의 상태를 true로 변경
-      // const modalElement = document.getElementById('termsModal');
-      // const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      // modalInstance.hide(); // Bootstrap 5의 모달 인스턴스를 사용하여 모달을 닫음
     },
     logout () {
       // 로그아웃 시 로컬 스토리지 토큰 삭제
