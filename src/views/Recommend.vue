@@ -14,6 +14,54 @@
             </p>
           </div>
         </div>
+
+        <!-- 2단계 -->
+        <div class="d-flex flex-row p-3">
+            <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
+            <div class="chat ml-2 p-4">
+              <p>
+                주제를 선택해주세요.
+              </p>
+              <div class="subject mt-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" value="주거지원" id="subject1" @change="selectSubject('주거지원')">
+                  <label class="form-check-label" for="subject1">
+                    주거지원
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" value="출산" id="subject2" @change="selectSubject('출산')">
+                  <label class="form-check-label" for="subject2">
+                    출산
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" value="양육" id="subject3" @change="selectSubject('양육')">
+                  <label class="form-check-label" for="subject3">
+                    양육
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" value="보육" id="subject4" @change="selectSubject('보육')">
+                  <label class="form-check-label" for="subject4">
+                    보육
+                  </label>
+                </div>
+              </div>
+
+              <!-- <button class="btn-primary" @click="saveSubject">다음</button> -->
+
+            </div>
+          </div>
+        </div>
+
+        <div v-if="selectedSubject">
+          <div class="d-flex flex-row p-3 justify-content-end">
+            <div class="bg-white answer mr-2 p-4">
+              <p class="text-muted">{{ selectedSubject }}</p>
+            </div>
+            <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
+          </div>
         
         <!-- 1단계 -->
         <div class="d-flex flex-row p-3" v-if="true">
@@ -59,54 +107,7 @@
             <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
           </div>
           
-          <!-- 2단계 -->
-          <div class="d-flex flex-row p-3">
-            <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
-            <div class="chat ml-2 p-4">
-              <p>
-                주제를 선택해주세요.
-              </p>
-              <div class="subject mt-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" value="주거지원" id="subject1" @change="selectSubject('주거지원')">
-                  <label class="form-check-label" for="subject1">
-                    주거지원
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" value="출산" id="subject2" @change="selectSubject('출산')">
-                  <label class="form-check-label" for="subject2">
-                    출산
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" value="양육" id="subject3" @change="selectSubject('양육')">
-                  <label class="form-check-label" for="subject3">
-                    양육
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" value="보육" id="subject4" @change="selectSubject('보육')">
-                  <label class="form-check-label" for="subject4">
-                    보육
-                  </label>
-                </div>
-              </div>
-
-              <!-- <button class="btn-primary" @click="saveSubject">다음</button> -->
-
-            </div>
-          </div>
-        </div>
-
-
-        <div v-if="selectedSubject">
-          <div class="d-flex flex-row p-3 justify-content-end">
-            <div class="bg-white answer mr-2 p-4">
-              <p class="text-muted">{{ selectedSubject }}</p>
-            </div>
-            <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
-          </div>
+        
 
           <!-- 3단계 -->
           <div class="d-flex flex-row p-3">
