@@ -22,7 +22,7 @@ export default {
   created() {
     const id = this.$route.params.id;
     axios
-      .get(`http://localhost:8080/api/housingdetails/newlywedHopeTown/${id}`)
+      .get(`http://localhost:8080/api/v1/housingdetails/newlywedHopeTown/${id}`)
       .then((response) => {
         this.policy = response.data;
       })

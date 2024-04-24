@@ -9,7 +9,6 @@
     <p v-else>Loading or No data available</p>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 
@@ -23,7 +22,7 @@ export default {
     const id = this.$route.params.id; // URL에서 ID를 추출
     axios
       .get(
-        `http://localhost:8080/api/housingdetails/integratedPublicRental/${id}`
+        `http://localhost:8080/api/v1/housingdetails/integratedPublicRental/${id}`
       )
       .then((response) => {
         this.policy = response.data;
@@ -34,7 +33,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .content-left {
   text-align: left; /* 모든 텍스트를 왼쪽으로 정렬 */

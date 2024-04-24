@@ -22,7 +22,7 @@ export default {
   created() {
     const id = this.$route.params.id; // URL에서 ID를 추출
     axios
-      .get(`http://localhost:8080/api/housingdetails/purchasedRental/${id}`)
+      .get(`http://localhost:8080/api/v1/housingdetails/purchasedRental/${id}`)
       .then((response) => {
         this.policy = response.data;
       })

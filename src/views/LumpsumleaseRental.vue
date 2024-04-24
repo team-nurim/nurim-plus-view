@@ -22,7 +22,9 @@ export default {
   created() {
     const id = this.$route.params.id;
     axios
-      .get(`http://localhost:8080/api/housingdetails/lumpsumleaseRental/${id}`)
+      .get(
+        `http://localhost:8080/api/v1/housingdetails/lumpsumleaseRental/${id}`
+      )
       .then((response) => {
         this.policy = response.data;
       })
