@@ -71,7 +71,14 @@ h4 {
   line-height: 1.5 !important;
 }
 
+h5 {
+  font-weight: 700;
+  line-height: 1.5 !important;
+}
+
+
 h6 {
+  font-weight: 700;
   line-height: 1.5 !important;
 }
 

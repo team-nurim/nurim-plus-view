@@ -82,6 +82,8 @@ export default {
       // 로그인 상태가 없을 경우 Vuex 상태 업데이트
       this.$store.commit('setLoggedIn', false)
     }
+  },
+  async mounted () {
     console.log('로그인 상태', this.loggedIn)
   },
   watch: {
