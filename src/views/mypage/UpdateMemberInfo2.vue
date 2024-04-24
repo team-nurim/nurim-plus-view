@@ -271,7 +271,7 @@ export default {
         });
         console.log('회원 정보 수정 성공: ', response.data);
         alert('회원 정보가 성공적으로 수정되었습니다.');
-        this.$router.push('/Mypage')
+        this.$router.push('/mypage')
       } catch (error) {
         console.log('회원 정보 수정 실패: ', error)
         alert('회원 정보 수정에 실패했습니다.');

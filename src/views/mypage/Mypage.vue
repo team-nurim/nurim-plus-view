@@ -89,7 +89,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" @click="deleteMemberInfo">탈퇴하기</button>
+              <button type="button" class="btn btn-primary" @click="deleteMemberInfo" data-bs-dismiss="modal">탈퇴하기</button>
             </div>
           </div>
         </div>
@@ -181,7 +181,7 @@ export default {
         alert('정상적으로 탈퇴되었습니다.');
         this.$router.push('/')
       } catch (error) {
-        console.log('계정 삭제 실패: ', error)
+        console.error('계정 삭제 실패: ', error)
         alert('계정 삭제에 실패했습니다.');
       }
     },
