@@ -1,66 +1,70 @@
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/admin/members">Member List</router-link>
-
-    </nav>
-    <div class="content">
-      <router-view />
-      <div v-if="loading" class="loader"></div>
-    </div>
-  </div>
+  <!-- <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">정책정보</router-link> |
+    <router-link to="/about">지원추천</router-link> |
+    <router-link to="/about">커뮤니티</router-link>
+  </nav>
+  <router-view/> -->
+  <Header></Header>
+  <router-view />
+  <Footer></Footer>
 </template>
 
 <script>
-// eslint-disable-next-line
-/* eslint-disable */
+import Header from './components/common/NurimHeader.vue'
+import Footer from './components/common/NurimFooter.vue'
+// import HomeView from './views/HomeView.vue'
+
 export default {
-  data() {
-    return {
-      loading: false
-    };
-  },
-  methods: {
-    // 필요하다면 로딩 상태를 관리하는 메서드를 추가할 수 있습니다.
+  name: 'App',
+  components: {
+    Header,
+    Footer
   }
-};
+}
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
 #app {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 98vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  color: #333;
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
 }
 
 nav {
-  background-color: #007bff;
-  padding: 15px 0;
+  padding: 30px;
 }
 
 nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 15px;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
-.content {
-  margin: 50px auto;
-  width: 80%;
+Footer {
+  margin-top: auto;;
 }
 
-.loader {
-  border: 5px solid #f3f3f3; /* 회색 */
-  border-top: 5px solid #3498db; /* 파랑색 */
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin: 50px auto;
+h1 {
+  font-weight: 700;
+  line-height: 1.5 !important;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+h6 {
+  line-height: 1.5 !important;
 }
+
+.btn-primary {
+  font-weight: 500;
+  background-color: #2F80ED;
+}
+
 </style>
