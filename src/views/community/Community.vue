@@ -14,36 +14,32 @@ c<template>
       <div class="col">
         <div class="arrow-buttons">
           <h3 class="text-start">가장 많이 본 게시물</h3>
+          <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
+          <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
         </div>
       </div>
     </div>
 
     <div class="popularContainer">
-      <!-- card -->
-      <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
-      <div class="col-md-4" v-for="(community, index) in popluarVisbleBoards" :key="index">
-        <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
-          <div class="card justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
-            <div class="card-body">
-              <div class="row mb-3">
-                <div class="col">
-                  <h4 class="card-title">{{ community.memberNickname }}</h4>
-                    <span class="card-subtitle mb-2" style="color:#B4B4B4;">
-                      등록일자:{{ formatDate(community.registerDate) }}  |  조회수:{{ community.counts }}
-                    </span>
-                </div>
-              </div>
-              <p class="card-text mt-2">
-                {{ community.content.slice(0, 100) }}
-                <span v-if="community.content.length > 60">...</span>
-                </p>
-            </div>
-          </div>
-        </router-link>
+  <!-- card -->
+  <div class="col-md-4" v-for="(community, index) in popluarVisbleBoards" :key="index" style="margin-bottom: 1rem;">
+    <router-link style="text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
+      <div class="card">
+            <div class="col">
+              <h4 class="card-title">{{ community.memberNickname }}</h4>
+              <span class="card-subtitle mb-2" style="color:#B4B4B4;">
+                등록일자:{{ formatDate(community.registerDate) }}  |  조회수:{{ community.counts }}
+              </span>
+          <p class="card-text mt-2">
+            {{ community.content.slice(0, 100) }}
+            <span v-if="community.content.length > 60">...</span>
+          </p>
+        </div>
       </div>
-      <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
-    </div>
+    </router-link>
   </div>
+</div>
+</div>
 
   <!--답변을 기다리는 게시물-->
   <div class="inquire-container">
@@ -58,11 +54,12 @@ c<template>
     <p class="category" style="border-radius: 30px;">{{ inquire.category }}</p>
   </div>
     <h2 class="inquire-title">{{ inquire.title }}</h2>
-    <p class="content">{{ inquire.content }}</p>
+    {{ inquire.content.slice(0, 100) }}<span v-if="inquire.content.length > 60">...</span>
     </router-link>
     </div>
   </div>
 <!--답변을 기다리는 게시물-->
+
 <!--카테고리 및 검색창-->
 <div class="container1">
 <div class="category-search">
@@ -74,7 +71,7 @@ c<template>
   <button class="btn btn-outline-secondary" @click="selectCategory('장례')" style="border-radius: 17px;">장례</button>
 </div>
 <div class="search-container">
-<input type="text" v-model="searchQuery" placeholder="검색하실 제목을 입력해주세요." class="search-input">
+<input type="text" v-model="searchQuery" placeholder="검색하실 제목을 입력해주세요." class="search-input" @keyup.enter="searchCommunity">
 <i class="fa-solid fa-magnifying-glass search-icon" style="color: skyblue; cursor: pointer;" @click="searchCommunity"></i>
 </div>
 </div>
@@ -103,7 +100,7 @@ c<template>
     </div>
     <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
 </div>
-<router-link to="/CommunityCreate"><button class="btn btn-primary" style="width: 100px;">문의하기</button></router-link>
+<router-link to="/CommunityCreate"><button class="btn btn-primary" style="width: 150px; margin-bottom: 20px;">문의하기</button></router-link>
 </div>
 <!-- 위로가기 버튼 -->
 <p class="fixed_top">
@@ -232,7 +229,7 @@ async selectCategory(category) {
 async searchCommunity() {
   try {
     const accessToken = localStorage.getItem('accessToken')
-    let url = `http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`
+    let url = `http://localhost:8080/api/v1/community/Search?keyword=${this.searchQuery}`
     const response = await axios.get(url,{
       headers : {
         'Authorization': `Bearer ${accessToken}`
@@ -329,6 +326,12 @@ flex-wrap: wrap;
 flex: 1;
 justify-content: center;
 }
+.card {
+  text-align: left;
+  padding: 1.2rem;
+  margin-right: 30px;
+}
+
 .most-view-card {
   border: 1px solid #ccc;
   border-radius: 1rem;
