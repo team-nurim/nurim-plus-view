@@ -29,7 +29,6 @@
               </div>
             </div>
           </div>
-
         </div><!-- row end -->
       </div><!-- review section end -->
 

@@ -12,18 +12,15 @@ c<template>
 
     <div class="row">
       <div class="col">
-        <h3 class="text-start">가장 많이 본 게시물</h3>
-      </div>
-      <div class="col">
         <div class="arrow-buttons">
-          <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
-          <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
+          <h3 class="text-start">가장 많이 본 게시물</h3>
         </div>
       </div>
     </div>
 
     <div class="popularContainer">
       <!-- card -->
+      <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
       <div class="col-md-4" v-for="(community, index) in popluarVisbleBoards" :key="index">
         <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
           <div class="card justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
@@ -44,15 +41,15 @@ c<template>
           </div>
         </router-link>
       </div>
-
+      <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
     </div>
   </div>
 
   <!--답변을 기다리는 게시물-->
   <div class="inquire-container">
-    <div class="arrow-buttons">
-      <h3 class="inquire-title" style="font-size: 30px; margin-left: 300px">답변을 기다리는 게시물</h3>
-      <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1" style="margin-left: 930px">‹</a>
+    <div class="arrow-buttons" style="justify-self: end;">
+      <h3 class="inquire-title" style="font-size: 28px;">답변을 기다리는 게시물</h3>
+      <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
       <a @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
     </div>
   <div class="inquire-card">
@@ -282,6 +279,7 @@ async searchCommunity() {
 .arrow-buttons {
   display: flex;
   align-content: center;
+  justify-content: center;
 }
 .arrow-button1 {
   width: 30px;
@@ -362,6 +360,7 @@ justify-content: center;
   /*=======================답변을 기다리는 게시물 스타일==================================*/
   .inquire-container{
     margin-bottom: 100px;
+    margin-top: 100px;
   }
   .inquire-title{
     margin-right: center;
