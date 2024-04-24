@@ -277,32 +277,19 @@ export default {
 </script>
 
 <style>
-
-  /* textarea 요소를 더 크게 만듭니다 */
-  textarea {
-  width: 80%; /* 전체 폭을 차지하도록 설정 */
-  max-width: 80%; /* 최대 폭을 지정하여 넘치지 않도록 설정 */
-  height: 300px; /* 원하는 높이로 조정하세요 */
+/* textarea 요소를 더 크게 만듭니다 */
+textarea {
+  width: 100%;
   resize: vertical; /* 사용자가 크기를 조절할 수 있도록 합니다 */
-  padding: 8px;
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
-  border-radius: 5px;
+  border-radius: 0.3rem;
   box-sizing: border-box; /* 패딩과 테두리를 포함하여 요소의 전체 크기를 계산합니다 */
-}
-
-  /* 입력 요소들의 폭을 조절합니다 */
-input[type="textreg"] {
-  width: 80%; /* 전체 폭을 차지하도록 설정 */
-}
-
-input[type="date"] {
-  width: 80%; /* 전체 폭을 차지하도록 설정 */
 }
 
 /* ============푸터 디자인===================== */
 #app {
-   display: flex;
+  display: flex;
   flex-direction: column;
   min-height: 100vh;
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -311,10 +298,6 @@ input[type="date"] {
   text-align: center;
   color: #2c3e50;
 }
-.router-view-container {
-  flex: 1;
-}
-
 
 #nav {
   padding: 30px;
