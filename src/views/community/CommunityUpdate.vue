@@ -97,6 +97,8 @@ export default {
             this.communityData.communityImages.push(imageUrl);
             this.communityData.communityImageId.push(imageId);
 
+            window.location.reload();
+
         } catch (error) {
             console.error('이미지 업로드 실패:', error);
         }
