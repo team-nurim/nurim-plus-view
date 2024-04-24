@@ -10,7 +10,7 @@
       <!-- 내 맞춤 정보 수정 -->
       <!-- 이름 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Nickname" class="form-label">성함(닉네임,,?)</label>
+        <label for="Nickname" class="form-label">닉네임</label>
         <div class="row">
           <input class="form-control" type="text" id="Nickname" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
         </div>
@@ -30,21 +30,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Gender" class="form-label">성별</label>
-        <div class="row" id="Gender">
-          <div class="col">
-            <button type="button" class="btn btn-update" :class="{'active': activeGender === 0 }" @click="setGender(0)">
-              남성
-            </button>
-          </div> -->
-          <!-- <div class="col">
-            <button type="button" class="btn btn-update" :class="{'active': activeGender === 1 }" @click="setGender(1)">
-              여성
-            </button>
-          </div>
-        </div>
-      </div> -->
 
       <!-- 연령대 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
@@ -76,22 +61,20 @@
 
       <!-- 거주지 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Residence" class="form-label">거주지</label>
+        <div class="row mt-3 mb-3 align-items-center address-padding">
+          <label for="postcode" class="form-label">우편번호</label>
+          <input type="text" class="mb-3" id="postcode" v-model="postcode" placeholder="우편번호">
+          <button type="button" class="btn btn-update" @click="execDaumPostcode">우편번호 찾기</button>
+        </div>
+        <div class="row mt-3 mb-3 align-items-center address-padding">
+          <label for="address" class="form-label">주소</label>
+          <input type="text" id="address" v-model="address" placeholder="주소" readonly>
+        </div>
+        <div class="row mt-3 mb-3 align-items-center address-padding">
+          <label for="detailAddress" class="form-label">상세주소</label>
+          <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소">
+        </div>
       </div>
-      <div class="row mt-3 mb-3 align-items-center custom-padding">
-        <label for="postcode" class="form-label">우편번호</label>
-        <input type="text" class="mb-3" id="postcode" v-model="postcode" placeholder="우편번호">
-        <button type="button" class="btn btn-update" @click="execDaumPostcode">우편번호 찾기</button>
-      </div>
-      <div class="row mt-3 mb-3 align-items-center custom-padding">
-        <label for="address" class="form-label">주소</label>
-        <input type="text" id="address" v-model="address" placeholder="주소" readonly>
-      </div>
-      <div class="row mt-3 mb-3 align-items-center custom-padding">
-        <label for="detailAddress" class="form-label">상세주소</label>
-        <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소">
-      </div>
-
 
       <!-- 결혼 여부 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
@@ -327,24 +310,12 @@ export default {
   padding-bottom: 10px;
 }
 
-.btn-profile {
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 10px; /* 글씨크기 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+.address-padding {
+  padding-right: 95px;
+  padding-left: 95px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
-
-.btn-profile:hover, .btn-profile:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
-}
-
-/* .btn-menu:active {
-  background-color: #004085; /* 클릭 시 배경색 */
-/*  color: #ffc107; /* 클릭 시 글씨색 */
-/*} */
 
 .form-control {
   height: 50px;

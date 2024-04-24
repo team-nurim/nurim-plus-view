@@ -171,7 +171,7 @@ export default {
       try {
         const memberId = this.member.memberId;
         const accessToken = localStorage.getItem('accessToken')
-        const response = await axios.delete(`/api/v1/members/${memberId}`, {}, {
+        const response = await axios.delete(`/api/v1/members/${memberId}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
             'Content-Type': `application/json`
@@ -179,7 +179,7 @@ export default {
         });
         console.log('계정 삭제 성공: ', response.data);
         alert('정상적으로 탈퇴되었습니다.');
-        this.$router.push('/')
+        this.$router.push('/join')
       } catch (error) {
         console.error('계정 삭제 실패: ', error)
         alert('계정 삭제에 실패했습니다.');
