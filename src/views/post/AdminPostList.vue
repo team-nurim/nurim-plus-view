@@ -116,7 +116,6 @@
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
-
 import axios from 'axios';
 export default {
 
