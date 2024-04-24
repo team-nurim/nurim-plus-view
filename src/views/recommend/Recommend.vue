@@ -1,5 +1,5 @@
 <template>
-  <main style="background-color: #F5F5F5 !important;">
+  <main style="background-color: #F5F5F5;">
     
     <div class="container mt-5 mb-5">
       <div style="padding:0;">
@@ -14,53 +14,9 @@
             </p>
           </div>
         </div>
-        
-        <!-- 1단계 -->
-        <div class="d-flex flex-row p-3" v-if="true">
-          <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
-          <div class="chat ml-2 p-4">
-            <p>
-              어디에 살고 계신가요?<br>
-            </p>
-            <!-- 지역구 드롭다운 / 선택 후 다음 클릭 시 hidden 처리 -->
-            <div class="btn-group mt-3" style="width:100%;">
-              <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:#FFF; border:none; color:#333;">
-                {{ selectedLocation ? selectedLocation : '거주지역을 선택하세요.' }}
-              </button>
-              <ul class="dropdown-menu" style="font-size: 0.9rem;">
-                <li><a class="dropdown-item" href="#" @click="selectLocation('서울특별시')">서울특별시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('부산광역시')">부산광역시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('대구광역시')">대구광역시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('인천광역시')">인천광역시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('광주광역시')">광주광역시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('대전광역시')">대전광역시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('경기도')">경기도</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('충청북도')">충청북도</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('충청남도')">충청남도</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('전라남도')">전라남도</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('경상북도')">경상북도</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('경상남도')">경상남도</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('세종특별시')">세종특별시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('제주특별시')">제주특별시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('강원특별시')">강원특별시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectLocation('전북특별시')">전북특별시</a></li>                
-              </ul>
-            </div>
 
-            <!-- <button class="btn-primary" @click="saveLocation">다음</button> -->
-          </div>
-        </div>
-        
-        <div v-if="selectedLocation">
-          <div class="d-flex flex-row p-3 justify-content-end" >
-            <div class="bg-white answer mr-2 p-4">
-              <p class="text-muted">{{ selectedLocation }}</p>
-            </div>
-            <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
-          </div>
-          
-          <!-- 2단계 -->
-          <div class="d-flex flex-row p-3">
+        <!-- 1단계 -->
+        <div class="d-flex flex-row p-3">
             <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
             <div class="chat ml-2 p-4">
               <p>
@@ -99,7 +55,6 @@
           </div>
         </div>
 
-
         <div v-if="selectedSubject">
           <div class="d-flex flex-row p-3 justify-content-end">
             <div class="bg-white answer mr-2 p-4">
@@ -107,6 +62,52 @@
             </div>
             <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
           </div>
+        
+
+        <!-- 2단계 -->
+        <div class="d-flex flex-row p-3" v-if="true">
+          <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
+          <div class="chat ml-2 p-4">
+            <p>
+              어디에 살고 계신가요?<br>
+            </p>
+            <!-- 지역구 드롭다운 / 선택 후 다음 클릭 시 hidden 처리 -->
+            <div class="btn-group mt-3" style="width:100%;">
+              <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:#FFF; border:none; color:#333;">
+                {{ selectedRegion ? selectedRegion : '거주지역을 선택하세요.' }}
+              </button>
+              <ul class="dropdown-menu" style="font-size: 0.9rem;">
+                <li><a class="dropdown-item" href="#" @click="selectRegion('서울특별시')">서울특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('부산광역시')">부산광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('대구광역시')">대구광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('인천광역시')">인천광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('광주광역시')">광주광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('대전광역시')">대전광역시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('경기도')">경기도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('충청북도')">충청북도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('충청남도')">충청남도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('전라남도')">전라남도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('경상북도')">경상북도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('경상남도')">경상남도</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('세종특별시')">세종특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('제주특별시')">제주특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('강원특별시')">강원특별시</a></li>
+                <li><a class="dropdown-item" href="#" @click="selectRegion('전북특별시')">전북특별시</a></li>                
+              </ul>
+            </div>
+
+            <!-- <button class="btn-primary" @click="saveRegion">다음</button> -->
+          </div>
+        </div>
+        
+        <div v-if="selectedRegion">
+          <div class="d-flex flex-row p-3 justify-content-end" >
+            <div class="bg-white answer mr-2 p-4">
+              <p class="text-muted">{{ selectedRegion }}</p>
+            </div>
+            <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="44" height="44">
+          </div>
+          
 
           <!-- 3단계 -->
           <div class="d-flex flex-row p-3">
@@ -136,7 +137,7 @@
 
           <!-- '정책 매칭' 링크 버튼 -->
           <div class="mt-5 mb-5">
-            <button class="btn btn-primary mb-2" style="padding:0.75rem 2rem; border-radius:1.5rem;" @click="getResult">조회하고 지원받기</button>
+            <button class="btn btn-primary mb-2" style="padding:0.75rem 2rem; border-radius:1.5rem;" @click="fetchResult">조회하고 지원받기</button>
           </div>
         </div>
         
@@ -145,6 +146,7 @@
 
   </main>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -152,23 +154,56 @@ export default {
   data() {
     return {
       messages: [],
-      selectedLocation: null,
       selectedSubject: null,
-      submittedKeyword: ''
+      selectedRegion: null,
+      submittedKeyword: '',
+      result: []
     };
   },
   methods: {
-    selectLocation(location) {
-      this.selectedLocation = location;
+    selectRegion (region) {
+      this.selectedRegion = region;
     },
-    selectSubject(subject) {
+    selectSubject (subject) {
       this.selectedSubject = subject;
     },
-    submitKeyword() {
+    submitKeyword () {
       // 제출 버튼 클릭 시 호출되는 메서드
       // submittedKeyword에 입력한 키워드 할당
       this.submittedKeyword = this.keyword;
     },
+    async fetchResult () {
+      try {
+        let endpoint = ''
+        switch (this.selectedSubject) {
+          case '주거지원':
+            endpoint = '/api/v1/recommend/getFilteredHousingPolicy'
+            break
+          case '출산':
+            endpoint = '/api/v1/recommend/getBirthPolicy'
+            break
+          case '양육':
+            endpoint = '/api/v1/recommend/getFilteredChildcare'
+            break
+          case '보육':
+            endpoint = '/api/v1/recommend/getFilteredIntegratedPolicy'
+            break
+        }
+        const accessToken = localStorage.getItem('accessToken')
+        const response = await axios.get(endpoint, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
+          },
+          params: {
+            region: this.selectedRegion,
+            keyword: this.submittedKeyword
+          }
+        })
+        this.result = response.data
+      } catch (error) {
+        console.error('Error fetching result: ', error)
+      }
+    }
   }
 }
 </script>
