@@ -84,7 +84,7 @@
         </table>
       </div>
       <!-- 페이지네이션 -->
-      <div class="d-flex justify-content-center mt-3">
+      <div class="d-flex justify-content-center mt-3 mb-3">
         <button class="btn btn-white mr-2" @click="prevPage" :disabled="currentPage === 0">이전</button>
         <div v-for="pageNumber in totalPages" :key="pageNumber">
           <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
