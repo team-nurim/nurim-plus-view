@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AdminPostList from '../views/post/AdminPostList.vue'
+import AdminPostRegister from '../views/post/AdminPostRegister.vue'
+import AdminPostRead from '../views/post/AdminPostRead.vue'
+import AdminPostModify from '../views/post/AdminPostModify.vue'
+import AdminLogin from '../views/AdminLogin.vue'
 import JoinView from '../views/join/JoinView.vue'
 import LoginView from '../views/LoginView.vue'
 import Mypage from '../views/mypage/Mypage.vue'
@@ -16,6 +21,34 @@ import CommunityCreateView from '../views/community/CommunityCreateView.vue'
 import CommunityUpdate from '../views/community/CommunityUpdate.vue'
 
 const routes = [
+  {
+    path: '/admin/post/list',
+    name: 'AdminPostList',
+    props: true,
+    component: AdminPostList
+  },
+  {
+    path: '/admin/post/register',
+    name: 'AdminPostRegister',
+    component: AdminPostRegister
+  },
+  {
+    path: '/admin/post/modify/:postId',
+    name: 'AdminPostModify',
+    props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
+    component: AdminPostModify
+  },
+  {
+    path: '/admin/post/read/:postId', // postId를 동적으로 받아오는 부분입니다.
+    name: 'AdminPostRead',
+    props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
+    component: AdminPostRead
+  },
+  {
+    path: '/admin/login',
+    name: 'adminLogin',
+    component: AdminLogin
+  },
   {
     path: '/',
     name: 'home',

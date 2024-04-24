@@ -1,56 +1,68 @@
 <template>
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">정책정보</router-link> |
-    <router-link to="/about">지원추천</router-link> |
-    <router-link to="/about">커뮤니티</router-link>
-  </nav>
-  <router-view/> -->
-  <Header></Header>
-  <router-view />
-  <Footer></Footer>
+  <div id="app">
+    <component :is="headerComponent" />
+    <div class="router-view-container">
+      <router-view/>
+    </div>
+    <Footer />
+  </div>
 </template>
-
 <script>
+import HeaderAdmin from './layout/HeaderAdmin.vue'
 import Header from './components/common/NurimHeader.vue'
 import Footer from './components/common/NurimFooter.vue'
-// import HomeView from './views/HomeView.vue'
 
 export default {
-  name: 'App',
-  components: {
-    Header,
-    Footer
+  // eslint-disable-next-line
+/* eslint-disable */
+  components: { HeaderAdmin, Footer, Header },
+  computed: {
+    headerComponent() {
+      // '/admin' 경로에 대한 헤더 컴포넌트 선택
+      if (this.$route.path.startsWith('/admin')) {
+        return 'HeaderAdmin';
+      } else {
+        // 기본값으로 헤더 컴포넌트 선택
+        return 'Header';
+      }
+    }
   }
 }
+// eslint-disable-next-line
+/* eslint-disable */
 </script>
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
 #app {
-  display: flex;
+   display: flex;
   flex-direction: column;
-  min-height: 98vh;
+  min-height: 100vh;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  color: #2c3e50;
+}
+.router-view-container {
+  flex: 1;
   color: #333;
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
 }
 
-nav {
+
+#nav {
   padding: 30px;
 }
 
-nav a {
+#nav a {
   font-weight: bold;
   color: #2c3e50;
 }
 
-Footer {
-  margin-top: auto;;
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 
 h1 {
