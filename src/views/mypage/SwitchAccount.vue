@@ -28,7 +28,27 @@
           <p>{{ member.expertFile }}</p>
         </div>
         <img v-else :src="member.expertFile" class="custom-padding">
-        <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" @click="cancelImage">제출 서류 변경</button>
+        <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">제출 서류 변경</button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">제출 서류 변경</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>제출 서류를 변경하시겠습니까?</p>
+              <p>서류를 변경하기 위해서 이전 서류는 삭제합니다.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" @click="cancelImage">변경하기</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Button to Open the Modal -->
@@ -73,15 +93,15 @@
           <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled">계정 전환 신청</button>
+          <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled || agreed == false">계정 전환 신청</button>
         </div>
       </div>
 
       <!-- 내 계정 상태(전문가/일반인) -->
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Status" class="form-label">내 계정 상태</label>
         <!-- <input type="text" id="Status" class="form-control" value="" aria-label="Disabled input example" disabled readonly> -->
-        <button v-if="!showHiddenText" type="button" class="btn" @click="toggleText">확인하기</button>
+        <button v-if="!showHiddenText" type="button" class="btn" @click="toggleText" :disabled="!isFileInputEnabled || agreed == false">확인하기</button>
         <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
           <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
           <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
@@ -198,6 +218,8 @@ export default {
         })
         if(response.data.success) {
           this.member.expertFile = response.data.expertFile;
+          this.$router.push('/switchAccount')
+          // this.showModal = false;
           console.log('자격증 이미지 삭제 성공')
         } else {
           console.log('자격증 이미지 삭제 실패')
@@ -218,7 +240,7 @@ export default {
         if(response.data.success) {
           this.member.expertFile = response.data.expertFile;
           console.log('자격증 이미지 삭제 성공')
-          this.$router.push('/Mypage')
+          this.$router.push('/mypage')
         } else {
           console.log('자격증 이미지 삭제 실패')
         }
@@ -233,12 +255,12 @@ export default {
         console.error('텍스트 숨기기/보이기 실패: ', error)
       }
     },
-    // async agreeAndCloseModal() {
-    //   this.agreed = true; // 약관 동의 상태를 true로 변경
-    //   const modalElement = document.getElementById('termsModal');
-    //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    //   modalInstance.hide(); // Bootstrap 5의 모달 인스턴스를 사용하여 모달을 닫음
-    // },
+    async agreeAndCloseModal() {
+      this.agreed = true; // 약관 동의 상태를 true로 변경
+      // const modalElement = document.getElementById('termsModal');
+      // const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      // modalInstance.hide(); // Bootstrap 5의 모달 인스턴스를 사용하여 모달을 닫음
+    },
     logout () {
       // 로그아웃 시 로컬 스토리지 토큰 삭제
       localStorage.removeItem('accessToken');
