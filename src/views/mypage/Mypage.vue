@@ -23,9 +23,16 @@
 
       <hr class="custom-divider hr-sm">
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div v-if="member.type == false" class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" @click="goForward2" class="btn btn-menu d-flex justify-content-between align-items-center">
           <span class="mx-2">내 맞춤 정보 수정</span>
+          <span class="mx-2">></span>
+        </button>
+      </div>
+
+      <div v-if="member.type == true" class="row mt-3 mb-10 align-items-center custom-padding">
+        <button type="button" @click="goForward4" class="btn btn-menu d-flex justify-content-between align-items-center">
+          <span class="mx-2">내 경력 사항 수정</span>
           <span class="mx-2">></span>
         </button>
       </div>
@@ -195,6 +202,9 @@ export default {
     },
     goForward3 () {
       this.$router.push('/switchAccount')
+    },
+    goForward4 () {
+      this.$router.push('/updateExpertInfo')
     }
   }
 }
