@@ -32,7 +32,7 @@
       </div>
 
       <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" v-if="showModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -97,7 +97,8 @@ export default {
         memberProfileImage: '',
         expertFile: ''
       },
-      showHiddenText: false
+      showHiddenText: false,
+      showModal: false
     }
   },
   async created () {
@@ -170,8 +171,8 @@ export default {
         })
         if(response.data.success) {
           this.member.expertFile = response.data.expertFile;
-          // this.$router.push('/updateExpertInfo')
-          this.closeModalAndRedirect();
+          this.$router.push('/updateExpertInfo')
+          this.showModal = false;
           console.log('자격증 이미지 삭제 성공')
         } else {
           console.log('자격증 이미지 삭제 실패')
