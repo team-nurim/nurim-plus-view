@@ -1,7 +1,7 @@
 <template>
-  <main class="mt-3">
-    <div class="container">
-      <div class="row mb-2 d-flex justify-content-center">
+  <main class="mt-3 mb-5">
+    <div class="container mb-5">
+      <div class="row d-flex justify-content-center">
           <h3 class="mt-3" style="font-weight: bold">정책정보관리</h3>
         <div class="col-12 d-flex justify-content-center">
           <!-- 카테고리 선택 드롭다운 -->
@@ -228,6 +228,10 @@ export default {
 </script>
 
 <style>
+.margin-bottom {
+  margin-bottom: 3rem;
+}
+
 thead th {
   border-bottom: 2px solid black; /* 테두리 진하게 설정 */
   background-color: #f2f2f2; /* 배경색 설정 */

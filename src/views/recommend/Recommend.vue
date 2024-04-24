@@ -1,5 +1,5 @@
 <template>
-  <main style="background-color: #F5F5F5;">
+  <main style="background-color: #F5F5F5 !important;">
     
     <div class="container mt-5 mb-5">
       <div style="padding:0;">
@@ -68,25 +68,25 @@
               </p>
               <div class="subject mt-3">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" value="주거지원" id="subject1" @change="selectSubject('주거지원')">
+                  <input class="form-check-input" type="radio" value="주거지원" id="subject1" name="subject" v-model="selectedSubject">
                   <label class="form-check-label" for="subject1">
                     주거지원
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" value="출산" id="subject2" @change="selectSubject('출산')">
+                  <input class="form-check-input" type="radio" value="출산" id="subject2" name="subject" v-model="selectedSubject">
                   <label class="form-check-label" for="subject2">
                     출산
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" value="양육" id="subject3" @change="selectSubject('양육')">
+                  <input class="form-check-input" type="radio" value="양육" id="subject3" name="subject" v-model="selectedSubject">
                   <label class="form-check-label" for="subject3">
                     양육
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" value="보육" id="subject4" @change="selectSubject('보육')">
+                  <input class="form-check-input" type="radio" value="보육" id="subject4" name="subject" v-model="selectedSubject">
                   <label class="form-check-label" for="subject4">
                     보육
                   </label>

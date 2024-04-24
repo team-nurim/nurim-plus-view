@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <component :is="headerComponent" />
-    <div class="router-view-container">
       <router-view/>
-    </div>
     <Footer />
   </div>
 </template>
@@ -35,22 +33,14 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
 #app {
-   display: flex;
+  display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-.router-view-container {
-  flex: 1;
-  color: #333;
+  min-height: 80vh;
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
+  text-align: center;
+  color: #333
 }
-
 
 #nav {
   padding: 30px;
@@ -61,11 +51,22 @@ export default {
   color: #2c3e50;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+h1 {
+  font-weight: 700;
+  line-height: 1.5 !important;
 }
 
-h1 {
+h2 {
+  font-weight: 700;
+  line-height: 1.5 !important;
+}
+
+h3 {
+  font-weight: 700;
+  line-height: 1.5 !important;
+}
+
+h4 {
   font-weight: 700;
   line-height: 1.5 !important;
 }
