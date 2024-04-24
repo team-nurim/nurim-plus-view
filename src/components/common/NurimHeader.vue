@@ -36,8 +36,10 @@
               <ul class="dropdown-menu dropdown-menu-end text-small">
                 <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
                 <li><hr class="dropdown-divider"></li>
-                <li style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
-                <li style="padding:0.5rem 1rem"><router-link to="#">계정 전환</router-link></li>
+                <!-- memberEmail이 admin일 경우 다르게 드롭다운 표시 -->
+                <li v-if="member.memberEmail === 'admin'" style="padding:0.5rem 1rem"><router-link to="/admin/post/list">관리자 페이지</router-link></li>
+                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
+                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="#">계정 전환</router-link></li>
                 <li style="padding:0.5rem 1rem"><router-link to="#" @click="logout">로그아웃</router-link></li>
               </ul>
             </div>

@@ -50,7 +50,7 @@ const routes = [
     component: AdminLogin
   },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: HomeView
   },

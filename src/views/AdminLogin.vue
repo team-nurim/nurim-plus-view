@@ -75,6 +75,13 @@ export default {
   methods: {
     async login () {
       try {
+        // memberEmail이 'admin'이 아닌 경우에만 로그인 시도
+        if (this.memberEmail !== 'admin') {
+        // memberEmail이 'admin'이 아닌 경우, 로그인을 거부하고 경고 메시지 출력
+        alert('관리자만 로그인할 수 있습니다.');
+        return;
+        }
+        
         const response = await axios.post('/generateToken', {
           memberEmail: this.memberEmail,
           memberPw: this.memberPw
@@ -110,6 +117,7 @@ export default {
 
 <style>
 .containeradminlogin {
+  margin-top: 5%;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -80,7 +80,7 @@
           </form>
         </div>
       </div>
-      <div class="row mt-4">
+      <div class="row mt-4 mb-4">
         <div class="col-md-8 offset-md-2 d-flex justify-content-center">
           <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
           <!-- 수정하기 버튼에 savePost 메서드 연결 -->
