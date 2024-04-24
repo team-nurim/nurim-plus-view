@@ -115,16 +115,8 @@
             <td>{{ selectedMember.memberIncome }}</td>
           </tr>
           <tr>
-            <td>게시글</td>
-            <td>{{ selectedMember.posts }}</td>
-          </tr>
-          <tr>
-            <td>댓글</td>
-            <td>{{ selectedMember.comments }}</td>
-          </tr>
-          <tr>
             <td>전문가 변경</td>
-            <td>{{ selectedMember.isExpert }}</td>
+            <td>{{ selectedMember.type }}</td>
           </tr>
         </table>
         <!-- 수정 폼 부분 -->
@@ -146,7 +138,7 @@
             <label for="memberIncome">월소득:</label>
             <input type="text" id="memberIncome" v-model="selectedMember.memberIncome" />
             <label for="isExpert">전문가 변경:</label>
-            <input type="text" id="isExpert" v-model="selectedMember.isExpert" />
+            <input type="text" id="isExpert" v-model="selectedMember.type" />
             <!-- 수정 버튼 대신 저장 버튼 사용 -->
             <button type="button" class="blue-button" @click="saveForm">저장</button>
             <button type="button" class="red-button" @click="closeEditForm">취소</button>
@@ -182,10 +174,13 @@ export default {
   },
   computed: {
     displayedMembers() {
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = Math.min(startIndex + this.pageSize, this.membersList.length);
-      return this.membersList.slice(startIndex, endIndex);
-    },
+  if (!this.membersList) {
+    return []; // membersList가 정의되지 않은 경우 빈 배열 반환
+  }
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  const endIndex = Math.min(startIndex + this.pageSize, this.membersList.length);
+  return this.membersList.slice(startIndex, endIndex);
+},
     displayedPages() {
       let startPage;
       let endPage;
@@ -210,19 +205,24 @@ export default {
     this.fetchMembers(1);
   },
   methods: {
-    async fetchMembers(page, lastItemId) {
-      try {
-        this.loading = true;
-        const response = await axios.get(`http://localhost:8080/api/v1/members/members?page=${page - 1}&size=${this.pageSize}&sortBy=${this.sortBy}&lastItemId=${lastItemId}`);
-        this.membersList.push(...response.data.content);
-        this.totalPages = response.data.totalPages;
-        this.currentPage = page;
-        this.loading = false;
-      } catch (error) {
-        console.error('멤버를 조회할 수 없습니다:', error);
-        this.loading = false;
+    async fetchMembers(page) {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    this.loading = true;
+    this.membersList = [];
+    const response = await axios.get(`http://localhost:8080/api/v1/members/admin/members?page=${page - 1}&size=${this.pageSize}&sortBy=${this.sortBy}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
       }
-    },
+    });
+    this.membersList = response.data.content;
+    this.totalPages = response.data.totalPages;
+    this.currentPage = page;
+    this.loading = false;
+  } catch (error) {
+    console.error('멤버를 조회할 수 없습니다:', error);
+  }
+},
     fetchPreviousPage() {
       if (this.currentPage > 1) {
         this.fetchMembers(this.currentPage - 1);
@@ -303,26 +303,81 @@ export default {
     goToUpdatePage() {
       this.showEditForm = true;
     },
-    submitForm() {
-      if (confirm('수정한 내용을 저장하시겠습니까?')) {
-        axios.put(`http://localhost:8080/api/v1/members/${this.selectedMember.memberId}`, {
-          memberNickname: this.selectedMember.memberNickname,
-          memberEmail: this.selectedMember.memberEmail,
+    // async submitForm() {
+
+    //     const accessToken = localStorage.getItem('accessToken');
+    //     const updateData = {
+    //       memberNickname: this.selectedMember.memberNickname,
+    //       memberEmail: this.selectedMember.memberEmail,
+    //       memberAge: this.selectedMember.memberAge,
+    //       gender: this.selectedMember.gender,
+    //       memberResidence: this.selectedMember.memberResidence,
+    //       memberMarriage: this.selectedMember.memberMarriage,
+    //       memberIncome: this.selectedMember.memberIncome,
+    //       isExpert: this.selectedMember.isExpert
+    //     }
+    //     const response = await axios.put(`http://localhost:8080/api/v1/members/${this.selectedMember.memberId}`, updateData,{
+    //       headers: {
+    //         'Authorization': `Bearer ${accessToken}`,
+    //         'Content-Type': 'application/json'
+    //       }
+    // });
+
+    //     }).then(response => {
+    //       console.log('회원 정보가 성공적으로 수정되었습니다:', response.data);
+    //       this.closeModal(); // 모달 닫기
+    //       this.fetchMembers(this.currentPage); // 조회 페이지 갱신
+    //     }).catch(error => {
+    //       console.error('회원 정보 수정 중 오류가 발생했습니다:', error);
+    //     });
+    //   }
+    // },
+
+    async submitForm() {
+      try {
+        const memberId = this.selectedMember.memberId;
+        const updateData = {
           memberAge: this.selectedMember.memberAge,
           gender: this.selectedMember.gender,
           memberResidence: this.selectedMember.memberResidence,
           memberMarriage: this.selectedMember.memberMarriage,
           memberIncome: this.selectedMember.memberIncome,
-          isExpert: this.selectedMember.isExpert
-        }).then(response => {
-          console.log('회원 정보가 성공적으로 수정되었습니다:', response.data);
-          this.closeModal(); // 모달 닫기
-          this.fetchMembers(this.currentPage); // 조회 페이지 갱신
-        }).catch(error => {
-          console.error('회원 정보 수정 중 오류가 발생했습니다:', error);
+          type: this.selectedMember.type
+        };
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.put(`/admin`, updateData, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': `application/json`
+          }
         });
+        console.log('회원 정보 수정 성공: ', response.data);
+        this.closeModal(); // 모달 닫기
+        this.fetchMembers(this.currentPage); // 조회 페이지 갱신
+      } catch (error) {
+        console.log('회원 정보 수정 실패: ', error)
       }
     },
+
+    async fetchMembers(page) {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    this.loading = true;
+    this.membersList = [];
+    const response = await axios.get(`http://localhost:8080/api/v1/members/admin/members?page=${page - 1}&size=${this.pageSize}&sortBy=${this.sortBy}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    });
+    this.membersList = response.data.content;
+    this.totalPages = response.data.totalPages;
+    this.currentPage = page;
+    this.loading = false;
+  } catch (error) {
+    console.error('멤버를 조회할 수 없습니다:', error);
+  }
+},
+
     // 수정 폼 열기
     openEditForm() {
       this.showEditForm = true;

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h1>회원 상세 정보</h1>
     <div v-if="loading" class="loader">로딩 중...</div>
@@ -53,4 +53,4 @@ export default {
   align-items: center;
   height: 100px;
 }
-</style>
+</style> -->
