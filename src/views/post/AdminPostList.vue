@@ -63,15 +63,15 @@
                     </svg>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
                       <li><a @click="readPost(post.postId)" class="dropdown-item" href="#">게시물 보기
-                      <span><i class="fa-solid fa-magnifying-glass" style="margin-left: 5px;"></i></span>
+                      <span><i class="fa-solid fa-magnifying-glass" style="padding:0.5rem"></i></span>
                       </a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a @click="editPost(post.postId)" class="dropdown-item" href="#">게시물 수정
-                        <span><i class="fa-solid fa-gear" style="margin-left: 5px;"></i></span>
+                        <span><i class="fa-solid fa-gear" style="padding:0.5rem"></i></span>
                       </a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a @click="showModal(post.postId)" class="dropdown-item" href="#">게시물 삭제
-                      <span><i class="fa-solid fa-trash-can" style="margin-left: 5px;"></i></span>
+                      <span><i class="fa-solid fa-trash-can" style="padding:0.5rem"></i></span>
                       </a></li>
                     </ul>
                   </div>

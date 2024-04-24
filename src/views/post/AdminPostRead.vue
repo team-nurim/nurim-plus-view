@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-4 mb-4">
       <div class="col-md-8 offset-md-2 d-flex justify-content-center">
         <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
         <router-link :to="`/admin/post/modify/${postRead.postId}`" class="btn btn-lg btn-primary me-3">수정하기</router-link>
