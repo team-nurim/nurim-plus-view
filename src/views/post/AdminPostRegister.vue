@@ -15,13 +15,13 @@
             <div class="mb-3 row">
               <label for="postTitle" class="col-md-3 col-form-label">제목</label>
               <div class="col-md-9">
-                <input v-model="postData.postTitle" type="text" class="form-control" id="postTitle">
+                <input v-model="postData.postTitle" type="textreg" class="form-control" id="postTitle">
               </div>
             </div>
             <div class="mb-3 row">
               <label for="postCategory" class="col-md-3 col-form-label">카테고리</label>
               <div class="col-md-9">
-                <input v-model="postData.postCategory" type="text" class="form-control" id="postCategory">
+                <input v-model="postData.postCategory" type="textreg" class="form-control" id="postCategory">
               </div>
             </div>
             <!-- 다른 입력 요소들도 동일하게 구성 -->
@@ -34,7 +34,7 @@
              <div class="mb-3 row">
               <label for="postWriter" class="col-md-3 col-form-label">작성자</label>
               <div class="col-md-9">
-                <input v-model="postData.postWriter" type="text" class="form-control" id="postWriter" readonly>
+                <input v-model="postData.postWriter" type="textreg" class="form-control" id="postWriter" readonly>
               </div>
             </div>
              <div class="mb-3 row">
@@ -292,7 +292,7 @@ export default {
 }
 
   /* 입력 요소들의 폭을 조절합니다 */
-input[type="text"] {
+input[type="textreg"] {
   width: 80%; /* 전체 폭을 차지하도록 설정 */
 }
 
