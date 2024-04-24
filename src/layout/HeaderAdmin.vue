@@ -1,18 +1,19 @@
 <template>
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white">
-    <div class="container justify-content-center" style="margin-bottom: 0 !important;">
-      <a href="/admin/post/list" class="navbar-brand" style="font-size: 2rem;">NurimPlus</a> <!-- Increased font size and added margin-bottom -->
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2C3E50;">
+    <div class="container justify-content-center">
+      <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px; color: #fff;">NurimPlus
+        <span style="font-size: 16px;">관리자페이지</span></a> <!-- Increased font size and added margin-bottom -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a href="/admin/post/list" class="nav-link" style="margin-right: 10px; font-weight: bold;">정책정보 페이지</a>
+            <a href="/admin/post/list" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold;">정책정보 관리</a>
           </li>
           <li class="nav-item">
-            <a href="/home" class="nav-link" style="margin-right: 10px; font-weight: bold;">회원관리 페이지</a>
+            <a href="/home" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold; color: #fff;">회원정보 관리</a>
           </li>
           <!-- <li class="nav-item">
             <a href="/admin/login" class="nav-link" style="margin-right: 10px;">로그아웃</a>
@@ -27,11 +28,12 @@
           <template v-if="loggedIn">
             <div class="dropdown text-end">
               <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img :src="'https://www.pngkey.com/png/detail/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'" alt="mdo" width="45" class="rounded-circle" style="border-radius: 50%;">
+                <img :src="'https://nurimplus.s3.ap-northeast-2.amazonaws.com/images/8383f351-73fc-47c5-bf2f-b6ebc105326a.jpeg'" alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu dropdown-menu-end text-small">
                 <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
                 <li><hr class="dropdown-divider"></li>
+                <li v-if="member.memberEmail === 'admin'" style="padding:0.5rem 1rem"><a href="/">누림플러스 홈</a></li>
                 <li style="padding:0.5rem 1rem"><router-link to="#" @click="logout">로그아웃</router-link></li>
               </ul>
             </div>
@@ -130,3 +132,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.admin-link {
+  color: #fff !important;
+}
+.dropdown-toggle::after {
+  border-top-color: #fff; /* 위쪽 선의 색상을 흰색으로 변경 */
+}
+</style>
