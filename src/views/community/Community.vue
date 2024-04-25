@@ -115,7 +115,6 @@ c<template>
 import axios from 'axios'
 export default {
   name: 'CommunityView',
-
   data () {
     return {
       popluarBoards: [],
@@ -312,7 +311,6 @@ async searchCommunity() {
 }
 /*======================가장많이 본 게시물 스타일==========================================*/
 .favorite-container {
-  margin-bottom: 100px;
 }
 .favorite-header {
   align-items: center;
@@ -323,10 +321,6 @@ async searchCommunity() {
   margin-right: auto;
 }
 .popularContainer {
-display: flex;
-flex-wrap: wrap;
-flex: 1;
-justify-content: center;
 }
 .card {
   text-align: left;
