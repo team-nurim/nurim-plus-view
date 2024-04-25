@@ -63,24 +63,22 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="termsModalLabel">서비스 약관 동의</h5>
+              <h5 class="modal-title" id="termsModalLabel">자격증 이미지 제출에 대한 개인정보 처리 동의서</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- 약관 내용 -->
-            <div class="modal-body">a
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
+            <div class="modal-body" style="text-align: left;">
+              <p style="font-weight: 700; font-size: 18px;">제출하시는 자격증 이미지(이하 "이미지")는 당사의 서비스에 필요한 용도로만 사용되며, 개인 정보 보호법에 따라 안전하게 보호됩니다.</p>
+              <p>아래의 내용을 읽고 동의하신 후 이미지 제출 부탁드립니다.</p>
+              <p class="text-modal">1. 제출 목적: 이미지는 서비스 내에서 사용자의 신분을 확인하고, 서비스 품질 향상을 위한 목적으로 사용됩니다.</p>
+              <p class="text-modal">2. 수집 항목: 이미지는 자격증 또는 인증서와 관련된 정보를 포함하고 있습니다.</p>
+              <p class="text-modal">3. 이용 목적: 이미지는 서비스 내에서 사용자 신분 확인 및 관리 목적으로 사용되며, 이외의 목적으로 사용되지 않습니다.</p>
+              <p class="text-modal">4. 보유 기간: 이미지는 서비스 운영에 필요한 기간 동안에만 보유되며, 해당 기간 종료 후 즉시 파기됩니다.</p>
+              <p class="text-modal">5. 제 3 자 제공: 이미지는 사용자의 동의 없이 제 3 자에게 제공되지 않습니다. 단, 법률에 따라 정해진 경우에는 예외로 합니다.</p>
+              <p class="text-modal">6. 개인정보의 파기: 제출된 이미지는 목적 달성 후 즉시 안전하게 파기됩니다.</p>
+              <p class="text-modal">7. 동의 철회: 이미지 제출에 대한 동의는 언제든지 철회할 수 있습니다. 동의 철회 시, 이미지는 파기되고 이후 사용되지 않습니다.</p>
+              <p class="text-modal">8. 기타 권리: 개인 정보 보호법 및 관련 법령에 따라 사용자는 개인정보에 관한 열람, 정정, 삭제, 처리정지 등의 권리를 가지고 있습니다.</p>
+              <p style="font-size: 15px;">본 동의서에 동의하십니까?</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -365,7 +363,7 @@ export default {
   width: 100%;
 }
 
-.btn-update:hover, .btn-update:focus {
+.btn-update:hover {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: white; /* 호버 및 포커스 시 글씨색 변경 */
 }
@@ -382,7 +380,7 @@ export default {
   width: 100%;
 }
 
-.btn-cancel:hover, .btn-cancel:focus {
+.btn-cancel:hover {
   background-color: lightgray; /* 호버 및 포커스 시 배경색 변경 */
   color: black; /* 호버 및 포커스 시 글씨색 변경 */
 }
@@ -398,7 +396,7 @@ export default {
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
 }
 
-.btn-account:hover, .btn-account:focus {
+.btn-account:hover {
   background-color: lightgray; /* 호버 및 포커스 시 배경색 변경 */
   color: black; /* 호버 및 포커스 시 글씨색 변경 */
 }
@@ -413,9 +411,14 @@ export default {
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
 }
 
-.btn-changefile:hover, .btn-changefile:focus {
+.btn-changefile:hover {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: white; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.text-modal {
+  font-weight: 700;
+  font-size: 15px;
 }
 
 </style>
