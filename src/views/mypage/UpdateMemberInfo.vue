@@ -59,7 +59,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'UpdateMemberInfo',
   computed: {
-    ...mapGetters(['getLoggedIn', 'getMemberInfo']),
+    ...mapGetters(['getLoggedIn']),
     memberNickname() {
       return this.member.memberNickname;
     }
@@ -143,6 +143,7 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         });
+        window.location.reload();
         this.member.memberProfileImage = response.data.uuid;
       } catch (error) {
         console.error('프로필 이미지 업로드 실패:', error);
@@ -158,6 +159,7 @@ export default {
           }
         })
         if(response.data.success) {
+          window.location.reload();
           this.member.memberProfileImage = response.data.memberProfileImage;
           console.log('프로필 이미지 삭제 성공')
         } else {
