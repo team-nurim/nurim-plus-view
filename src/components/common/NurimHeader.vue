@@ -12,7 +12,8 @@
             to="/"
             class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
           >
-            <span class="fs-4">Nurim+ BI</span>
+            <img src="../../assets/Nurim.png" height="35">
+            <!-- <span class="fs-4">Nurim+ BI</span> -->
           </router-link>
         </div>
 
