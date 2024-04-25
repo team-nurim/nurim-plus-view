@@ -1,14 +1,14 @@
 <template>
-  <main>
-    <div class="container">
+  <main style="background-color: #FAFBFC;">
+    <div class="container mt-3 mb-4">
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4>내 맞춤 정보 수정</h4>
+          <h4 style="font-weight: 700; font-size: 28px;">내 맞춤 정보 수정</h4>
         </div>
       </div>
 
       <!-- 내 맞춤 정보 수정 -->
-      <!-- 이름 -->
+      <!-- 닉네임 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Nickname" class="form-label">닉네임</label>
         <div class="row">
@@ -22,11 +22,11 @@
         <div class="row" id="Gender">
           <div class="col">
             <input type="radio" id="male" name="gender" class="btn-check" @click="setGender(0)">
-            <label class="btn btn-update text-center" for="male">남성</label>
+            <label class="btn btn-choice text-center" for="male">남성</label>
           </div>
           <div class="col">
             <input type="radio" id="female" name="gender" class="btn-check" @click="setGender(1)">
-            <label class="btn btn-update text-center" for="female">여성</label>
+            <label class="btn btn-choice text-center" for="female">여성</label>
           </div>
         </div>
       </div>
@@ -60,20 +60,13 @@
       </div>
 
       <!-- 거주지 -->
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <div class="row mt-3 mb-3 align-items-center address-padding">
+      <div class="row mt-3 mb-10 align-items-center address-padding">
           <label for="postcode" class="form-label">우편번호</label>
-          <input type="text" class="mb-3" id="postcode" v-model="postcode" placeholder="우편번호">
-          <button type="button" class="btn btn-update" @click="execDaumPostcode">우편번호 찾기</button>
-        </div>
-        <div class="row mt-3 mb-3 align-items-center address-padding">
-          <label for="address" class="form-label">주소</label>
-          <input type="text" id="address" v-model="address" placeholder="주소" readonly>
-        </div>
-        <div class="row mt-3 mb-3 align-items-center address-padding">
-          <label for="detailAddress" class="form-label">상세주소</label>
-          <input type="text" id="detailAddress" v-model="detailAddress" placeholder="상세주소">
-        </div>
+          <input type="text" class="mt-3 mb-3 form-control" id="postcode" v-model="postcode" placeholder="우편번호">
+          <button type="button" class="btn btn-update mb-3 mt-3" @click="execDaumPostcode">우편번호 찾기</button>
+          <label for="address" class="form-label">상세주소</label>
+          <input type="text" class="mt-3 mb-3 form-control" id="address" v-model="address" placeholder="주소" readonly>
+          <input type="text" class="mb-3 form-control" id="address" v-model="detailAddress" placeholder="상세주소">
       </div>
 
       <!-- 결혼 여부 -->
@@ -82,11 +75,11 @@
         <div class="row" id="Marriage">
           <div class="col">
             <input type="radio" id="married" name="marriage" class="btn-check" @click="setMarriage(1)">
-            <label class="btn btn-update text-center" for="married">기혼</label>
+            <label class="btn btn-choice text-center" for="married">기혼</label>
           </div>
           <div class="col">
             <input type="radio" id="unmarried" name="marriage" class="btn-check" @click="setMarriage(0)">
-            <label class="btn btn-update text-center" for="unmarried">미혼</label>
+            <label class="btn btn-choice text-center" for="unmarried">미혼</label>
           </div>
         </div>
       </div>
@@ -331,7 +324,7 @@ export default {
   margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
   width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
   flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  font-size: 1.2rem; /* 폰트 크기 조정 */
+  font-size: 20px; /* 폰트 크기 조정 */
   font-weight: bold; /* 폰트 두께 조정 */
   align-self: start; /* Flex 아이템 수직 중앙 정렬 */
   margin-right: 10px; /* 오른쪽 여백 추가 */
@@ -361,6 +354,23 @@ export default {
 .btn-update:hover, .btn-update:focus {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.btn-choice {
+  height: 50px;
+  width: 100%;
+  padding: 8;
+  background-color: #007bff; /* 기본 배경색 */
+  color: white; /* 글씨색 */
+  font-size: 16px; /* 글씨크기 */
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+}
+
+.btn-choice:hover, .btn-choice:focus {
+  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
+  color: white; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
 /* 선택되지 않은 라디오 버튼의 스타일 */
