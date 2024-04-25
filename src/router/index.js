@@ -17,19 +17,18 @@ import CommunityCreateView from "../views/community/CommunityCreateView.vue";
 import CommunityUpdate from "../views/community/CommunityUpdate.vue";
 
 import MciHousingPolicy from "../views/MciHousingPolicy.vue";
-// import MciIntegratedPolicy from "../views/MciIntegratedPolicy"
-import IntegratedPublicRental from "../views/IntegratedPublicRental.vue";
-import PurchasedRental from "../views/PurchasedRental.vue";
-import LumpsumleaseRental from "../views/LumpsumleaseRental.vue";
-import Ahappyhouse from "../views/Ahappyhouse.vue";
-import NationalRental from "../views/NationalRental.vue";
-import PermanentPublicRental from "../views/PermanentPublicRental.vue";
-import Alongtermlumpsumlease from "../views/Alongtermlumpsumlease.vue";
-import Publiclysupportedprivatelease from "../views/Publiclysupportedprivatelease.vue";
-import Publicsale from "../views/Publicsale.vue";
-import NewlywedHopeTown from "../views/NewlywedHopeTown.vue";
-import Aspecialsupplyfornewlyweds from "../views/Aspecialsupplyfornewlyweds.vue";
-import Thefirstspecialsupplyinoneslife from "../views/Thefirstspecialsupplyinoneslife.vue";
+import IntegratedPublicRental from "../views/policy/policydetails/IntegratedPublicRental.vue";
+import PurchasedRental from "../views/policy/policydetails/PurchasedRental.vue";
+import LumpsumleaseRental from "../views/policy/policydetails/LumpsumleaseRental.vue";
+import Ahappyhouse from "../views/policy/policydetails/Ahappyhouse.vue";
+import NationalRental from "../views/policy/policydetails/NationalRental.vue";
+import PermanentPublicRental from "../views/policy/policydetails/PermanentPublicRental.vue";
+import Alongtermlumpsumlease from "../views/policy/policydetails/Alongtermlumpsumlease.vue";
+import Publiclysupportedprivatelease from "../views/policy/policydetails/Publiclysupportedprivatelease.vue";
+import Publicsale from "../views/policy/policydetails/Publicsale.vue";
+import NewlywedHopeTown from "../views/policy/policydetails/NewlywedHopeTown.vue";
+import Aspecialsupplyfornewlyweds from "../views/policy/policydetails/Aspecialsupplyfornewlyweds.vue";
+import Thefirstspecialsupplyinoneslife from "../views/policy/policydetails/Thefirstspecialsupplyinoneslife.vue";
 
 const routes = [
   {
@@ -99,11 +98,6 @@ const routes = [
     path: "/mcihousingpolicy",
     name: "MciHousingPolicy",
     component: MciHousingPolicy,
-    // {
-    //   path: "/mciintegratedpolicy",
-    //   name: "MciintegratedPolicy",
-    //   component: MciIntegratedPolicy,
-    // },
   },
   {
     path: "/integratedPublicRental/:id",
