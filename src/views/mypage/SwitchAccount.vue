@@ -20,10 +20,22 @@
         <input type="text" id="Nickname" class="form-control" :value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
       </div>
 
+      <!-- 내 계정 상태(전문가/일반인) -->
+      <div v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Status" class="form-label">내 계정 상태</label>
+        <button v-if="!showHiddenText" type="button" class="btn btn-account" @click="toggleText" :disabled="!isFileInputEnabled || agreed == false || !applyforAccount">
+          확인하기
+        </button>
+        <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
+          <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
+          <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
+        </div>
+      </div>
+
       <!-- 증빙 서류 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Expertfile" class="form-label">제출 증빙 서류</label>
-        <input type="file" id="Expertfile" class="form-control" ref="fileInput" style="height: auto;" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
+        <input type="file" id="Expertfile" class="form-control" ref="fileInput" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
         <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
           <p>{{ member.expertFile }}</p>
         </div>
@@ -94,19 +106,6 @@
         </div>
         <div class="col">
           <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == false">계정 전환 신청</button>
-        </div>
-      </div>
-
-      <!-- 내 계정 상태(전문가/일반인) -->
-      <div v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Status" class="form-label">내 계정 상태</label>
-        <!-- <input type="text" id="Status" class="form-control" value="" aria-label="Disabled input example" disabled readonly> -->
-        <button v-if="!showHiddenText" type="button" class="btn btn-account" @click="toggleText" :disabled="!isFileInputEnabled || agreed == false || !applyforAccount">
-          확인하기
-        </button>
-        <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
-          <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
-          <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
         </div>
       </div>
 
@@ -233,6 +232,7 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         });
+        window.location.reload();
         this.member.expertFile = response.data.url;
       } catch (error) {
         console.error('자격증 이미지 업로드 실패:', error);
@@ -249,6 +249,7 @@ export default {
         })
         if(response.data.success) {
           this.member.expertFile = response.data.expertFile;
+          window.location.reload();
           this.$router.push('/switchAccount')
           // this.showModal = false;
           console.log('자격증 이미지 삭제 성공')
@@ -270,6 +271,7 @@ export default {
         })
         if(response.data.success) {
           this.member.expertFile = response.data.expertFile;
+          window.location.reload();
           console.log('자격증 이미지 삭제 성공')
           this.$router.push('/mypage')
         } else {
@@ -333,6 +335,7 @@ export default {
   font-size: 17px;
   font-weight: 600;
   box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+  width: 100%;
 }
 
 .row {
@@ -348,7 +351,6 @@ export default {
   font-size: 20px; /* 폰트 크기 조정 */
   font-weight: bold; /* 폰트 두께 조정 */
   align-self: start; /* Flex 아이템 수직 중앙 정렬 */
-  margin-right: 10px; /* 오른쪽 여백 추가 */
 }
 
 .btn-update {
