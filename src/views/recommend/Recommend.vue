@@ -113,7 +113,7 @@
               </p>
               <!-- 키워드 입력필드 -->
               <div class="input-group input-group-sm mt-3 mb-3">
-                <input type="text" class="form-control" style="height:2rem;" v-model="keyword">
+                <input type="text" class="form-control" style="height:2rem;" v-model="keyword" @keydown.enter="submitKeyword">
               </div>
 
               <button class="btn-primary -1" @click="submitKeyword">입력하기</button>
@@ -140,11 +140,12 @@
           <p class="mb-5">{{ results.length }}건이 조회되었습니다.</p>
 
           <div v-for="(result, index) in results" :key="index">
-            <div class="card w-100 mb-3" style="text-align:left;">
+            <div class="card w-100 mb-3" style="padding:1rem; text-align:left;">
               <div class="card-body">
-                  <h5 class="card-title">{{ result.businessEntity }}</h5>
-                  <p class="card-text"><b>지역 </b>{{ result.region }}</p>
-                  <p class="card-text"><small class="text-body-secondary">{{ result.businessOverview }}</small></p>
+                  <h5 class="card-title">{{ result.businessOverview }}</h5>
+                  <p class="card-text"><b>지역 </b>{{ result.region }} | {{ result.businessClassification }}</p>
+                  <p class="card-text"><small class="text-body-secondary"><b>지급기준  </b>{{ result.marriageCriteria }}</small></p>
+                  <p class="card-text"><small class="text-body-secondary"><b>소득수준  </b>{{ result.incomeCriteria }}</small></p>
               </div>
             </div>
           </div><!-- v-for -->
@@ -154,10 +155,10 @@
           <p class="mb-5">{{ results.length }}건이 조회되었습니다.</p>
 
           <div v-for="(result, index) in results" :key="index">
-            <div class="card w-100 mb-3" style="text-align:left;">
+            <div class="card w-100 mb-3" style="padding:1rem; text-align:left;">
               <div class="card-body">
                   <h5 class="card-title">{{ result.bizNm }}</h5>
-                  <p class="card-text"><b>지역 </b>{{ result.sigunNm }}</p>
+                  <p class="card-text"><b>지역  </b>{{ result.sigunNm }}</p>
                   <p class="card-text">{{ result.payment }}</p>
               </div>
             </div>
@@ -168,11 +169,13 @@
           <p class="mb-5">{{ results.length }}건이 조회되었습니다.</p>
 
           <div v-for="(result, index) in results" :key="index">
-            <div class="card w-100 mb-3" style="text-align:left;">
+            <div class="card w-100 mb-3" style="padding:1rem; text-align:left;">
               <div class="card-body">
                   <h5 class="card-title">{{ result.businessOverview }}</h5>
-                  <p class="card-text"><b>지원규모 </b>{{ result.paymentAmount }}</p>
-                  <p class="card-text"><small class="text-body-secondary">{{ result.businessOverview }}</small></p>
+                  <p class="card-text"><b>주관 </b>{{ result.region }} | {{ result.businessEntity }}</p>
+                  <span class="text-body-secondary"><b>지원대상  </b>{{ result.supportTarget }}</span>
+                  <span class="text-body-secondary" style="color:#C8C8C8;"><b>상세  </b>{{ result.supportDetails.slice(0, 60) }}</span>
+                  <span style="color:#C3C3C3;" v-if="result.supportDetails.length > 60">...</span>
               </div>
             </div>
           </div><!-- v-for -->
