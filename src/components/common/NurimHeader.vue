@@ -8,11 +8,8 @@
       >
         <!-- identity -->
         <div class="col-md-3 mb-2 mb-md-0">
-          <router-link
-            to="/"
-            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
-          >
-            <img src="../../assets/Nurim.png" height="35">
+          <router-link to="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <img src="../../assets/Nurim.png" height="34">
             <!-- <span class="fs-4">Nurim+ BI</span> -->
           </router-link>
         </div>
@@ -65,19 +62,13 @@
                 />
               </a>
               <ul class="dropdown-menu dropdown-menu-end text-small">
-                <li style="padding: 0.5rem 1rem">
-                  <b>{{ member.memberNickname }}님</b>
-                </li>
-                <li><hr class="dropdown-divider" /></li>
-                <li style="padding: 0.5rem 1rem">
-                  <router-link to="/mypage" href="#">마이페이지</router-link>
-                </li>
-                <li style="padding: 0.5rem 1rem">
-                  <router-link to="#">계정 전환</router-link>
-                </li>
-                <li style="padding: 0.5rem 1rem">
-                  <router-link to="#" @click="logout">로그아웃</router-link>
-                </li>
+                <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
+                <li><hr class="dropdown-divider"></li>
+                <!-- memberEmail이 admin일 경우 다르게 드롭다운 표시 -->
+                <li v-if="member.memberEmail === 'admin'" style="padding:0.5rem 1rem"><router-link to="/admin/post/list">관리자 페이지</router-link></li>
+                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
+                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="#">계정 전환</router-link></li>
+                <li style="padding:0.5rem 1rem"><router-link to="#" @click="logout">로그아웃</router-link></li>
               </ul>
             </div>
           </template>
@@ -118,7 +109,9 @@ export default {
       // 로그인 상태가 없을 경우 Vuex 상태 업데이트
       this.$store.commit("setLoggedIn", false);
     }
-    console.log("로그인 상태", this.loggedIn);
+  },
+  async mounted () {
+    console.log('로그인 상태', this.loggedIn)
   },
   watch: {
     getLoggedIn(newValue) {
