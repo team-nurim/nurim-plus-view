@@ -13,7 +13,7 @@
             <a href="/admin/post/list" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold;">정책정보 관리</a>
           </li>
           <li class="nav-item">
-            <a href="/home" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold; color: #fff;">회원정보 관리</a>
+            <a href="/admin/members" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold; color: #fff;">회원정보 관리</a>
           </li>
           <!-- <li class="nav-item">
             <a href="/admin/login" class="nav-link" style="margin-right: 10px;">로그아웃</a>
