@@ -9,7 +9,8 @@
         <!-- identity -->
         <div class="col-md-3 mb-2 mb-md-0">
           <router-link to="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <span class="fs-4">Nurim+ BI</span>
+            <img src="../../assets/Nurim.png" height="34">
+            <!-- <span class="fs-4">Nurim+ BI</span> -->
           </router-link>
         </div>
 
@@ -84,6 +85,8 @@ export default {
       // 로그인 상태가 없을 경우 Vuex 상태 업데이트
       this.$store.commit('setLoggedIn', false)
     }
+  },
+  async mounted () {
     console.log('로그인 상태', this.loggedIn)
   },
   watch: {

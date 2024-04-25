@@ -73,8 +73,10 @@
 </div>
 </div>
   </template>
-  
-  <script>
+
+<script>
+// eslint-disable-next-line
+/* eslint-disable */
 import axios from 'axios';
 import { TrackOpTypes } from 'vue';
   export default {
@@ -304,7 +306,7 @@ import { TrackOpTypes } from 'vue';
     }
   }
   </script>
-  
+
   <style>
   /*모달 스타일 */
   .modal {
@@ -411,4 +413,3 @@ import { TrackOpTypes } from 'vue';
 }
 
   </style>
-  
