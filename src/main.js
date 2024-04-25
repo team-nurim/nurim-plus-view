@@ -3,7 +3,7 @@
 import { createApp } from 'vue'; // Vue를 createApp으로 가져오기
 import App from './App.vue';
 import router from './router';
-import store from './store'
+import store from './store/index'
 import axios from 'axios'
 import { BootstrapVue3 } from 'bootstrap-vue-3'
 import 'bootstrap/dist/css/bootstrap.css'

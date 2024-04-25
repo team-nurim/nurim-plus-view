@@ -35,7 +35,7 @@ export default {
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 84vh;
+  min-height: 100vh;
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
   text-align: center;

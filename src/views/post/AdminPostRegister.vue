@@ -1,7 +1,8 @@
 <template>
-  <div class="mt-5">
+  <main class="mt-5 mb-5">
     <div class="container">
-      <h2 class="text-center mb-5">정책정보 등록</h2>
+
+      <h3 class="mt-2 mb-4" style="font-weight: bold">정책정보 등록</h3>
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
@@ -26,28 +27,28 @@
             </div>
             <!-- 다른 입력 요소들도 동일하게 구성 -->
              <div class="mb-3 row">
-              <label for="postRegisterDate" class="col-md-3 col-form-label">등록일자</label>
+              <label for="postRegisterDate" class="col-md-3 col-form-label" >등록일자</label>
               <div class="col-md-9">
-                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate">
+                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate" style="width:100%;">
               </div>
             </div>
              <div class="mb-3 row">
               <label for="postWriter" class="col-md-3 col-form-label">작성자</label>
               <div class="col-md-9">
-                <input v-model="postData.postWriter" type="textreg" class="form-control" id="postWriter" readonly>
+                <input v-model="postData.postWriter" type="textreg" class="form-control" id="postWriter">
               </div>
             </div>
              <div class="mb-3 row">
               <label for="postContent" class="col-md-3 col-form-label">내용</label>
-              <div class="col-md-9">
-                <textarea v-model="postData.postContent" class="form-control" id="postContent" style="height: 390px;"></textarea>
+              <div class="col-md-9 d-flex ">
+                <textarea v-model="postData.postContent" class="form-control" id="postContent" style="height:380px;"></textarea>
               </div>
             </div>
             <!-- 이미지 업로드를 위한 input 요소 추가 -->
             <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
-                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload">
+                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload" style="width:100%;">
               </div>
             </div>
             <!-- 이미지 미리보기 -->
@@ -69,13 +70,13 @@
       </div>
       <div class="row mb-5">
         <div class="col-md-8 offset-md-2 d-flex justify-content-center">
-          <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
+          <router-link to="/admin/post/list" class="btn btn-dark btn-primary me-2">목록으로</router-link>
   <!-- 저장하기 버튼에 savePost 메서드 연결 -->
-          <button type="button" class="btn btn-lg btn-primary" @click="showModal">저장하기</button>
+          <button type="button" class="btn btn-primary" @click="showModal">저장하기</button>
         </div>
       </div>
     </div>
-  </div>
+  </main>
    <!-- 모달 -->
     <div v-if="modalVisible" class="modal fade show" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0, 0, 0, 0.5);">
       <div class="modal-dialog" role="document">
@@ -129,7 +130,7 @@ export default {
         this.postData.postWriter = adminNickname; // 작성자 정보 설정
       } else {
         // 닉네임이 없으면 기본 값으로 설정
-        this.postData.postWriter = 'admin'; 
+        this.postData.postWriter = '관리자'; 
       }
     },
     async savePost() {
@@ -277,39 +278,11 @@ export default {
 </script>
 
 <style>
-/* textarea 요소를 더 크게 만듭니다 */
+/* 모든 입력 필드의 너비를 동일하게 설정 */
+input[type="text"],
+input[type="date"],
 textarea {
-  width: 100%;
-  resize: vertical; /* 사용자가 크기를 조절할 수 있도록 합니다 */
-  background-color: #f8f9fa;
-  border: 1px solid #ced4da;
-  border-radius: 0.3rem;
-  box-sizing: border-box; /* 패딩과 테두리를 포함하여 요소의 전체 크기를 계산합니다 */
-}
-
-/* ============푸터 디자인===================== */
-#app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  width: calc(100% - 1rem); /* 부트스트랩의 col-md-9 클래스가 가진 패딩(0.5rem)을 고려하여 너비 계산 */
 }
 
 </style>
