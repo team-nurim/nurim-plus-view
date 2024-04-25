@@ -1,7 +1,7 @@
 <template>
   <main class="mt-5">
-    <div class="container">
-      <h2 class="text-center mb-5">정책정보 수정</h2>
+    <div class="container-admin-modify">
+      <h2 class="text-center mb-5" style="font-weight: bold">정책정보 수정</h2>
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
@@ -84,7 +84,7 @@
         <div class="col-md-8 offset-md-2 d-flex justify-content-center">
           <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
           <!-- 수정하기 버튼에 savePost 메서드 연결 -->
-          <button type="button" class="btn btn-lg btn-primary me-3" @click="showModifyModal">수정하기</button>
+          <button type="button" class="btn btn-lg btn-primary me-3" @click="showModifyModal">수정완료</button>
           <button type="button" class="btn btn-lg btn-danger" @click="showDeleteModal">삭제하기</button>
         </div>
       </div>
@@ -220,9 +220,9 @@ export default {
         formData.append('postWriter', this.postData.postWriter);
         formData.append('postContent', this.postData.postContent);
 
-        if (this.imageFile) {
-          formData.append('image', this.imageFile);
-        }
+        // if (this.imageFile) {
+        //   formData.append('image', this.imageFile);
+        // }
 
         const accessToken = localStorage.getItem('accessToken')
         const url = `http://localhost:8080/api/v1/posts/post/update/${this.postId}`;
@@ -269,7 +269,9 @@ export default {
       this.modifyModalVisible  = false; // 모달 숨김
     },
     modifyPostAndHideModal() {
+      if (this.imageFile && this.imageFile.length > 0) { // 이미지를 등록한 경우에만 업로드 수행
       this.uploadImage(this.postId); // 이미지 저장
+      }
       this.modifyPost(); // 게시물 저장
       this.hideModal(); // 모달 숨김
     },
@@ -342,7 +344,7 @@ export default {
         for (let i = 0; i < this.imageFile.length; i++) {
           formData.append('files', this.imageFile[i]);
         }
-        formData.append('postId', this.postId); // 수정된 부분
+        // formData.append('postId', this.postId); // 수정된 부분
 
         try {
           console.log('Uploaded image:', this.imageFile);
@@ -415,6 +417,15 @@ export default {
 </script>
 
 <style>
+.container-admin-modify{
+  margin-top: 1%;
+  margin-bottom: 2%;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
 /* 파일 업로드 요소와 추가 정보 스타일링 */
 input[type="file"] {
   width: 80%;

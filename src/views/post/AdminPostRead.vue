@@ -1,10 +1,15 @@
 <template>
   <main class="mt-2">
-     <div class="containerpostread">
+      <div class="container-admin-postread">
        <div class="row">
-         <div class="col-md-7">
-           <h2 class="text mb-5">{{ postRead.postTitle }}</h2>
+        <div class="col-md-7 mb-3">
+           <h2 class="text content-start">{{ postRead.postTitle }}</h2>
          </div>
+         <div class="col-md-5 mb-3">
+          <div class="text-content-end">
+         <router-link :to="`/admin/post/modify/${postRead.postId}`" class="btn btn-lg btn-primary me-3">수정하기</router-link>
+       </div>
+       </div>
        </div>
        <div class="row">
          <div class="col-md-8 offset-md-2">
@@ -109,11 +114,14 @@
  
  <style scoped>
    /* 컨테이너 스타일링 */
-   .containerpostread {
-     padding: 50px;
-     border-radius: 15px;
-     background-color: #f8f9fa;
-     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 수정 */
+   .container-admin-postread {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 50px;
+    border-radius: 15px;
+    background-color: #f8f9fa;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 수정 */
    }
  
    /* 제목 스타일링 */

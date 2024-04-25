@@ -1,6 +1,6 @@
 <template>
   <main class="mt-5 mb-5">
-    <div class="container mb-5">
+    <div class="container-admin-list mb-5">
       <div class="row d-flex justify-content-center">
           <h3 class="mt-3" style="font-weight: bold">정책정보관리</h3>
         <div class="col-12 d-flex justify-content-center mb-4">
@@ -231,6 +231,14 @@ export default {
 </script>
 
 <style>
+.container-admin-list {
+  margin-top: 2%;
+  width: 70%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
 .margin-bottom {
   margin-bottom: 3rem;
 }

@@ -1,8 +1,7 @@
 <template>
   <main class="mt-5 mb-5">
-    <div class="container">
-
-      <h3 class="mt-2 mb-4" style="font-weight: bold">정책정보 등록</h3>
+    <div class="container-admin-register">
+      <h2 class="text-center mb-5" style="font-weight: bold">정책정보 등록</h2>
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
@@ -269,15 +268,27 @@ export default {
         this.hideModal();
         // 리스트 페이지로 이동
         // this.$router.push('/admin/post/list');
-      } catch(error) {
-        console.error('이미지 업로드 실패 이유:', error);
-      }
+      }catch(error) {
+    // 이미지 업로드 실패 이유가 없으면 콘솔에 오류를 출력하지 않음
+    if (error.response) {
+      console.error('이미지 업로드 실패 이유:', error.response.data);
     }
+  }
+}
   }
 }
 </script>
 
 <style>
+.container-admin-register{
+  margin-top: 1%;
+  margin-bottom: 2%;
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
 /* 모든 입력 필드의 너비를 동일하게 설정 */
 input[type="text"],
 input[type="date"],
