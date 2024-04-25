@@ -286,54 +286,63 @@
           <hr class="mt-4" style="height: 4px; background-color: #6c757d" />
         </div>
         <!-- 리스트 표시 -->
-        <div v-if="selectedCategory === 'housing' && filteredPolicies.length">
-          <!-- 선택된 카테고리가 주거지원이고, policies 배열에 데이터가 있을 경우에만 표시 -->
-          <!-- 리스트의 개수를 보여주는 부분 -->
-          <div style="text-align: left">
-            <h5 class="text-start pl-2">총 {{ filteredPolicies.length }}건</h5>
-          </div>
-          <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-          <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-          <ul class="policy-list min-vh-100 list-unstyled">
-            <li
-              v-for="(policy, index) in filteredPolicies"
-              :key="policy.id"
-              @click="selectPolicy(policy)"
-              class="text-start pl-5 fs-3"
-            >
-              {{ policy.businessOverview }}
-              <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
-              <hr
-                v-if="index !== policies.length - 1"
-                style="height: 2px; background-color: #6c757d"
-              />
-            </li>
-          </ul>
-          <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-          <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-              <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <a class="page-link" href="#" @click="prevPage">&laquo;</a>
-              </li>
+        <div
+          v-if="
+            selectedCategory === 'housing' || selectedCategory === 'integrated'
+          "
+        >
+          <!-- 선택된 카테고리가 주거지원이거나 통합지원일 때에만 표시 -->
+          <div v-if="filteredPolicies.length">
+            <!-- filteredPolicies 배열의 길이가 0이 아닐 때만 표시 -->
+            <!-- 리스트의 개수를 보여주는 부분 -->
+            <div style="text-align: left">
+              <h5 class="text-start pl-2">
+                총 {{ filteredPolicies.length }}건
+              </h5>
+            </div>
+            <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
+            <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
+            <ul class="policy-list min-vh-100 list-unstyled">
               <li
-                class="page-item"
-                v-for="page in pageCount"
-                :key="page"
-                :class="{ active: currentPage === page }"
+                v-for="(policy, index) in filteredPolicies"
+                :key="policy.id"
+                @click="selectPolicy(policy)"
+                class="text-start pl-5 fs-3"
               >
-                <a class="page-link" href="#" @click="setPage(page)">{{
-                  page
-                }}</a>
-              </li>
-              <li
-                class="page-item"
-                :class="{ disabled: currentPage === pageCount }"
-              >
-                <a class="page-link" href="#" @click="nextPage">&raquo;</a>
+                {{ policy.businessOverview }}
+                <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
+                <hr
+                  v-if="index !== policies.length - 1"
+                  style="height: 2px; background-color: #6c757d"
+                />
               </li>
             </ul>
-          </nav>
+            <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
+            <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                  <a class="page-link" href="#" @click="prevPage">&laquo;</a>
+                </li>
+                <li
+                  class="page-item"
+                  v-for="page in pageCount"
+                  :key="page"
+                  :class="{ active: currentPage === page }"
+                >
+                  <a class="page-link" href="#" @click="setPage(page)">{{
+                    page
+                  }}</a>
+                </li>
+                <li
+                  class="page-item"
+                  :class="{ disabled: currentPage === pageCount }"
+                >
+                  <a class="page-link" href="#" @click="nextPage">&raquo;</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
@@ -492,76 +501,6 @@ export default {
       // 로그아웃 후 리다이렉트
       this.$router.push("/");
     },
-    async selectRegion(region) {
-      this.selectedRegion = region; // 선택한 도/특별시/광역시 업데이트
-      // 선택한 도/특별시/광역시에 따라 시/군/구 목록 업데이트
-      if (region === "서울특별시") {
-        this.selectedDistricts = [
-          "강남구",
-          "강동구",
-          "강북구",
-          "강서구",
-          "관악구",
-          "광진구",
-          "구로구",
-          "금천구",
-          "노원구",
-          "도봉구",
-          "동대문구",
-          "동작구",
-          "마포구",
-          "서대문구",
-          "서초구",
-          "성동구",
-          "성북구",
-          "송파구",
-          "양천구",
-          "영등포구",
-          "용산구",
-          "은평구",
-          "종로구",
-          "중구",
-          "중랑구",
-        ];
-      } else if (region === "경기도") {
-        this.selectedDistricts = [
-          "가평군",
-          "고양시",
-          "과천시",
-          "광명시",
-          "광주시",
-          "구리시",
-          "군포시",
-          "김포시",
-          "남양주시",
-          "동두천시",
-          "부천시",
-          "성남시",
-          "수원시",
-          "시흥시",
-          "안산시",
-          "안성시",
-          "안양시",
-          "양주시",
-          "양평군",
-          "여주시",
-          "연천군",
-          "오산시",
-          "용인시",
-          "의왕시",
-          "의정부시",
-          "이천시",
-          "파주시",
-          "평택시",
-          "포천시",
-          "하남시",
-          "화성시",
-        ];
-      }
-    },
-    async selectCategory(category) {
-      this.selectedCategory = category;
-    },
     fetchPolicies() {
       if (!this.selectedCategory) {
         console.log("카테고리를 선택해주세요.");
@@ -592,8 +531,12 @@ export default {
             ? this.selectedOfferType.toLowerCase().trim()
             : undefined; // 'businessClassification' 대신 'provisionType' 사용
       }
+      const accessToken = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
       axios
-        .get(`http://localhost:8080/api/v1/${apiPath}`, { params })
+        .get(`http://localhost:8080/api/v1/${apiPath}`, { params, headers })
         .then((response) => {
           this.policies = response.data.map((policy) => ({
             ...policy,
