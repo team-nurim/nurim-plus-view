@@ -35,9 +35,13 @@
         </div>
     </div>
     <p>{{community.content}}</p>
-    <!-- 좋아요 버튼 -->
-    <button v-if="isLiked(community)" class="btn btn-primary" @click="likeCommunity(community)">좋아요</button>
-    <button v-else class="btn btn-danger" @click="cancelLike(community)">좋아요 취소</button>
+  <div class="text-center">
+  <button class="btn" :class="liked ? 'liked' : ''" @click="toggleLike(community)">
+    <i v-if="liked" class="fa-solid fa-heart"></i> <!-- 좋아요가 됐을 때 -->
+    <i v-else class="fa-regular fa-heart"></i> <!-- 좋아요가 아직 안 됐을 때 -->
+    {{ community.recommend }}
+  </button>
+</div>
       </div>
       <hr>
       <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;" @keyup.enter="submitReply">
@@ -85,13 +89,15 @@ import { TrackOpTypes } from 'vue';
         newReply:'',
         showEditModal: false,
         editedReplyText: '',
-        editingReplyIndex: null
+        editingReplyIndex: null,
+        liked: false
       };
     },
     mounted() {
       this.axiosCommunityData()
       this.axiosReplyData()
       window.scrollTo(0, 0)
+      this.isLiked()
     },
     methods: {
       openModal(){
@@ -237,6 +243,7 @@ import { TrackOpTypes } from 'vue';
         'Authorization': `Bearer ${accessToken}`
       }})
       console.log('좋아요 성공')
+      this.isLiked(community.communityId);
   }catch(error){
     console.error('좋아요 오류:', error)
   }
@@ -249,6 +256,7 @@ import { TrackOpTypes } from 'vue';
         'Authorization': `Bearer ${accessToken}`
       }})
       console.log('좋아요 취소')
+      this.isLiked(community.communityId);
     }catch(error){
       console.error('좋아요가 왜 취소안될까..?:',error)
     }
@@ -256,17 +264,43 @@ import { TrackOpTypes } from 'vue';
   async isLiked(community){
     try{
       const accessToken = localStorage.getItem('accessToken')
-      const response = await axios.get(`http://localhost:8080/api/v1/community/${community.communityId}/isLiked/${accessToken}`,
+      const response = await axios.get(`http://localhost:8080/api/v1/community/${this.communityId}/isLiked/${accessToken}`,
       {
         headers:{
           'Authorization': `Bearer ${accessToken}`
         }})
-        return response.data
+        console.log('좋아요 상태 확인',response.data)
+        this.liked = response.data
     }catch(error){
       console.error('좋아요 상태 확인불가:',error);
-      return false //에러ㅅ 좋아요 상태를 false로 간주한다. 최소 좋아요는 안했을테니까..
+      this.liked = false //에러ㅅ 좋아요 상태를 false로 간주한다. 최소 좋아요는 안했을테니까..
     }
   },
+  async toggleLike(community) {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (this.liked) {
+          // 좋아요 취소
+          await axios.delete(`http://localhost:8080/api/v1/community/${community.communityId}/cancelLike/${accessToken}`, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+        } else {
+          // 좋아요
+          await axios.post(`http://localhost:8080/api/v1/community/${community.communityId}/like/${accessToken}`, {}, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+        }
+        // 상태 업데이트
+        await this.isLiked();
+        await this.axiosCommunityData();
+      } catch (error) {
+        console.error('좋아요 처리 중 오류:', error);
+      }
+    }
     }
   }
   </script>
@@ -372,7 +406,8 @@ import { TrackOpTypes } from 'vue';
 .reply-text{
   display: flex;
 }
-
+.btn{
+  border: 1px solid #ca0a0a}
 
   </style>
   
