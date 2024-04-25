@@ -1,93 +1,123 @@
 c<template>
-      <div class="List-container">
-        <h1 class="title" style="font-weight: bold">무엇이든 물어보세요</h1>
-        <router-link to="/CommunityCreate" style="text-decoration: none; color: black;"><p class="subtitle">어디에 어떻게 물어볼지 모르겠다면 여기에</p></router-link>
-      </div>
-      <!--가장많이 본 게시물 -->
-      <div class="favorite-container">
-        <div class="arrow-buttons">
-          <h3 class="favoriteboards-title" style="margin-left: 300px">가장 많이 본 게시물</h3>
-          <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
-          <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button" style="margin-right: 300px">›</a>
-        </div>
-        <div class="popularContainer">
-        <div v-for="(community, index) in popluarVisbleBoards" :key="index" class="mostView-card">
-          <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
-          <h2 class="mostViewNickName">{{ community.memberNickname }} </h2>
-    <div class="info">
-        <p class="date">등록일자:{{ formatDate(community.registerDate) }}</p>
-        <p class="counts">조회수:{{ community.counts }}</p>
-    </div>
-    <p class="content">{{ community.content }}</p>
-  </router-link>
-          </div>
-        </div>
-      </div>
-      <!-- 가장많이 본 게시물-->
-      <!--답변을 기다리는 게시물-->
-      <div class="inquire-container">
-        <div class="arrow-buttons">
-          <h3 class="inquire-title" style="font-size: 30px; margin-left: 300px">답변을 기다리는 게시물</h3>
-          <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1" style="margin-left: 930px">‹</a>
-          <a @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
-        </div>
-      <div class="inquire-card">
-        <router-link style="text-decoration: none; color: black;" v-for="(inquire, index) in insqireVisbleBoards" :key="index" :to="{ name: 'CommunityDetailView', params: { communityId: inquire.communityId }}" class="inquireView-card">
-        <div class="category-info">
-        <p class="category" style="border-radius: 30px;">{{ inquire.category }}</p>
-      </div>
-        <h2 class="inquire-title">{{ inquire.title }}</h2>
-        <p class="content">{{ inquire.content }}</p>
-        </router-link>
-        </div>
-      </div>
-    <!--답변을 기다리는 게시물-->
-    <!--카테고리 및 검색창-->
-    <div class="container1">
-    <div class="category-search">
-    <div class="category-buttons">
-      <button class="btn btn-outline-secondary" @click="selectCategory('전체')" style="border-radius: 17px;">전체</button>
-      <button class="btn btn-outline-secondary" @click="selectCategory('보육')" style="border-radius: 17px;">보육</button>
-    <button class="btn btn-outline-secondary" @click="selectCategory('출산')" style="border-radius: 17px;">출산/양육</button>
-    <button class="btn btn-outline-secondary" @click="selectCategory('주거')" style="border-radius: 17px;">주거</button>
-    <button class="btn btn-outline-secondary" @click="selectCategory('장례')" style="border-radius: 17px;">장례</button>
+  <!-- full page 영역 -->
+  <div class="List-container">
+    <h4 class="mb-3">무엇이든 물어보세요</h4>
+    <button class="btn btn-primary" style="padding:0.75rem 1.5rem; border-radius:1.5rem;" @click="goWrite">문의하기</button>
   </div>
-  <div class="search-container">
-  <input type="text" v-model="searchQuery" placeholder="검색하실 제목을 입력해주세요." class="search-input">
-  <i class="fa-solid fa-magnifying-glass search-icon" style="color: skyblue; cursor: pointer;" @click="searchCommunity"></i>
-</div>
-</div>
-     <!-- 게시물 리스트 -->
-  <div class="list-container" style="display: grid;">
-    <div v-for="(community, index) in communityList" :key="index" class="List-card" style="place-items: center;">
-      <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId}}">
-      <div class="listInfo">
-        <p style="margin-right: 20px; margin-left: 10px;">닉네임:{{ community.memberNickname }}</p>
-        <p style="margin-right: 20px;">등록일:{{ formatDate(community.registerDate) }}</p>
-        <p >조회수:{{ community.counts }}</p>
+
+  <div class="container">
+
+  <!--가장많이 본 게시물 -->
+  <div>
+
+    <div class="row">
+      <div class="col">
+        <h3 class="text-start">가장 많이 본 게시물</h3>
       </div>
-        <p class="list-title" style="margin-left: 10px;">
-          {{ community.title }}
-        </p>
+      <div class="col">
+        <div class="arrow-buttons">
+          <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
+          <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="popularContainer">
+      <!-- card -->
+      <div class="col-md-4" v-for="(community, index) in popluarVisbleBoards" :key="index">
+        <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
+          <div class="card justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col">
+                  <h4 class="card-title">{{ community.memberNickname }}</h4>
+                    <span class="card-subtitle mb-2" style="color:#B4B4B4;">
+                      등록일자:{{ formatDate(community.registerDate) }}  |  조회수:{{ community.counts }}
+                    </span>
+                </div>
+              </div>
+              <p class="card-text mt-2">
+                {{ community.content.slice(0, 100) }}
+                <span v-if="community.content.length > 60">...</span>
+                </p>
+            </div>
+          </div>
         </router-link>
-        </div>
       </div>
-    <!-- 페이지네이션 -->
-    <div class="d-flex justify-content-center mt-3">
-        <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
-        <div v-for="pageNumber in totalPages" :key="pageNumber">
-          <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
-        </div>
-        <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
-      </div>
-  <router-link to="/CommunityCreate"><button class="btn btn-primary" style="width: 100px;">문의하기</button></router-link>
+
+    </div>
+  </div>
+
+  <!--답변을 기다리는 게시물-->
+  <div class="inquire-container">
+    <div class="arrow-buttons">
+      <h3 class="inquire-title" style="font-size: 30px; margin-left: 300px">답변을 기다리는 게시물</h3>
+      <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1" style="margin-left: 930px">‹</a>
+      <a @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
+    </div>
+  <div class="inquire-card">
+    <router-link style="text-decoration: none; color: black;" v-for="(inquire, index) in insqireVisbleBoards" :key="index" :to="{ name: 'CommunityDetailView', params: { communityId: inquire.communityId }}" class="inquireView-card">
+    <div class="category-info">
+    <p class="category" style="border-radius: 30px;">{{ inquire.category }}</p>
+  </div>
+    <h2 class="inquire-title">{{ inquire.title }}</h2>
+    <p class="content">{{ inquire.content }}</p>
+    </router-link>
+    </div>
+  </div>
+<!--답변을 기다리는 게시물-->
+<!--카테고리 및 검색창-->
+<div class="container1">
+<div class="category-search">
+<div class="category-buttons">
+  <button class="btn btn-outline-secondary" @click="selectCategory('전체')" style="border-radius: 17px;">전체</button>
+  <button class="btn btn-outline-secondary" @click="selectCategory('보육')" style="border-radius: 17px;">보육</button>
+  <button class="btn btn-outline-secondary" @click="selectCategory('출산')" style="border-radius: 17px;">출산/양육</button>
+  <button class="btn btn-outline-secondary" @click="selectCategory('주거')" style="border-radius: 17px;">주거</button>
+  <button class="btn btn-outline-secondary" @click="selectCategory('장례')" style="border-radius: 17px;">장례</button>
+</div>
+<div class="search-container">
+<input type="text" v-model="searchQuery" placeholder="검색하실 제목을 입력해주세요." class="search-input">
+<i class="fa-solid fa-magnifying-glass search-icon" style="color: skyblue; cursor: pointer;" @click="searchCommunity"></i>
+</div>
+</div>
+
+<!-- 게시물 리스트 -->
+<div class="list-container" style="display: grid;">
+<div v-for="(community, index) in communityList" :key="index" class="List-card" style="place-items: center;">
+  <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId}}">
+  <div class="listInfo">
+    <p style="margin-right: 20px; margin-left: 10px;">닉네임:{{ community.memberNickname }}</p>
+    <p style="margin-right: 20px;">등록일:{{ formatDate(community.registerDate) }}</p>
+    <p >조회수:{{ community.counts }}</p>
+  </div>
+    <p class="list-title" style="margin-left: 10px;">
+      {{ community.title }}
+    </p>
+    </router-link>
+</div>
+</div>
+
+<!-- 페이지네이션 -->
+<div class="d-flex justify-content-center mt-3">
+    <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
+    <div v-for="pageNumber in totalPages" :key="pageNumber">
+      <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
+    </div>
+    <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
+</div>
+<router-link to="/CommunityCreate"><button class="btn btn-primary" style="width: 100px;">문의하기</button></router-link>
 </div>
 <!-- 위로가기 버튼 -->
 <p class="fixed_top">
-        <a href="#">위로</a>
-    </p>
-  </template>
+    <a href="#">위로</a>
+</p>
+
+  </div>
+</template>
 <script>
+// eslint-disable-next-line
+/* eslint-disable */
 import axios from 'axios'
 export default {
   name: 'CommunityView',
@@ -149,7 +179,7 @@ export default {
   methods: {
     async axiosPopularboards () {
       try{
-        const accessToken = localStorage.getItem('accessToken') 
+        const accessToken = localStorage.getItem('accessToken')
         const response = await axios.get('http://localhost:8080/api/v1/popular',{
           headers: {
             'Authorization': `Bearer ${accessToken}`
@@ -219,7 +249,6 @@ async searchCommunity() {
     console.log('검색 실패:', err);
   }
 },
-
     nextPopluarPage () {
       if (this.popluarCurrentPage < this.popluarTotalPages - 1 && this.hasNextData) {
         this.popluarCurrentPage++
@@ -244,83 +273,71 @@ async searchCommunity() {
       this.currentPage = pageNumber -1;
       this.axiosCommunityList(this.selectedCategory);
     },
+    goWrite () {
+      this.$router.push('/CommunityCreate')
+    }
   }
 }
 </script>
-  <style>
-  /*=======================화살표 스타일============================================*/
-  .arrow-buttons {
-    display: flex;
-    align-content: center;
-  }
-  .arrow-button1 {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    background: url('../../assets/images/left_arrow.png');
-    text-indent: -9999px;
-    margin-right: 5px; /* 화살표 간 간격 조정 */
-  }
-  .arrow-button {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    background: url('../../assets/images/right_arrow.png');
-    text-indent: -9999px;
-  }
-  /*=======================메인 타이틀 스타일============================================*/
-  .List-container {
-    width: 100%;
-    height: 28vh;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0;
-    padding-top: 60px;
-    margin-bottom: 100px;
-  }
-  .title{
-    font-size: 52px;
-  }
-  .subtitle {
-    font-size: 16px;
-    margin-top: 20px;
-  }
-  /*======================가장많이 본 게시물 스타일==========================================*/
-.favorite-container {
-    margin-bottom: 100px;
-  }
-  .favorite-header {
-    align-items: center;
-    margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
-    margin-left: 300px;
-  }
-  .favoriteboards-title {
-    margin-right: auto;
-  }
-    .popularContainer {
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1;
-    justify-content: center;
-    }
-    .mostView-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: calc(23.33% - 40px); /* 가로 여백 제외한 1/3 너비로 설정 */
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    margin-left: 20px;
-  }
-  .mostView-card h2 {
-    font-size: 18px;
-    font-weight: bold;
+<style>
+/*=======================화살표 스타일============================================*/
+.arrow-buttons {
+  display: flex;
+  align-content: center;
 }
-.mostViewNickName{
-  margin-right: 180px;
+.arrow-button1 {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background: url('../../assets/images/left_arrow.png');
+  text-indent: -9999px;
+  margin-right: 5px; /* 화살표 간 간격 조정 */
+}
+.arrow-button {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background: url('../../assets/images/right_arrow.png');
+  text-indent: -9999px;
+}
+/*=======================메인 타이틀 스타일============================================*/
+.List-container {
+  width: 100%;
+  height: 28vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding-top: 60px;
+  margin-bottom: 100px;
+}
+.subtitle {
+  font-size: 16px;
+  margin-top: 20px;
+}
+/*======================가장많이 본 게시물 스타일==========================================*/
+.favorite-container {
+  margin-bottom: 100px;
+}
+.favorite-header {
+  align-items: center;
+  margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
+  margin-left: 300px;
+}
+.favoriteboards-title {
+  margin-right: auto;
+}
+.popularContainer {
+display: flex;
+flex-wrap: wrap;
+flex: 1;
+justify-content: center;
+}
+.most-view-card {
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  margin: 1rem;
 }
 .info {
     display: flex;
@@ -380,17 +397,7 @@ async searchCommunity() {
     }
    /*====================================================================================*/
    /*====================================카테고리 검색창=================================== */
-   .container1{
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    padding-top: 60px;
-    margin-bottom: 100px;
-  }
-   .category-search {
+.category-search {
   display: flex;
   align-items: flex-start;
   width: 1000px;
@@ -440,7 +447,7 @@ async searchCommunity() {
 }
 
    /* ======================================카드 스타일링================================= */
-   .list-container {
+.list-container {
   justify-content: center;
   margin-top: 20px;
 }
@@ -530,4 +537,10 @@ async searchCommunity() {
         text-indent: -99999999px;
         overflow: hidden;
     }
+
+.card-inquiry {
+  border: 1px solid #E0E0E0;
+  border-radius: 1rem;
+  margin: 0 auto;
+}
   </style>
