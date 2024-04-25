@@ -1,100 +1,102 @@
 <template>
-  <div class="container">
-    <!-- 모달 팝업 -->
-    <div class="black-bg" v-if="selectedPolicy">
-      <div class="white-bg">
-        <div class="modal-content">
-          <!-- 동적으로 모달 내용 조정 -->
-          <div v-if="selectedCategory === 'housing'">
-            <!-- 주거지원 정보 -->
+  <main class="mt-5 mb-5">
+
+    <div class="container">
+      <!-- 모달 팝업 -->
+      <div class="black-bg" v-if="selectedPolicy">
+        <div class="white-bg">
+          <div class="modal-content">
+            <!-- 동적으로 모달 내용 조정 -->
+            <div v-if="selectedCategory === 'housing'">
+              <!-- 주거지원 정보 -->
+              <div class="modal-section">
+                <h3 class="detail-box"><strong>사업개요</strong></h3>
+                <div
+                  class="info-box h3"
+                  v-html="selectedPolicy.businessOverview"
+                ></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>지원내용</strong></p>
+                <div
+                  class="info-box"
+                  v-html="selectedPolicy.supportDetails"
+                ></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>사업구분</strong></p>
+                <div
+                  class="info-box"
+                  v-html="selectedPolicy.businessClassification"
+                ></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>소득기준</strong></p>
+                <div
+                  class="info-box"
+                  v-html="selectedPolicy.incomeCriteria"
+                ></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>자산기준</strong></p>
+                <div class="info-box" v-html="selectedPolicy.assetCriteria"></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>결혼기준</strong></p>
+                <div
+                  class="info-box"
+                  v-html="selectedPolicy.marriageCriteria"
+                ></div>
+              </div>
+            </div>
+            <div v-if="selectedCategory === 'integrated'">
+              <!-- 통합지원 정보 -->
+              <div class="modal-section">
+                <h3 class="detail-box"><strong>사업개요</strong></h3>
+                <div
+                  class="info-box h3"
+                  v-html="selectedPolicy.businessOverview"
+                ></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>지원내용</strong></p>
+                <div
+                  class="info-box"
+                  v-html="selectedPolicy.supportDetails"
+                ></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>제공유형</strong></p>
+                <div class="info-box" v-html="selectedPolicy.offerType"></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>지원금액</strong></p>
+                <div class="info-box" v-html="selectedPolicy.paymentAmount"></div>
+              </div>
+              <div class="modal-section">
+                <p class="detail-box"><strong>지원대상</strong></p>
+                <div class="info-box" v-html="selectedPolicy.supportTarget"></div>
+              </div>
+            </div>
+            <!-- 공통 섹션 -->
             <div class="modal-section">
-              <h3 class="detail-box"><strong>사업개요</strong></h3>
-              <div
-                class="info-box h3"
-                v-html="selectedPolicy.businessOverview"
-              ></div>
+              <p class="detail-box"><strong>사업주체</strong></p>
+              <div class="info-box" v-html="selectedPolicy.businessEntity"></div>
             </div>
             <div class="modal-section">
-              <p class="detail-box"><strong>지원내용</strong></p>
-              <div
-                class="info-box"
-                v-html="selectedPolicy.supportDetails"
-              ></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>사업구분</strong></p>
-              <div
-                class="info-box"
-                v-html="selectedPolicy.businessClassification"
-              ></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>소득기준</strong></p>
-              <div
-                class="info-box"
-                v-html="selectedPolicy.incomeCriteria"
-              ></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>자산기준</strong></p>
-              <div class="info-box" v-html="selectedPolicy.assetCriteria"></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>결혼기준</strong></p>
-              <div
-                class="info-box"
-                v-html="selectedPolicy.marriageCriteria"
-              ></div>
+              <p class="detail-box"><strong>홈페이지</strong></p>
+              <div class="d-flex justify-content-center" style="width: 100%">
+                <button @click="websiteClick" class="btn detail-box">
+                  바로가기
+                </button>
+              </div>
             </div>
           </div>
-          <div v-if="selectedCategory === 'integrated'">
-            <!-- 통합지원 정보 -->
-            <div class="modal-section">
-              <h3 class="detail-box"><strong>사업개요</strong></h3>
-              <div
-                class="info-box h3"
-                v-html="selectedPolicy.businessOverview"
-              ></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>지원내용</strong></p>
-              <div
-                class="info-box"
-                v-html="selectedPolicy.supportDetails"
-              ></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>제공유형</strong></p>
-              <div class="info-box" v-html="selectedPolicy.offerType"></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>지원금액</strong></p>
-              <div class="info-box" v-html="selectedPolicy.paymentAmount"></div>
-            </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>지원대상</strong></p>
-              <div class="info-box" v-html="selectedPolicy.supportTarget"></div>
-            </div>
-          </div>
-          <!-- 공통 섹션 -->
-          <div class="modal-section">
-            <p class="detail-box"><strong>사업주체</strong></p>
-            <div class="info-box" v-html="selectedPolicy.businessEntity"></div>
-          </div>
-          <div class="modal-section">
-            <p class="detail-box"><strong>홈페이지</strong></p>
-            <div class="d-flex justify-content-center" style="width: 100%">
-              <button @click="websiteClick" class="btn detail-box">
-                바로가기
-              </button>
-            </div>
-          </div>
+          <button @click="closeModal" class="btn btn-secondary rounded-pill">
+            닫기
+          </button>
         </div>
-        <button @click="closeModal" class="btn btn-secondary rounded-pill">
-          닫기
-        </button>
       </div>
-    </div>
 
     <div class="row align-items-center">
       <div class="col mt-3 mb-4">
@@ -337,7 +339,9 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+
+  </main>
 </template>
 
 // eslint-disable-next-line /* eslint-disable */
