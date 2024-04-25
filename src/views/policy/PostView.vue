@@ -1,6 +1,7 @@
 <template>
   <main class="mt-5 mb-5">
-    <div class="container" style="padding:0;">
+    <div class="container">
+
 
       <!-- 타이틀 이미지 -->
       <div class="mb-5" style="margin:0; padding:0;">
@@ -18,10 +19,14 @@
             <p class="form-control-plaintext">{{ post.postContent }}</p>
         </div>
       </div>
-      
+
       <!-- 본문 이미지 -->
       <div class="mb-3" v-if="post.postImages && post.postImages.length > 1">
         <img v-for="(image, index) in post.postImages.slice(1)" :key="index" :src="image" width="100%">
+      </div>
+
+      <div class="col d-flex text-end mt-3 mb-5">
+        <button type="button" class="btn btn-outline-dark" @click="goToList">목록</button>
       </div>
 
     </div>
@@ -56,6 +61,9 @@ export default {
       } catch (err) {
         console.error('게시물을 불러 올 수 없습니다.', err)
       }
+    },
+    goToList () {
+      this.$router.push('/policy')
     }
   }
 }
