@@ -259,6 +259,9 @@ async searchMembers() {
         this.fetchMembers(nextPage, lastItemId);
       }
     },
+    searchMembers() {
+      console.log(`Searching members with query: ${this.searchQuery} in category: ${this.searchCategory}`);
+    },
 
     searchMembers() {
       console.log(`Searching members with query: ${this.searchQuery} in category: ${this.searchCategory}`);
@@ -267,6 +270,9 @@ async searchMembers() {
     openModal(member) {
       this.selectedMember = member;
       this.showModal = true;
+    },
+    selectAllMembers() {
+      this.selectedMembers = this.selectedMembers.length === this.membersList.length ? [] : [...this.membersList];
     },
 
     selectAllMembers() {
