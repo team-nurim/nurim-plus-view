@@ -36,7 +36,7 @@
     </div>
     <p>{{community.content}}</p>
   <div class="text-center">
-  <button class="btn" :class="liked ? 'liked' : ''" @click="toggleLike(community)">
+  <button class="btn" style="border:1px solid #333; border-radius:1.2rem; padding: 0.3rem 1rem;" :class="liked ? 'liked' : ''" @click="toggleLike(community)">
     <i v-if="liked" class="fa-solid fa-heart"></i> <!-- 좋아요가 됐을 때 -->
     <i v-else class="fa-regular fa-heart"></i> <!-- 좋아요가 아직 안 됐을 때 -->
     {{ community.recommend }}
@@ -406,8 +406,9 @@ import { TrackOpTypes } from 'vue';
 .reply-text{
   display: flex;
 }
-.btn{
-  border: 1px solid #ca0a0a}
+.btnliked{
+  border: 1px solid #ccc;
+}
 
   </style>
   
