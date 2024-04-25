@@ -1,9 +1,9 @@
 <template>
-  <main>
-    <div class="container">
+  <main style="background-color: #FAFBFC;">
+    <div class="container  mt-3 mb-3">
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4>계정 전환</h4>
+          <h4 style="font-weight: 700; font-size: 28px;">계정 전환</h4>
         </div>
       </div>
 
@@ -23,15 +23,22 @@
       <!-- 증빙 서류 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Expertfile" class="form-label">제출 증빙 서류</label>
-        <input type="file" id="Expertfile" class="form-control" ref="fileInput" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
+        <input type="file" id="Expertfile" class="form-control" ref="fileInput" style="height: auto;" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
         <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
           <p>{{ member.expertFile }}</p>
         </div>
         <img v-else :src="member.expertFile" class="mt-3 mb-3 custom-padding">
-        <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">제출 서류 변경</button>
+        <div class="">
+          <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="col-6 btn btn-changefile" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          제출 서류 변경
+          </button>
+          <button v-if="!agreed" type="button" class="col-6 btn btn-changefile" data-bs-toggle="modal" data-bs-target="#termsModal" :disabled="agreed">
+            약관 보기 및 동의
+          </button>
+        </div>
       </div>
 
-      <!-- Modal -->
+      <!-- Modal 제출서류 변경 -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -51,12 +58,7 @@
         </div>
       </div>
 
-      <!-- Button to Open the Modal -->
-      <button v-if="!agreed" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#termsModal" :disabled="agreed">
-        약관 보기 및 동의
-      </button>
-
-      <!-- The Modal -->
+      <!-- The Modal 야고간 -->
       <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
           <div class="modal-content">
@@ -65,7 +67,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- 약관 내용 -->
-            <div class="modal-body">
+            <div class="modal-body">a
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
@@ -326,13 +328,11 @@ export default {
   color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
-/* .btn-menu:active {
-  background-color: #004085; /* 클릭 시 배경색 */
-/*  color: #ffc107; /* 클릭 시 글씨색 */
-/*} */
-
 .form-control {
-  height: 50px;
+  height: 70px;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
 }
 
 .row {
@@ -345,17 +345,8 @@ export default {
   margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
   width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
   flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  font-size: 1.2rem; /* 폰트 크기 조정 */
+  font-size: 20px; /* 폰트 크기 조정 */
   font-weight: bold; /* 폰트 두께 조정 */
-  align-self: start; /* Flex 아이템 수직 중앙 정렬 */
-  margin-right: 10px; /* 오른쪽 여백 추가 */
-}
-
-.form-text {
-  margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
-  width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
-  flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  color: darkgray; /* 글씨 색*/
   align-self: start; /* Flex 아이템 수직 중앙 정렬 */
   margin-right: 10px; /* 오른쪽 여백 추가 */
 }
@@ -375,6 +366,16 @@ export default {
 .btn-update:hover, .btn-update:focus {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.btn-changefile {
+  height: 50px;
+  background-color: #007bff; /* 기본 배경색 */
+  color: white; /* 글씨색 */
+  font-size: 16px; /* 글씨크기 */
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
 }
 
 </style>

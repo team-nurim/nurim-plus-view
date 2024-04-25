@@ -1,9 +1,9 @@
 <template>
-  <main>
-    <div class="container">
+  <main style="background-color: #FAFBFC;">
+    <div class="container mt-3 mb-3">
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4>내 경력 사항 수정</h4>
+          <h4 style="font-weight: 700; font-size: 28px;">내 경력 사항 수정</h4>
         </div>
       </div>
 
@@ -259,7 +259,10 @@ export default {
 /*} */
 
 .form-control {
-  height: 50px;
+  height: 70px;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
 }
 
 .row {
@@ -272,7 +275,7 @@ export default {
   margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
   width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
   flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  font-size: 1.2rem; /* 폰트 크기 조정 */
+  font-size: 20px; /* 폰트 크기 조정 */
   font-weight: bold; /* 폰트 두께 조정 */
   align-self: start; /* Flex 아이템 수직 중앙 정렬 */
   margin-right: 10px; /* 오른쪽 여백 추가 */
