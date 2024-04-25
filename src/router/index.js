@@ -38,6 +38,7 @@ import Publicsale from "../views/policy/policydetails/Publicsale.vue";
 import NewlywedHopeTown from "../views/policy/policydetails/NewlywedHopeTown.vue";
 import Aspecialsupplyfornewlyweds from "../views/policy/policydetails/Aspecialsupplyfornewlyweds.vue";
 import Thefirstspecialsupplyinoneslife from "../views/policy/policydetails/Thefirstspecialsupplyinoneslife.vue";
+import axios from 'axios';
 
 const routes = [
   {
