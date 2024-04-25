@@ -1,9 +1,9 @@
 <template>
-  <main>
-    <div class="container">
+  <main style="background-color: #FAFBFC;">
+    <div class="container mt-3 mb-4">
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4>마이페이지</h4>
+          <h4 style="font-weight: 700; font-size: 28px;">마이페이지</h4>
         </div>
       </div>
 
@@ -13,11 +13,11 @@
           <img v-if="member.type == true" src="../../assets/images/expert_badge.png" alt="mdo" width="50" height="50" style="margin-left: 200px;">
         </div>
         <div class="col-2 align-items-center">
-          <div>{{ member.memberNickname }}</div><br>
-          <div>{{ member.memberEmail }}</div>
+          <div style="font-size: 20px; font-weight: 500;">{{ member.memberNickname }} 님</div><br>
+          <div style="font-size: 15px; font-weight: 500;">{{ member.memberEmail }}</div>
         </div>
         <div class="col-4 align-items-center">
-          <button type="button" @click="goForward" class="btn btn-outline-primary">회원 정보 수정</button>
+          <button type="button" @click="goForward" class="btn btn-profile">회원 정보 수정</button>
         </div>
       </div>
 
@@ -25,22 +25,22 @@
 
       <div v-if="member.type == false" class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" @click="goForward2" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">내 맞춤 정보 수정</span>
-          <span class="mx-2">></span>
+          <span class="menu-text mx-2">내 맞춤 정보 수정</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
       <div v-if="member.type == true" class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" @click="goForward4" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">내 경력 사항 수정</span>
-          <span class="mx-2">></span>
+          <span class="menu-text mx-2">내 경력 사항 수정</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" @click="goForward3" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">계정 전환</span>
-          <span class="mx-2">></span>
+          <span class="menu-text mx-2">계정 전환</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
@@ -48,22 +48,22 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">내가 받을 수 있는 지원금</span>
-          <span class="mx-2">></span>
+          <span class="menu-text mx-2">내가 받을 수 있는 지원금</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">정책 정보</span>
-          <span class="mx-2">></span>
+          <span class="menu-text mx-2">정책 정보</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">지식 커뮤니티</span>
-          <span class="mx-2">></span>
+          <span class="menu-text mx-2">지식 커뮤니티</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
@@ -71,8 +71,8 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <span class="mx-2">계정 탈퇴</span>
-          <span class="mx-2">></span>
+          <span class="menu-text mx-2">계정 탈퇴</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
@@ -227,17 +227,34 @@ export default {
 
 .btn-menu {
   height: 70px;
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 16px; /* 글씨크기 */
+  background-color: white; /* 기본 배경색 */
+  color: black; /* 글씨색 */
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
 }
 
 .btn-menu:hover, .btn-menu:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+  background-color: lightgray; /* 호버 및 포커스 시 배경색 변경 */
+  color: black; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.btn-profile {
+  height: 40px;
+  background-color: lightgray; /* 기본 배경색 */
+  color: black; /* 글씨색 */
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.menu-text {
+  font-size: 18px;
+  font-weight: 700;
 }
 
 /* .btn-menu:active {
