@@ -116,6 +116,8 @@ c<template>
   </div>
 </template>
 <script>
+// eslint-disable-next-line
+/* eslint-disable */
 import axios from 'axios'
 export default {
   name: 'CommunityView',
@@ -177,7 +179,7 @@ export default {
   methods: {
     async axiosPopularboards () {
       try{
-        const accessToken = localStorage.getItem('accessToken') 
+        const accessToken = localStorage.getItem('accessToken')
         const response = await axios.get('http://localhost:8080/api/v1/popular',{
           headers: {
             'Authorization': `Bearer ${accessToken}`

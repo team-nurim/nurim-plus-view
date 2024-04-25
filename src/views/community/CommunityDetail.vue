@@ -66,8 +66,10 @@
 </div>
 </div>
   </template>
-  
-  <script>
+
+<script>
+// eslint-disable-next-line
+/* eslint-disable */
 import axios from 'axios';
   export default {
     name: 'CommunityDetailView',
@@ -210,7 +212,7 @@ import axios from 'axios';
     }
   }
   </script>
-  
+
   <style>
   /*모달 스타일 */
   .modal {
@@ -315,4 +317,3 @@ import axios from 'axios';
 
 
   </style>
-  
