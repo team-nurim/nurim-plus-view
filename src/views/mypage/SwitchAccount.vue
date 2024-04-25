@@ -28,11 +28,11 @@
           <p>{{ member.expertFile }}</p>
         </div>
         <img v-else :src="member.expertFile" class="mt-3 mb-3 custom-padding">
-        <div class="">
-          <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="col-6 btn btn-changefile" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <div class="row mt-3 mb-10 align-items-center custom-padding">
+          <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="col btn btn-changefile" style="margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#exampleModal">
           제출 서류 변경
           </button>
-          <button v-if="!agreed" type="button" class="col-6 btn btn-changefile" data-bs-toggle="modal" data-bs-target="#termsModal" :disabled="agreed">
+          <button v-if="!agreed" type="button" class="col btn btn-changefile" style="margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#termsModal" :disabled="agreed">
             약관 보기 및 동의
           </button>
         </div>
@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <!-- The Modal 야고간 -->
+      <!-- The Modal 약관 -->
       <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
           <div class="modal-content">
@@ -92,7 +92,7 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding" v-if="!member.type">
         <div class="col">
-          <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
+          <button type="button" class="btn btn-cancel" @click="cancelUpload">취소</button>
         </div>
         <div class="col">
           <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == false">계정 전환 신청</button>
@@ -366,6 +366,23 @@ export default {
 .btn-update:hover, .btn-update:focus {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.btn-cancel {
+  height: 50px;
+  padding: 8;
+  background-color: gray; /* 기본 배경색 */
+  color: white; /* 글씨색 */
+  font-size: 16px; /* 글씨크기 */
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  width: 100%;
+}
+
+.btn-cancel:hover, .btn-cancel:focus {
+  background-color: lightgray; /* 호버 및 포커스 시 배경색 변경 */
+  color: black; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
 .btn-changefile {
