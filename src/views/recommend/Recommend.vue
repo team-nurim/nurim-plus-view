@@ -1,9 +1,13 @@
 <template>
-  <main style="background-color: #F5F5F5;">
+  <main style="background-color: #F5F5F5; position: relative;">
     
     <div class="container mt-5 mb-5">
       <div style="padding:0;">
 
+        <!-- 플로팅 버튼 -->
+        <div v-if="selectedSubject && selectedRegion && keyword && isAllSet" class="floating-button mt-5 mb-5" style="position:fixed; left:50%; transform:translateX(-50%); z-index:1000; bottom:4rem;">
+          <button class="btn btn-primary" style="padding:0.75rem 4rem; border-radius:1.5rem;" @click="goAsk">문의하기</button>
+        </div>
 
         <div class="d-flex flex-row p-3">
           <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="44" height="44">
@@ -267,6 +271,9 @@ export default {
       } catch (error) {
         console.error('Error fetching results: ', error)
       }
+    },
+    goAsk () {
+      this.$router.push('/community')
     }
   }
 }
@@ -329,6 +336,13 @@ p {
   width: 100%;
   color: #FFF;
   font-weight: 400;
+}
+
+.floating-button button {
+  border-radius: 1rem;
+  padding: 15px;
+  font-size: 16px;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.13);
 }
 
 footer {
