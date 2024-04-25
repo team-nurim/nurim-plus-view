@@ -54,6 +54,10 @@ h2:empty {
   display: none; /* 내용이 없는 h2 태그는 표시하지 않음 */
 }
 
+h4:empty {
+  display: none; /* 내용이 없는 h2 태그는 표시하지 않음 */
+}
+
 .no-bullets {
   list-style-type: none; /* 불릿 제거 */
   padding: 0; /* 기본 패딩 제거 */
