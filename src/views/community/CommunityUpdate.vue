@@ -24,46 +24,54 @@
         </div>
         
         <!-- 이미지 업로드를 위한 input 요소 추가 -->
-        <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
+        <label for="image" class="col-md-3 col-form-label"></label>
         <div class="mb-3 row justify-content-center">
             <div class="col-md-9">
-                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload">
+                <label for="image" class="fa-solid fa-camera" style="cursor: pointer;"> 파일첨부</label>
+                <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload" style="display: none;">
+
             </div>
         </div>
 
-        <!-- 이미지 목록 표시 -->
-<div class="row">
+<!-- 이미지 목록 표시 -->
+<div id="yong" class="row">
     <div class="col-md-8 offset-md-2">
-        <div v-if="communityData.communityImages && communityData.communityImages.length > 0" class="mb-3">
+        <div class="mb-3">
             <h3 class="text-center mb-3">이미지</h3>
             <div class="image-list d-flex flex-wrap justify-content-start">
-                <div v-for="(image, index) in communityData.communityImages" :key="index" class="image-item">
-                    <!-- 이미지가 유효한 URL인 경우에만 출력 -->
+                <!-- 커뮤니티 이미지 표시 -->
+                <div v-for="(image, index) in communityData.communityImages" :key="'existing-' + index" class="image-item">
                     <img :src="image" alt="이미지" class="img-fluid" style="max-width: 200px; max-height: 200px;">
-                    <!-- 이미지 삭제 버튼 -->
                     <button class="btn btn-sm delete-image-btn" @click="deleteImage(communityData.communityImageId[index], $event, index)"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <!-- 이미지 미리보기 표시 -->
+                <div v-for="(previewImage, index) in previewImages" :key="'preview-' + index" class="image-item mx-2 mb-2">
+                    <img :src="previewImage" alt="미리보기 이미지" class="img-fluid" loading="lazy" style="max-width: 200px; max-height: 200px;">
+                    <button type="button" class="btn btn-sm" @click="removePreviewImage(index)"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-        
+
         <!-- 취소하기 및 수정하기 버튼 -->
         <div class="row" style="margin-top: 20px;">
             <div class="col">
                 <button class="btn btn-secondary" @click="cancel">취소하기</button>
             </div>
             <div class="col">
-                <button class="btn btn-primary" @click="modifyCommunity">수정하기</button>
+                <button class="btn btn-primary" @click="modifyButton">수정하기</button>
             </div>
         </div>
     </div>
 </template>
 
+
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
 import axios from 'axios';
+
 
 export default {
     name: 'CommunityUpdate',
@@ -78,53 +86,80 @@ export default {
                 communityImages: [],
                 communityImageId: [],
             },
-            imageFile: null, // 이미지 파일을 저장할 변수 추가
+            imageFile: [], // 이미지 파일을 저장할 변수 추가
+            previewImages:[]
         };
     },
 
     mounted() {
-        this.axiosCommunityData();
+        this.loadCommunityData()
     },
 
     methods: {
+        loadCommunityData(){
+            const storedData = JSON.parse(localStorage.getItem('communityData'))
+            if(storedData) {
+                this.communityData = storedData
+            }else{
+                this.axiosCommunityData()
+            }
+        },
+
         async handleImageUpload(event) {
-        // 이미지 파일을 저장
-        const imageFile = event.target.files[0];
+    // 이미지 파일을 저장
+    const imageFiles = event.target.files;
+    for (let i = 0; i < imageFiles.length; i++) {
+        const files = imageFiles[i];
+
+        this.imageFile.push(files);
+        this.previewImages.push(URL.createObjectURL(files));
+    }
+
+},
+
+    removePreviewImage(index){
+     // 미리보기 이미지를 삭제하면 실행될 로직
+     this.imageFile.splice(index, 1); // 이미지 파일 배열에서 삭제
+      this.previewImages.splice(index, 1); // 미리보기 배열에서 삭제
+       // 인풋 요소에 남은 이미지들을 설정
+       const inputElement = document.getElementById('image');
+      const remainingImages = this.imageFile.map(file => file); // 파일 배열을 복사하여 사용
+      inputElement.value = ''; // 인풋 요소의 값 초기화
+
+      // FileList 객체 생성
+      const fileList = new DataTransfer();
+      remainingImages.forEach(file => {
+      fileList.items.add(file); // 각 파일을 FileList에 추가
+      });
+      inputElement.files = fileList.files; // FileList를 인풋 요소의 files 속성에 설정
+      this.$forceUpdate(); // 컴포넌트 강제 업데이트
+    },
+
+    async axiosUploadImage(imageFile, communityId) { // 매개변수 수정
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const formData = new FormData();
         
-        try {
-            // 이미지 파일을 업로드하고 이미지 URL을 받아옴
-            const imageUrl = URL.createObjectURL(imageFile);
-            const imageId = await this.axiosUploadImage(imageFile, this.communityId);
-            // 받아온 이미지 URL을 미리보기 배열에 추가
-            this.communityData.communityImages.push(imageUrl);
-            this.communityData.communityImageId.push(imageId);
-
-            window.location.reload();
-
-        } catch (error) {
-            console.error('이미지 업로드 실패:', error);
+        // 여러 이미지 파일을 formData에 추가
+        for (let i = 0; i < imageFile.length; i++) {
+            formData.append('files', imageFile[i]);
         }
-    },
-    async axiosUploadImage(imageFile, communityId) {
-        try {
-            const accessToken = localStorage.getItem('accessToken');
-            const formData = new FormData();
-            formData.append('files', imageFile);
-            const url = `http://localhost:8080/api/v1/communityImages/upload/${communityId}`;
-            const response = await axios.post(url, formData, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            const communityImageId = response.data.communityImageId
-            console.log('이미지 업로드 성공ㅎ:', response.data.content);
-            return communityImageId
-        } catch (error) {
-            console.error('이미지 업로드 실패:', error);
-            throw error;
-        }
-    },
+
+        const url = `http://localhost:8080/api/v1/communityImages/upload/${communityId}`;
+        const response = await axios.post(url, formData, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    
+        console.log('이미지 업로드 성공:', response.data.content);
+
+    } catch (error) {
+        console.error('이미지 업로드 실패:', error);
+    }
+},
+
         async axiosCommunityData() {
             try {
                 const accessToken = localStorage.getItem('accessToken');
@@ -157,10 +192,6 @@ export default {
 
                 const accessToken = localStorage.getItem('accessToken');
 
-                // 이미지 파일이 있는 경우에만 이미지 업로드 실행
-                if (this.imageFile) {
-                    await this.axiosUploadImages(this.communityId);
-                }
 
                 const url = `http://localhost:8080/api/v1/communityUpdate/${this.communityId}/${accessToken}`;
 
@@ -170,6 +201,7 @@ export default {
                         'Content-Type': 'application/json',
                     },
                 });
+                localStorage.removeItem('communityData')
                 alert('게시물이 수정되었습니다.');
                 this.$router.push({ name: 'CommunityDetailView', params: { communityId: this.communityId } });
             } catch (error) {
@@ -206,6 +238,14 @@ export default {
         console.error('이미지가 삭제가 안됩니다.', error);
     }
 },
+modifyButton() {
+    if (this.imageFile.length > 0) {
+        this.axiosUploadImage(this.imageFile, this.communityId); // 이미지 파일과 커뮤니티 ID를 전달
+    }
+    this.modifyCommunity();
+}
+
+
     },
 };
 </script>
