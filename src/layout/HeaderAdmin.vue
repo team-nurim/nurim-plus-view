@@ -1,58 +1,50 @@
 <template>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2C3E50;">
+    <div class="container justify-content-center">
+      <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px; color: #fff;">NurimPlus
+        <span style="font-size: 16px;">관리자페이지</span></a> <!-- Increased font size and added margin-bottom -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a href="/admin/post/list" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold;">정책정보 관리</a>
+          </li>
+          <li class="nav-item">
+            <a href="/home" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold; color: #fff;">회원정보 관리</a>
+          </li>
+          <!-- <li class="nav-item">
+            <a href="/admin/login" class="nav-link" style="margin-right: 10px;">로그아웃</a>
+          </li> -->
 
-  <main class="border-bottom">
-    <div class="b-example-divider"></div>
-
-    <div class="container">
-
-      <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-1">
-        <!-- identity -->
-        <div class="col-md-3 mb-2 mb-md-0">
-          <router-link to="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <span class="fs-4">Nurim+ BI</span>
-          </router-link>
-        </div>
-
-        <!-- menu link -->
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><router-link to="/policy" class="nav-link px-3">정책정보</router-link></li>
-          <li><router-link to="/recommend-main" class="nav-link px-3">나를 위한 정책지원</router-link></li>
-          <li><router-link to="/community" class="nav-link px-3">커뮤니티</router-link></li>
-          <!-- <li><a href="#" class="nav-link px-2">About</a></li> -->
-        </ul>
-
-        <div class="col-md-3 text-end">
           <!-- 로그인 안했을 때 -->
-          <template v-if="!loggedIn">
+          <!-- <template v-if="!loggedIn">
             <router-link to="/login" class="btn btn-outline-primary btn-sm me-2">로그인</router-link>
             <router-link to="/join" class="btn btn-primary btn-sm">회원가입</router-link>
-          </template>
+          </template> -->
           <!-- 로그인했을 때 -->
-          <template v-else>
+          <template v-if="loggedIn">
             <div class="dropdown text-end">
               <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img :src=member.memberProfileImage alt="mdo" width="32" height="32" class="rounded-circle">
+                <img :src="'https://nurimplus.s3.ap-northeast-2.amazonaws.com/images/8383f351-73fc-47c5-bf2f-b6ebc105326a.jpeg'" alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu dropdown-menu-end text-small">
                 <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
                 <li><hr class="dropdown-divider"></li>
-                <!-- memberEmail이 admin일 경우 다르게 드롭다운 표시 -->
-                <li v-if="member.memberEmail === 'admin'" style="padding:0.5rem 1rem"><router-link to="/admin/post/list">관리자 페이지</router-link></li>
-                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
-                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="#">계정 전환</router-link></li>
+                <li v-if="member.memberEmail === 'admin'" style="padding:0.5rem 1rem"><a href="/">누림플러스 홈</a></li>
                 <li style="padding:0.5rem 1rem"><router-link to="#" @click="logout">로그아웃</router-link></li>
               </ul>
             </div>
           </template>
-        </div>
-
-      </header>
-
-    </div>   <!-- container -->
-
-  </main>
-
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
 </template>
+
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
@@ -60,7 +52,7 @@ import axios from 'axios'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'NurimHeader',
+  name: 'HeaderAdmin',
   computed: {
     ...mapGetters(['getLoggedIn']),
     memberNickname() {
@@ -75,6 +67,12 @@ export default {
       }
     }
   },
+  async mounted() {
+    await this.checkLoggedIn(); // 마운트 후 로그인 상태 확인
+    if (this.loggedIn) {
+      await this.fetchMemberInfo(); // 로그인된 경우 회원 정보 가져오기
+    }
+  },
   async created () {
     const accessToken = localStorage.getItem('accessToken')
     if (accessToken) {
@@ -83,9 +81,9 @@ export default {
     } else {
       // 로그인 상태가 없을 경우 Vuex 상태 업데이트
       this.$store.commit('setLoggedIn', false)
+      // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
+      this.$router.push('/admin/login')
     }
-  },
-  async mounted () {
     console.log('로그인 상태', this.loggedIn)
   },
   watch: {
@@ -127,7 +125,7 @@ export default {
       this.$store.commit('clearAccessToken');
 
       // 로그아웃 후 리다이렉트
-      this.$router.push('/')
+      this.$router.push('/admin/login')
 
       console.log('로그인 상태', this.loggedIn)
     }
@@ -135,13 +133,11 @@ export default {
 }
 </script>
 
-<style>
-.nav-link {
-  color: #333 !important;
-  text-decoration: none;
+<style scoped>
+.admin-link {
+  color: #fff !important;
 }
-
-.nav-link.active {
-  font-weight: 700 !important;
+.dropdown-toggle::after {
+  border-top-color: #fff; /* 위쪽 선의 색상을 흰색으로 변경 */
 }
 </style>
