@@ -45,32 +45,32 @@ const routes = [
     name: 'AdminPostList',
     props: true,
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostList
+    component: AdminPostList,
   },
   {
-    path: '/admin/post/register',
-    name: 'AdminPostRegister',
+    path: "/admin/post/register",
+    name: "AdminPostRegister",
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostRegister
+    component: AdminPostRegister,
   },
   {
-    path: '/admin/post/modify/:postId',
-    name: 'AdminPostModify',
+    path: "/admin/post/modify/:postId",
+    name: "AdminPostModify",
     props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostModify
+    component: AdminPostModify,
   },
   {
-    path: '/admin/post/read/:postId', // postId를 동적으로 받아오는 부분입니다.
-    name: 'AdminPostRead',
+    path: "/admin/post/read/:postId", // postId를 동적으로 받아오는 부분입니다.
+    name: "AdminPostRead",
     props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostRead
+    component: AdminPostRead,
   },
   {
-    path: '/admin/login',
-    name: 'adminLogin',
-    component: AdminLogin
+    path: "/admin/login",
+    name: "adminLogin",
+    component: AdminLogin,
   },
   {
     path: '/',
@@ -200,6 +200,12 @@ const routes = [
     path: "/thefirstspecialsupplyinoneslife/:id",
     name: "Thefirstspecialsupplyinoneslife",
     component: Thefirstspecialsupplyinoneslife,
+  },
+  {
+    path: "/post/read/:postId",
+    name: "PostView",
+    component: () => import("../views/policy/PostView.vue"),
+    props: true,
   },
   {
     path: '/admin/members',
