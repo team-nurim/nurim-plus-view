@@ -27,7 +27,7 @@
         <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
           <p>{{ member.expertFile }}</p>
         </div>
-        <img v-else :src="member.expertFile" class="custom-padding">
+        <img v-else :src="member.expertFile" class="mt-3 mb-3 custom-padding">
         <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">제출 서류 변경</button>
       </div>
 
@@ -64,6 +64,7 @@
               <h5 class="modal-title" id="termsModalLabel">서비스 약관 동의</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <!-- 약관 내용 -->
             <div class="modal-body">
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
@@ -78,7 +79,6 @@
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
               <p>여기에 약관 내용을 입력합니다. 약관은 충분히 길어질 수 있으므로 스크롤을 허용하는 구성이 중요합니다.</p>
-              <!-- 약관 내용 -->
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>

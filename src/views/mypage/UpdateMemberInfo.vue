@@ -17,7 +17,7 @@
       <div class="row mb-3 align-items-center">
         <div class="col mt-3 align-items-end">
           <input type="file" ref="fileInput" style="display: none" @change="uploadProfileImage">
-          <button type="button" class="btn btn-profile" @click="$refs.fileInput.click()">프로필 사진 수정</button>
+          <button type="button" class="btn btn-profile" style="margin-right: 10px;" @click="$refs.fileInput.click()">프로필 사진 수정</button>
           <button type="button" class="btn btn-profile" @click="setDefaultImage">기본 이미지로 설정</button>
         </div>
       </div>
@@ -30,7 +30,7 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Password" class="form-label">비밀번호</label>
-        <input type="password" id="Password" class="form-control" v-model="member.memberPw" aria-describedby="passwordHelpBlock">
+        <input type="password" id="Password" class="form-control" v-model="member.memberPw" placeholder="새로운 비밀번호를 입력하세요" aria-describedby="passwordHelpBlock">
         <div id="passwordHelpBlock" class="form-text">
           비밀번호 자리수, 문자 숫자 등 얼마나 포함하는지 빈칸,이모지 사용 안됨.
         </div>
