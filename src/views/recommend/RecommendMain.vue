@@ -1,6 +1,6 @@
 <template>
   <main class="main-content">
-    <div class="recommand">
+
     <div class="recommend mb-3">
       <!-- 메인 콘텐츠 섹션 -->
       <div class="content-box">
@@ -9,6 +9,7 @@
       </div>
 
       <!-- <button class="interview-button">들어갈것</button> <br> -->
+
       <!-- 슬라이드 혹은 이미지 추가 -->
 
       <!-- '정책 매칭' 링크 버튼 -->
@@ -45,6 +46,7 @@ export default {
 </script>
 
 <style scoped>
+
 /* eslint-disable */
 /* 전반적인 앱 디자인 */
 #app {
