@@ -5,7 +5,7 @@
       <select v-model="searchCategory">
         <option value="memberId">작성자(ID)</option>
         <option value="memberNickname">이름</option>
-        <option value="joinDate">가입일</option>
+        <option value="joinDate">회원종류</option>
       </select>
       <input type="text" v-model="searchQuery" placeholder="Search" @keyup.enter="searchMembers" />
       <button class="search-button" @click="searchMembers">검색</button>
@@ -169,7 +169,9 @@ export default {
       sortBy: 'memberId',
       showModal: false,
       selectedMember: null,
-      showEditForm: false
+      showEditForm: false,
+      searchQuery: '',
+    searchCategory: 'memberNickname', // 초기 검색 카테고리 설정
     };
   },
   computed: {
@@ -223,6 +225,22 @@ export default {
     console.error('멤버를 조회할 수 없습니다:', error);
   }
 },
+async searchMembers() {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.get(`http://localhost:8080/api/v1/members/admin/members?${this.searchCategory}=${this.searchQuery}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      });
+      this.membersList = response.data.content;
+      this.totalPages = response.data.totalPages;
+      this.currentPage = 1; // 검색 결과의 첫 페이지로 설정
+    } catch (error) {
+      console.error('멤버를 검색할 수 없습니다:', error);
+    }
+  },
+
     fetchPreviousPage() {
       if (this.currentPage > 1) {
         this.fetchMembers(this.currentPage - 1);
@@ -256,10 +274,12 @@ export default {
   }
 
   if (confirm('선택한 회원을 탈퇴하시겠습니까?')) {
+    const accessToken = localStorage.getItem('accessToken');
     const deletePromises = this.selectedMembers.map(member => {
       axios.delete(`http://localhost:8080/api/v1/admin/${member.memberId}`, {
         withCredentials: true,
         headers: {
+          'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         }
       }).then(response => {
@@ -332,10 +352,8 @@ export default {
     //     });
     //   }
     // },
-
     async submitForm() {
       try {
-        const memberId = this.selectedMember.memberId;
         const updateData = {
           memberAge: this.selectedMember.memberAge,
           gender: this.selectedMember.gender,
@@ -345,7 +363,7 @@ export default {
           type: this.selectedMember.type
         };
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.put(`/admin`, updateData, {
+        const response = await axios.put(`http://localhost:8080/api/v1/admin/${this.selectedMember.memberId}`, updateData, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': `application/json`
