@@ -506,6 +506,7 @@ export default {
       this.$router.push("/");
     },
     fetchPolicies() {
+      console.log(this.selectedCategory);
       if (!this.selectedCategory) {
         console.log("카테고리를 선택해주세요.");
         return;
@@ -515,6 +516,10 @@ export default {
           ? "mcihousingpolicy/housingfilter" // 주거지원의 경우
           : "mciintegratedpolicy/integratedfilter"; // 통합지원의 경우
       const params = {
+        category:
+        this.selectedCategory !== "all"
+            ? this.selectedCategory.toLowerCase().trim()
+            : undefined,
         region:
           this.selectedRegion !== "all"
             ? this.selectedRegion.toLowerCase().trim()
