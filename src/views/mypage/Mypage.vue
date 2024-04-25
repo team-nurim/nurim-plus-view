@@ -257,9 +257,4 @@ export default {
   font-weight: 700;
 }
 
-/* .btn-menu:active {
-  background-color: #004085; /* 클릭 시 배경색 */
-/*  color: #ffc107; /* 클릭 시 글씨색 */
-/*} */
-
 </style>
