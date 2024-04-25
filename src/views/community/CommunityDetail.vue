@@ -15,7 +15,7 @@
                       <circle cx="2.5" cy="12.5" r="2" fill="black"/>
                     </svg>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
-                      <li><router-link :to="{name: 'CommunityUpdate', params : { communityId: community.communityId, communityImages: community.communityImages}}" class="dropdown-item" href="#">게시물 수정</router-link></li>
+                      <li><a class="dropdown-item" @click="modifybutton(community)">게시물 수정</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" @click="deleteCommunity">게시물 삭제</a></li>
                     </ul>
@@ -33,8 +33,15 @@
         <div v-for="(image, index) in community.communityImages" :key="index">
             <img :src="image" alt="Community Image">
         </div>
-        <p>{{community.content}}</p>
     </div>
+    <p>{{community.content}}</p>
+  <div class="text-center">
+  <button class="btn" style="border:1px solid #333; border-radius:1.2rem; padding: 0.3rem 1rem;" :class="liked ? 'liked' : ''" @click="toggleLike(community)">
+    <i v-if="liked" class="fa-solid fa-heart"></i> <!-- 좋아요가 됐을 때 -->
+    <i v-else class="fa-regular fa-heart"></i> <!-- 좋아요가 아직 안 됐을 때 -->
+    {{ community.recommend }}
+  </button>
+</div>
       </div>
       <hr>
       <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;" @keyup.enter="submitReply">
@@ -71,6 +78,7 @@
 // eslint-disable-next-line
 /* eslint-disable */
 import axios from 'axios';
+import { TrackOpTypes } from 'vue';
   export default {
     name: 'CommunityDetailView',
     props: ['communityId'],
@@ -83,13 +91,15 @@ import axios from 'axios';
         newReply:'',
         showEditModal: false,
         editedReplyText: '',
-        editingReplyIndex: null
+        editingReplyIndex: null,
+        liked: false
       };
     },
     mounted() {
       this.axiosCommunityData()
       this.axiosReplyData()
       window.scrollTo(0, 0)
+      this.isLiked()
     },
     methods: {
       openModal(){
@@ -174,10 +184,15 @@ import axios from 'axios';
     }
   },
   toggleEditMode(reply){
+    const currentUserEmail = localStorage.getItem('memberEmail')
+    if(reply.memberEmail === currentUserEmail){
     reply.editMode = !reply.editMode
 
     if(reply.editMode){
       reply.editedReplyText = reply.replyText
+    }
+    }else{
+      alert('댓글 작성자만 수정할 수 있습니다.')
     }
   },
   async saveEdit(reply) {
@@ -208,7 +223,86 @@ import axios from 'axios';
   cancelEdit(reply){
     reply.editMode = false;
     reply.editedText = '';
+  },
+  modifybutton(community) {
+    const currentUser = community.memberEmail
+    console.log('이메일 오심????????????????',currentUser)
+    const currentUserEmail = localStorage.getItem('memberEmail')
+    console.log('이메일 오냐ㅑㅑㅑㅑㅑㅑㅑㅑㅑㅑㅑ',currentUserEmail)
+  if(currentUser === currentUserEmail){
+    this.$router.push({ name: 'CommunityUpdate', params: { communityId: community.communityId, communityImages: community.communityImages } })
+  }else{
+    alert('게시물 작성자만 수정 가능합니다.')
   }
+},
+  async likeCommunity (community) {
+    try{
+    const accessToken = localStorage.getItem('accessToken')
+    const response = await axios.post(`http://localhost:8080/api/v1/community/${community.communityId}/like/${accessToken}`,
+    {},
+    {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }})
+      console.log('좋아요 성공')
+      this.isLiked(community.communityId);
+  }catch(error){
+    console.error('좋아요 오류:', error)
+  }
+},
+  async cancelLike (community) {
+    try{
+      const accessToken = localStorage.getItem('accessToken')
+      const response = await axios.delete(`http://localhost:8080/api/v1/community/${community.communityId}/cancelLike/${accessToken}`,{
+        headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }})
+      console.log('좋아요 취소')
+      this.isLiked(community.communityId);
+    }catch(error){
+      console.error('좋아요가 왜 취소안될까..?:',error)
+    }
+  },
+  async isLiked(community){
+    try{
+      const accessToken = localStorage.getItem('accessToken')
+      const response = await axios.get(`http://localhost:8080/api/v1/community/${this.communityId}/isLiked/${accessToken}`,
+      {
+        headers:{
+          'Authorization': `Bearer ${accessToken}`
+        }})
+        console.log('좋아요 상태 확인',response.data)
+        this.liked = response.data
+    }catch(error){
+      console.error('좋아요 상태 확인불가:',error);
+      this.liked = false //에러ㅅ 좋아요 상태를 false로 간주한다. 최소 좋아요는 안했을테니까..
+    }
+  },
+  async toggleLike(community) {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (this.liked) {
+          // 좋아요 취소
+          await axios.delete(`http://localhost:8080/api/v1/community/${community.communityId}/cancelLike/${accessToken}`, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+        } else {
+          // 좋아요
+          await axios.post(`http://localhost:8080/api/v1/community/${community.communityId}/like/${accessToken}`, {}, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+        }
+        // 상태 업데이트
+        await this.isLiked();
+        await this.axiosCommunityData();
+      } catch (error) {
+        console.error('좋아요 처리 중 오류:', error);
+      }
+    }
     }
   }
   </script>
@@ -314,6 +408,8 @@ import axios from 'axios';
 .reply-text{
   display: flex;
 }
-
+.btnliked{
+  border: 1px solid #ccc;
+}
 
   </style>
