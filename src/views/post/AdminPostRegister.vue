@@ -130,7 +130,7 @@ export default {
         this.postData.postWriter = adminNickname; // 작성자 정보 설정
       } else {
         // 닉네임이 없으면 기본 값으로 설정
-        this.postData.postWriter = 'admin'; 
+        this.postData.postWriter = '관리자'; 
       }
     },
     async savePost() {
