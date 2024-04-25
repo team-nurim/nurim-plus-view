@@ -62,13 +62,13 @@
                       <circle cx="2.5" cy="12.5" r="2" fill="black"/>
                     </svg>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
-                      <li><a @click="readPost(post.postId)" class="dropdown-item" href="#">게시물 보기
+                      <li><router-link :to="`read/${post.postId}`" class="dropdown-item" href="#">게시물 보기
                       <span><i class="fa-solid fa-magnifying-glass" style="padding:0.5rem"></i></span>
-                      </a></li>
+                      </router-link></li> 
                       <li><hr class="dropdown-divider"></li>
-                      <li><a @click="editPost(post.postId)" class="dropdown-item" href="#">게시물 수정
+                      <li><router-link :to="`modify/${post.postId}`" class="dropdown-item" href="#">게시물 수정
                         <span><i class="fa-solid fa-gear" style="padding:0.5rem"></i></span>
-                      </a></li>
+                      </router-link></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a @click="showModal(post.postId)" class="dropdown-item" href="#">게시물 삭제
                       <span><i class="fa-solid fa-trash-can" style="padding:0.5rem"></i></span>
@@ -149,6 +149,9 @@ export default {
         this.postList = response.data.content;
         this.totalPages = response.data.totalPages;
       } catch (err) {
+        // alert('관리자만 이용할 수 있습니다.');
+        // this.$store.commit('setLoggedIn', this.loggedIn)
+        // this.$router.push('/');
         console.error('리스트를 불러 올 수 없습니다.', err);
       }
     },
