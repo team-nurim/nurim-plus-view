@@ -653,16 +653,16 @@ export default {
           case "공공지원민간임대":
             window.location.href = `${baseUrl}/publiclysupportedprivatelease/8`;
             break;
-          case "공공분양":
+          case "뉴:홈공공분양일반형":
             window.location.href = `${baseUrl}/publicsale/9`;
             break;
           case "신혼희망타운":
             window.location.href = `${baseUrl}/newlywedHopeTown/10`;
             break;
-          case "신혼부부특별공급":
+          case "민간분양신혼부부 특별공급":
             window.location.href = `${baseUrl}/aspecialsupplyfornewlyweds/11`;
             break;
-          case "생애최초특별공급":
+          case "생애최초 특별공급":
             window.location.href = `${baseUrl}/thefirstspecialsupplyinoneslife/12`;
             break;
           default:
