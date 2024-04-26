@@ -18,15 +18,26 @@ import Mypage from '../views/mypage/Mypage.vue'
 import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
 import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
 import SwitchAccount from '../views/mypage/SwitchAccount.vue'
-import Policy from '../views/policy/Policy.vue'
 import RecommendMain from '../views/recommend/RecommendMain.vue'
 import Recommend from '../views/recommend/Recommend.vue'
-import PostView from '../views/policy/PostView.vue'
 import CommunityView from '../views/community/Community.vue'
 import CommunityDetailView from '../views/community/CommunityDetail.vue'
 import CommunityCreateView from '../views/community/CommunityCreateView.vue'
 import CommunityUpdate from '../views/community/CommunityUpdate.vue'
-import UpdateExpertInfo from '../views/mypage/UpdateExpertInfo.vue'
+
+import MciHousingPolicy from "../views/policy/MciHousingPolicy.vue";
+import IntegratedPublicRental from "../views/policy/policydetails/IntegratedPublicRental.vue";
+import PurchasedRental from "../views/policy/policydetails/PurchasedRental.vue";
+import LumpsumleaseRental from "../views/policy/policydetails/LumpsumleaseRental.vue";
+import Ahappyhouse from "../views/policy/policydetails/Ahappyhouse.vue";
+import NationalRental from "../views/policy/policydetails/NationalRental.vue";
+import PermanentPublicRental from "../views/policy/policydetails/PermanentPublicRental.vue";
+import Alongtermlumpsumlease from "../views/policy/policydetails/Alongtermlumpsumlease.vue";
+import Publiclysupportedprivatelease from "../views/policy/policydetails/Publiclysupportedprivatelease.vue";
+import Publicsale from "../views/policy/policydetails/Publicsale.vue";
+import NewlywedHopeTown from "../views/policy/policydetails/NewlywedHopeTown.vue";
+import Aspecialsupplyfornewlyweds from "../views/policy/policydetails/Aspecialsupplyfornewlyweds.vue";
+import Thefirstspecialsupplyinoneslife from "../views/policy/policydetails/Thefirstspecialsupplyinoneslife.vue";
 
 const routes = [
   {
@@ -34,32 +45,32 @@ const routes = [
     name: 'AdminPostList',
     props: true,
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostList
+    component: AdminPostList,
   },
   {
-    path: '/admin/post/register',
-    name: 'AdminPostRegister',
+    path: "/admin/post/register",
+    name: "AdminPostRegister",
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostRegister
+    component: AdminPostRegister,
   },
   {
-    path: '/admin/post/modify/:postId',
-    name: 'AdminPostModify',
+    path: "/admin/post/modify/:postId",
+    name: "AdminPostModify",
     props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostModify
+    component: AdminPostModify,
   },
   {
-    path: '/admin/post/read/:postId', // postId를 동적으로 받아오는 부분입니다.
-    name: 'AdminPostRead',
+    path: "/admin/post/read/:postId", // postId를 동적으로 받아오는 부분입니다.
+    name: "AdminPostRead",
     props: true, // props를 true로 설정하여 postId를 컴포넌트에 전달합니다.
     meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
-    component: AdminPostRead
+    component: AdminPostRead,
   },
   {
-    path: '/admin/login',
-    name: 'adminLogin',
-    component: AdminLogin
+    path: "/admin/login",
+    name: "adminLogin",
+    component: AdminLogin,
   },
   {
     path: '/',
@@ -82,51 +93,119 @@ const routes = [
     component: Mypage
   },
   {
-    path: '/updateMemberInfo',
-    name: 'updateMemberInfo',
-    component: UpdateMemberInfo
+    path: "/updateMemberInfo",
+    name: "updateMemberInfo",
+    component: UpdateMemberInfo,
   },
   {
-    path: '/community',
-    name: 'community',
+    path: "/community",
+    name: "community",
     component: CommunityView,
   },
   {
-    path: '/community/:communityId',
-    name: 'CommunityDetailView',
+    path: "/community/:communityId",
+    name: "CommunityDetailView",
     component: CommunityDetailView,
-    props: true
+    props: true,
   },
   {
-    path: '/CommunityCreate',
-    name: 'CommunityCreate',
+    path: "/CommunityCreate",
+    name: "CommunityCreate",
     component: CommunityCreateView,
   },
   {
-    path: '/CommunityUpdate/:communityId',
-    name: 'CommunityUpdate',
+    path: "/CommunityUpdate/:communityId",
+    name: "CommunityUpdate",
     component: CommunityUpdate,
-    props: true
+    props: true,
   },
   {
-    path: '/updateMemberInfo2',
-    name: 'updateMemberInfo2',
-    component: UpdateMemberInfo2
+    path: "/updateMemberInfo2",
+    name: "updateMemberInfo2",
+    component: UpdateMemberInfo2,
   },
   {
-    path: '/switchAccount',
-    name: 'switchAccount',
-    component: SwitchAccount
+    path: "/switchAccount",
+    name: "switchAccount",
+    component: SwitchAccount,
   },
   {
-    path: '/updateExpertInfo',
-    name: 'updateExpertInfo',
-    component: UpdateExpertInfo
+    path: "/post/read/:postId",
+    name: "PostView",
+    component: () => import("../views/policy/PostView.vue"),
+    props: true,
   },
   {
-    path: '/policy',
-    name: 'policy',
-    component: Policy
+    path: "/policy",
+    name: "MciHousingPolicy",
+    component: MciHousingPolicy,
+  },
+  ,
+  {
+    path: "/integratedPublicRental/:id",
+    name: "IntegratedPublicRental",
+    component: IntegratedPublicRental,
+  },
+  {
+    path: "/purchasedRental/:id",
+    name: "PurchasedRental",
+    component: PurchasedRental,
+  },
+  {
+    path: "/lumpsumleaseRental/:id",
+    name: "LumpsumleaseRental",
+    component: LumpsumleaseRental,
+  },
+  {
+    path: "/ahappyhouse/:id",
+    name: "Ahappyhouse",
+    component: Ahappyhouse,
+  },
+  {
+    path: "/nationalRental/:id",
+    name: "NationalRental",
+    component: NationalRental,
+  },
+  {
+    path: "/permanentPublicRental/:id",
+    name: "PermanentPublicRental",
+    component: PermanentPublicRental,
+  },
+  {
+    path: "/alongtermlumpsumlease/:id",
+    name: "Alongtermlumpsumlease",
+    component: Alongtermlumpsumlease,
+  },
+  {
+    path: "/publiclysupportedprivatelease/:id",
+    name: "Publiclysupportedprivatelease",
+    component: Publiclysupportedprivatelease,
+  },
+  {
+    path: "/publicsale/:id",
+    name: "Publicsale",
+    component: Publicsale,
+  },
+  {
+    path: "/newlywedHopeTown/:id",
+    name: "NewlywedHopeTown",
+    component: NewlywedHopeTown,
+  },
+  {
+    path: "/aspecialsupplyfornewlyweds/:id",
+    name: "Aspecialsupplyfornewlyweds",
+    component: Aspecialsupplyfornewlyweds,
+  },
+  {
+    path: "/thefirstspecialsupplyinoneslife/:id",
+    name: "Thefirstspecialsupplyinoneslife",
+    component: Thefirstspecialsupplyinoneslife,
+  },
+  {
+    path: "/post/read/:postId",
+    name: "PostView",
+    component: () => import("../views/policy/PostView.vue"),
+    props: true,
   },
   {
     path: '/admin/members',

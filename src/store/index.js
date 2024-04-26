@@ -1,7 +1,7 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
 
 export default createStore({
-  state () {
+  state() {
     return {
       accessToken: null,
       loggedIn: false, // 로그인 상태
@@ -18,15 +18,15 @@ export default createStore({
     getApplied: state => state.applied,
   },
   mutations: {
-    setAccessToken (state, accessToken) {
-      state.accessToken = accessToken
+    setAccessToken(state, accessToken) {
+      state.accessToken = accessToken;
     },
-    clearAccessToken (state) {
-      localStorage.removeItem('accessToken')
-      state.loggedIn = false
+    clearAccessToken(state) {
+      localStorage.removeItem("accessToken");
+      state.loggedIn = false;
     },
-    setLoggedIn (state, loggedIn) {
-      state.loggedIn = loggedIn
+    setLoggedIn(state, loggedIn) {
+      state.loggedIn = loggedIn;
     },
     setMemberEmail (state, memberEmail){
       state.memberEmail = memberEmail
@@ -41,13 +41,13 @@ export default createStore({
     }
   },
   actions: {
-    saveAccessToken ({ commit }, accessToken, memberEmail) {
-      commit('setToken', accessToken)
-      commit('setMemberEmail', memberEmail)
+    saveAccessToken({ commit }, accessToken, memberEmail) {
+      commit("setToken", accessToken);
+      commit("setMemberEmail", memberEmail);
       // 로컬 스토리지에 토큰 저장
-      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem("accessToken", accessToken);
     },
-    clearAccessToken ({ commit }) {
+    clearAccessToken({ commit }) {
       // 로컬 스토리지에서 토큰 제거
       commit('clearAccessToken')
       commit('setMemberEmail', null)
@@ -62,6 +62,5 @@ export default createStore({
     },
 
   },
-  modules: {
-  }
-})
+  modules: {},
+});
