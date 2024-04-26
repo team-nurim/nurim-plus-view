@@ -3,7 +3,7 @@
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2C3E50;">
     <div class="container justify-content-center">
       <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px; color: #fff;">
-        <img src="../assets/Nurim.png" height="34" style="margin-right:1.1rem;">
+        <img src="../assets/Nurim_w.png" height="34" style="margin-right:1.1rem;">
         <span style="font-size:1.1rem;">관리자 페이지</span></a> <!-- Increased font size and added margin-bottom -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
