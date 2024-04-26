@@ -22,11 +22,11 @@
         <div class="row" id="Gender">
           <div class="col">
             <input type="radio" id="male" name="gender" class="btn-check" @click="setGender(0)">
-            <label class="btn btn-choice text-center" for="male">남성</label>
+            <label class="btn btn-choice d-flex justify-content-center align-items-center" for="male">남성</label>
           </div>
           <div class="col">
             <input type="radio" id="female" name="gender" class="btn-check" @click="setGender(1)">
-            <label class="btn btn-choice text-center" for="female">여성</label>
+            <label class="btn btn-choice d-flex justify-content-center align-items-center" for="female">여성</label>
           </div>
         </div>
       </div>
@@ -75,11 +75,11 @@
         <div class="row" id="Marriage">
           <div class="col">
             <input type="radio" id="married" name="marriage" class="btn-check" @click="setMarriage(1)">
-            <label class="btn btn-choice text-center" for="married">기혼</label>
+            <label class="btn btn-choice d-flex justify-content-center align-items-center" for="married">기혼</label>
           </div>
           <div class="col">
             <input type="radio" id="unmarried" name="marriage" class="btn-check" @click="setMarriage(0)">
-            <label class="btn btn-choice text-center" for="unmarried">미혼</label>
+            <label class="btn btn-choice d-flex justify-content-center align-items-center" for="unmarried">미혼</label>
           </div>
         </div>
       </div>
@@ -91,11 +91,11 @@
           <div class="accordion" id="Income">
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                   본인의 소득구간를 선택해주세요.
                 </button>
               </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
                   <input type="radio" class="btn-check" id="0" name="income" @click="setIncome('기초/차상위')">
                   <label class="btn btn-income" for="0">기초/차상위</label>
@@ -362,12 +362,12 @@ export default {
 }
 
 .btn-choice {
-  height: 50px;
+  height: 70px;
   width: 100%;
   padding: 8;
   background-color: #007bff; /* 기본 배경색 */
   color: white; /* 글씨색 */
-  font-size: 16px; /* 글씨크기 */
+  font-size: 18px; /* 글씨크기 */
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
@@ -385,7 +385,10 @@ export default {
   border-color: #ccc; /* 버튼의 테두리 색 */
   height: 50px;
   width: 100%;
-  padding: 8;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 선택된 라디오 버튼의 스타일 */
@@ -400,12 +403,30 @@ export default {
   font-size: 16px; /* 글씨크기 */
   height: 50px;
   width: 100%;
-  padding: 8;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .accordion-collapse {
-  max-height: 168px;
+  max-height: 400px;
   overflow-y: auto;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+}
+
+.accordion-button:not(.collapsed) {
+  background-color:  #f4f4f4;
+  font-weight: 600;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+}
+
+.accordion-button {
+  height: 70px;
+  font-size: 18px;
+  background-color:  #f4f4f4;
+  font-weight: 600;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
 }
 
 </style>
