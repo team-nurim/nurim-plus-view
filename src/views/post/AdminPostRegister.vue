@@ -2,7 +2,7 @@
   <main class="mt-5 mb-5">
     <div class="container">
 
-      <h3 class="mt-2 mb-4" style="font-weight: bold">정책정보 등록</h3>
+      <h3 class="text-center mb-5" style="font-weight: bold">정책정보 등록</h3>
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
@@ -259,7 +259,10 @@ export default {
         const registerResponse = await this.savePost();
         const postId = registerResponse.postId;
 
+         // 이미지가 있는 경우에만 이미지 업로드 함수를 실행합니다.
+       if (this.imageFile && this.imageFile.length > 0) {
         await this.uploadImage(postId);
+       }
         this.$router.push({ name: 'AdminPostRead', params: { postId: postId } });
         // 성공 시 처리
         // 성공 시 alert 메시지 표시
@@ -270,8 +273,11 @@ export default {
         // 리스트 페이지로 이동
         // this.$router.push('/admin/post/list');
       } catch(error) {
-        console.error('이미지 업로드 실패 이유:', error);
-      }
+    // 이미지 업로드 실패 이유가 없으면 콘솔에 오류를 출력하지 않음
+    if (error.response) {
+      console.error('이미지 업로드 실패 이유:', error.response.data);
+    }
+  }
     }
   }
 }
