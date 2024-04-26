@@ -1,7 +1,7 @@
 <!-- // eslint-disable-next-line
 /* eslint-disable */ -->
 <template>
-  <main v-if="postList.length && communityList">
+  <main>
 
     <div class="container mt-5">
 
