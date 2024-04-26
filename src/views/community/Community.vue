@@ -304,6 +304,9 @@ async searchCommunity() {
     },
     goWrite () {
       this.$router.push('/CommunityCreate')
+    },
+    goAsk () {
+      this.$router.push('/CommunityCreate')
     }
   }
 }

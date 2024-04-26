@@ -23,12 +23,13 @@
       <span v-if="!content" style="color: red; margin-left: 10px;">내용을 입력해주세요.</span>
     </div>
     <!-- 이미지 업로드를 위한 input 요소 추가 -->
-    <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
-    <div class="mb-3 row justify-content-center">
-      <div class="col-md-9">
-        <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload" multiple>
-      </div>
+    <div class="mb-3 row justify-content-start">
+    <label for="image" class="col-md-3 col-form-label text-md-end">파일첨부</label>
+    <div class="col-md-9">
+        <label for="image" class="fa-solid fa-camera" style="cursor: pointer; float: right;">파일첨부</label>
+        <input type="file" class="form-control" id="image" accept="image/*" @change="handleImageUpload" style="display: none;">
     </div>
+</div>
     <!-- 이미지 미리보기 -->
 <div v-if="previewImages.length > 0" class="row">
   <div class="col-md-8 offset-md-2">
