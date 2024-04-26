@@ -146,7 +146,7 @@
 
   <main style="background-color:#EFF7FF">
 
-    <div class="container mb-5">
+    <div class="container mb-5" style="max-width: 860px;">
       <div>
           <div class="row align-items-center mt-5 mb-3">
             <div class="col mt-3 mb-2">
