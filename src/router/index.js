@@ -14,12 +14,13 @@ import AdminPostModify from '../views/post/AdminPostModify.vue'
 import AdminLogin from '../views/AdminLogin.vue'
 import JoinView from '../views/join/JoinView.vue'
 import LoginView from '../views/LoginView.vue'
+
 import Mypage from '../views/mypage/Mypage.vue'
 import UpdateMemberInfo from '../views/mypage/UpdateMemberInfo.vue'
 import UpdateMemberInfo2 from '../views/mypage/UpdateMemberInfo2.vue'
+import UpdateExpertInfo from '../views/mypage/UpdateExpertInfo.vue'
 import SwitchAccount from '../views/mypage/SwitchAccount.vue'
-import RecommendMain from '../views/recommend/RecommendMain.vue'
-import Recommend from '../views/recommend/Recommend.vue'
+
 import CommunityView from '../views/community/Community.vue'
 import CommunityDetailView from '../views/community/CommunityDetail.vue'
 import CommunityCreateView from '../views/community/CommunityCreateView.vue'
@@ -98,6 +99,21 @@ const routes = [
     component: UpdateMemberInfo,
   },
   {
+    path: "/updateMemberInfo2",
+    name: "updateMemberInfo2",
+    component: UpdateMemberInfo2,
+  },
+  {
+    path: "/updateExpertInfo",
+    name: "updateExpertInfo",
+    component: UpdateExpertInfo,
+  },
+  {
+    path: "/switchAccount",
+    name: "switchAccount",
+    component: SwitchAccount,
+  },
+  {
     path: "/community",
     name: "community",
     component: CommunityView,
@@ -120,16 +136,6 @@ const routes = [
     props: true,
   },
   {
-    path: "/updateMemberInfo2",
-    name: "updateMemberInfo2",
-    component: UpdateMemberInfo2,
-  },
-  {
-    path: "/switchAccount",
-    name: "switchAccount",
-    component: SwitchAccount,
-  },
-  {
     path: "/post/read/:postId",
     name: "PostView",
     component: () => import("../views/policy/PostView.vue"),
@@ -140,7 +146,6 @@ const routes = [
     name: "MciHousingPolicy",
     component: MciHousingPolicy,
   },
-  ,
   {
     path: "/integratedPublicRental/:id",
     name: "IntegratedPublicRental",
@@ -202,12 +207,6 @@ const routes = [
     component: Thefirstspecialsupplyinoneslife,
   },
   {
-    path: "/post/read/:postId",
-    name: "PostView",
-    component: () => import("../views/policy/PostView.vue"),
-    props: true,
-  },
-  {
     path: '/admin/members',
     name: 'AdminMembers',
     component: AdminMembers
@@ -216,12 +215,6 @@ const routes = [
   // { path: '/admin/members/:id', component: DetailMember, name: 'DetailMember' },
   // { path: '/admin/member-list', component: MemberList },
   // { path: '/admin/search-member', component: SearchMember },
-  {
-    path: '/post/read/:postId',
-    name: 'PostView',
-    component: () => import('../views/policy/PostView.vue'),
-    props: true
-  },
   {
     path: '/recommend-main',
     name: ' RecommendMain',

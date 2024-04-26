@@ -11,9 +11,9 @@ export default createStore({
     }
   },
   getters: {
-    getAccessToken: state => state.accessToken,
-    getLoggedIn: state => state.loggedIn,
-    getMemberEmail: state => state.memberEmail,
+    getAccessToken: (state) => state.accessToken,
+    getLoggedIn: (state) => state.loggedIn,
+    getMemberEmail: (state) => state.memberEmail,
     getAgreed: state => state.agreed,
     getApplied: state => state.applied,
   },
