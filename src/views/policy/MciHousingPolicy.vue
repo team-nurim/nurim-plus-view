@@ -536,10 +536,10 @@ export default {
           ? "mcihousingpolicy/housingfilter" // 주거지원의 경우
           : "mciintegratedpolicy/integratedfilter"; // 통합지원의 경우
       const params = {
-        category:
-        this.selectedCategory !== "all"
-            ? this.selectedCategory.toLowerCase().trim()
-            : undefined,
+        // category:
+        // this.selectedCategory !== "all"
+        //     ? this.selectedCategory.toLowerCase().trim()
+        //     : undefined,
         region:
           this.selectedRegion !== "all"
             ? this.selectedRegion.toLowerCase().trim()
@@ -558,7 +558,7 @@ export default {
         params.OfferType =
           this.selectedOfferType !== "all"
             ? this.selectedOfferType.toLowerCase().trim()
-            : undefined; // 'businessClassification' 대신 'provisionType' 사용
+            : undefined;
       }
       const accessToken = localStorage.getItem("accessToken");
       const headers = {
