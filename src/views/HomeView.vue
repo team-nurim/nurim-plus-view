@@ -1,7 +1,7 @@
 <!-- // eslint-disable-next-line
 /* eslint-disable */ -->
 <template>
-  <main v-if="postList.length && communityList">
+  <main>
 
     <div class="container mt-5">
 
@@ -17,7 +17,7 @@
 
       <!-- 커뮤니티 리뷰 영역 -->
       <div class="review-section mt-5 mb-5">
-        <div class="row">
+        <div class="row"  v-if="communityList">
 
           <!-- card -->
           <div class="col-md-4" v-for="community in communityList.slice(0, 3)" :key="community.id">
@@ -67,7 +67,7 @@
       <div class="post-contents mt-5 mb-5">
         <h4 class="mb-5">최신 정책 정보</h4>
 
-        <div class="row">
+        <div class="row"  v-if="postList">
           <div class="col-md-3" v-for="post in postList" :key="post.id">
             <router-link :to="{ name: 'PostView', params: { postId: post.postId }}" style="text-decoration: none; color: inherit;">
               <div class="card" style="margin-right:1rem; margin-bottom:1.5rem; border:none; text-align: left; padding-left: 0;">
@@ -94,7 +94,7 @@
       <div class="inquiry-section mt-5 mb-5">
         <h4 class="mb-5">가장 많이 본 문의</h4>
 
-        <div class="row">
+        <div class="row"  v-if="popularList">
           <!-- card -->
           <div class="col-md-4" v-for="(popular, index) in popularList.slice(0, 3)" :key="index">
             <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
@@ -118,7 +118,7 @@
             </div>
           </div>
 
-        </div><!-- row end -->
+        </div>
       </div><!-- 문의 section end -->
 
 </div>
