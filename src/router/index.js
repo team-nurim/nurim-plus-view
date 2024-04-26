@@ -210,6 +210,7 @@ const routes = [
   {
     path: '/admin/members',
     name: 'AdminMembers',
+    meta: { requiresAuth: true }, // 권한 확인을 위한 meta 필드 추가
     component: AdminMembers
   },
   // { path: '/admin/members', component: AdminMembers },
