@@ -105,7 +105,7 @@
           <button type="button" class="btn btn-cancel" @click="cancelUpload">취소</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == false">계정 전환 신청</button>
+          <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == false || applied">계정 전환 신청</button>
         </div>
       </div>
 
@@ -181,7 +181,11 @@ export default {
     },
     applied() {
       return this.$store.state.applied;
-    }
+    },
+      // 버튼이 활성화되는지 여부를 반환하는 computed 속성 추가
+    isAccountUpdateEnabled() {
+      return this.isFileInputEnabled && this.agreed && !this.applied;
+    },
   },
   mutations: {
     setAgreed(state, agreed) {
