@@ -2,6 +2,8 @@
 /* eslint-disable */ -->
 <template>
 
+<div class="container">
+
   <div class="containeradminlogin">
     <div class="row mt-2 d-flex justify-content-center">
     <h3 class="mt-3" style="font-weight: bold">관리자 로그인</h3>
@@ -55,6 +57,8 @@
     </div>
     </div>
   </div>
+
+</div>
 
 </template>
 <script>
@@ -117,7 +121,7 @@ export default {
 
 <style>
 .containeradminlogin {
-  margin-top: 5%;
+  margin: 10% 0%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,7 +129,7 @@ export default {
 
 .loginBox {
   min-width: 330px;
-  max-width: 28%;
+  max-width: 20%;
   margin: 12% auto 0;
   text-align: left;
 }

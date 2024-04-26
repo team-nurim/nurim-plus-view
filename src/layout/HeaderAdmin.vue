@@ -2,8 +2,9 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2C3E50;">
     <div class="container justify-content-center">
-      <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px; color: #fff;">NurimPlus
-        <span style="font-size: 16px;">관리자페이지</span></a> <!-- Increased font size and added margin-bottom -->
+      <a href="/admin/post/list" class="navbar-brand" style="font-size: 36px; margin-bottom: 10px; color: #fff;">
+        <img src="../assets/Nurim_w.png" height="34" style="margin-right:1.1rem;">
+        <span style="font-size:1.1rem;">관리자 페이지</span></a> <!-- Increased font size and added margin-bottom -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -13,7 +14,7 @@
             <a href="/admin/post/list" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold;">정책정보 관리</a>
           </li>
           <li class="nav-item">
-            <a href="/home" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold; color: #fff;">회원정보 관리</a>
+            <a href="/admin/members" class="nav-link admin-link" style="margin-right: 10px; font-weight: bold; color: #fff;">회원정보 관리</a>
           </li>
           <!-- <li class="nav-item">
             <a href="/admin/login" class="nav-link" style="margin-right: 10px;">로그아웃</a>

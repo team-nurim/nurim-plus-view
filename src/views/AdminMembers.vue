@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Admin: 회원관리</h1>
+  <div class="container-memberservice">
+    <h1 class="mb-5">Admin: 회원관리</h1>
     <div class="search-bar">
       <select v-model="searchCategory">
         <option value="memberId">작성자(ID)</option>
@@ -52,17 +52,17 @@
           </tr>
         </tbody>
       </table>
-      <div class="pagination">
-        <button class="blue-button" @click="fetchPreviousPage" :disabled="currentPage === 1">Previous</button>
+      <div class="pagination d-flex justify-content-center mt-3 mb-3">
+        <button class="blue-button mr-2" @click="fetchPreviousPage" :disabled="currentPage === 1">Previous</button>
         <span v-for="page in displayedPages" :key="page">
-          <button class="blue-button" @click="fetchPage(page)">{{ page }}</button>
+          <button class="blue-button mr-2" @click="fetchPage(page)">{{ page }}</button>
         </span>
         <button class="blue-button" @click="fetchNextPage" :disabled="currentPage === totalPages">Next</button>
       </div>
-      <div class="select-all">
+      <div class="select-all mt-3 mb-3">
         <button class="blue-button" @click="selectAllMembers">전체 선택</button>
       </div>
-      <div class="delete-button">
+      <div class="delete-button mt-3 mb-3">
         <button class="red-button" @click="confirmDelete">탈퇴</button>
       </div>
     </div>
@@ -427,6 +427,14 @@ async searchMembers() {
 
 
 <style scoped>
+.container-memberservice {
+  margin-top: 3%;
+  width: 65%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
 .search-bar {
   margin-bottom: 20px;
   display: flex;
