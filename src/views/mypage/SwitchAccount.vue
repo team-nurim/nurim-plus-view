@@ -21,7 +21,7 @@
       </div>
 
       <!-- 내 계정 상태(전문가/일반인) -->
-      <div v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" class="row mt-3 mb-10 align-items-center custom-padding">
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Status" class="form-label">내 계정 상태</label>
         <button v-if="!showHiddenText" type="button" class="btn btn-account" @click="toggleText" :disabled="!isFileInputEnabled || agreed == false || !applyforAccount">
           확인하기
@@ -35,7 +35,7 @@
       <!-- 증빙 서류 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Expertfile" class="form-label">제출 증빙 서류</label>
-        <input type="file" id="Expertfile" class="form-control" style="height: auto;" ref="fileInput" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
+        <input type="file" id="Expertfile" class="form-control" style="height: auto;" ref="fileInput" @change="handleFileChange" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
         <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
           <p>{{ member.expertFile }}</p>
         </div>
@@ -102,7 +102,7 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding" v-if="!member.type">
         <div class="col">
-          <button type="button" class="btn btn-cancel" @click="cancelUpload">취소</button>
+          <button type="button" class="btn btn-cancel" @click="cancelUpload">계정 전환 취소</button>
         </div>
         <div class="col">
           <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == false || applied">계정 전환 신청</button>
@@ -123,7 +123,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'SwitchAccount',
   computed: {
-    ...mapGetters(['getLoggedIn'], ['getAgreed']),
+    ...mapGetters(['getLoggedIn'], ['getAgreed'], ['getApplied']),
     memberNickname() {
       return this.member.memberNickname;
     },
@@ -147,7 +147,8 @@ export default {
         memberProfileImage: '',
         expertFile: ''
       },
-      showHiddenText: false
+      showHiddenText: false,
+      tempFile: null
     }
   },
   async created () {
@@ -160,6 +161,7 @@ export default {
       this.$store.commit('setLoggedIn', false)
     }
     console.log('로그인 상태', this.loggedIn)
+
   },
   watch: {
     getLoggedIn(newValue) {
@@ -182,7 +184,7 @@ export default {
     applied() {
       return this.$store.state.applied;
     },
-      // 버튼이 활성화되는지 여부를 반환하는 computed 속성 추가
+    // 버튼이 활성화되는지 여부를 반환하는 computed 속성 추가
     isAccountUpdateEnabled() {
       return this.isFileInputEnabled && this.agreed && !this.applied;
     },
@@ -203,10 +205,52 @@ export default {
   methods: {
     async agreedModal() {
       this.$store.commit('setAgreed', true)
+      localStorage.setItem('agreed', true);
     },
     async applyforAccount() {
-      this.$store.commit('setApplied', true)
-      alert('계정 전환 신청이 완료되었습니다.')
+
+      if(this.tempFile) {
+        const formData = new FormData();
+        formData.append('files', this.tempFile);
+        formData.append('memberId', this.member.memberId);
+
+        try {
+          const accessToken = localStorage.getItem('accessToken');
+          const response = await axios.post(`/api/v1/experts/upload`, formData, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          this.member.expertFile = response.data.url;
+          alert('계정 전환 신청이 완료되었습니다.')
+
+          this.$store.commit('setApplied', true);
+
+          // 상태를 로컬 스토리지에 저장합니다.
+          localStorage.setItem('applied', true);
+
+          // this.$store.commit('setAgreed', true);
+          // localStorage.setItem('agreed', true);
+        } catch (error) {
+          console.error('자격증 이미지 업로드 실패:', error);
+        }
+      } else {
+        alert('자격증 이미지를 선택해주세요.')
+      }
+
+      // this.$store.commit('setApplied', true)
+      // alert('계정 전환 신청이 완료되었습니다.')
+    },
+    handleFileChange(event) {
+      this.tempFile = event.target.files[0];
+      if(this.tempFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.member.expertFile = e.target.result;
+        }
+      reader.readAsDataURL(this.tempFile);
+      }
     },
     async fetchMemberInfo () {
       try {
@@ -220,26 +264,6 @@ export default {
         this.member = response.data;
       } catch (error) {
         console.error('회원정보를 불러오지 못했습니다.', error);
-      }
-    },
-    async uploadExpertFileImage(event) {
-      const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append('files', file);
-      formData.append('memberId', this.member.memberId);
-
-      try {
-        const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.post(`/api/v1/experts/upload`, formData, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        window.location.reload();
-        this.member.expertFile = response.data.url;
-      } catch (error) {
-        console.error('자격증 이미지 업로드 실패:', error);
       }
     },
     async cancelImage() {
@@ -300,7 +324,7 @@ export default {
       this.loggedIn = false;
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
-    }
+    },
   }
 }
 </script>
