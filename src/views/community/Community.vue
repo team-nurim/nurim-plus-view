@@ -98,8 +98,12 @@
         </div>
 
         <div class="col-md-6 mb-3">
-          <input type="text" v-model="searchQuery" placeholder="검색어를 입력해주세요." class="search-input" style="magin:0;" @keyup.enter="searchCommunity">
-          <i class="fa-solid fa-magnifying-glass search-icon" style="color:#333; cursor:pointer;" @click="searchCommunity"></i>
+          <div class="input-group">
+            <input type="text" v-model="searchQuery" placeholder="검색어를 입력해주세요." class="search-input" @keyup.enter="searchCommunity">
+            <button class="btn btn-outline-dark" type="button" @click="searchCommunity">
+              <i class="fa-solid fa-magnifying-glass search-icon" style="color:#333; cursor:pointer;" @click="searchCommunity" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -193,6 +197,9 @@ export default {
     },
     hasInsqirePreviousData () {
       return this.currentPage1 > 0
+    },
+    goAsk () {
+      this.$router.push('/CommunityCreate')
     }
   },
   mounted () {
