@@ -107,13 +107,16 @@ c<template>
 
     <!-- 페이지네이션 -->
     <div class="d-flex justify-content-center mt-3">
-        <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
-        <div v-for="pageNumber in totalPages" :key="pageNumber">
-          <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
-        </div>
-        <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
-    </div>
-
+    <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
+    <template v-for="groupIndex in Math.ceil(totalPages / 10)">
+        <template v-if="currentPage >= (groupIndex - 1) * 10 && currentPage < groupIndex * 10">
+            <div v-for="pageNumber in Math.min(10, totalPages - (groupIndex - 1) * 10)" :key="pageNumber">
+                <button class="btn btn-white mr-2" @click="goToPage((groupIndex - 1) * 10 + pageNumber)" :class="{ 'btn-white': currentPage === (groupIndex - 1) * 10 + pageNumber }">{{ (groupIndex - 1) * 10 + pageNumber }}</button>
+            </div>
+        </template>
+    </template>
+    <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages - 1" style="margin-bottom: 50px;">›</button>
+</div>
     <router-link to="/CommunityCreate"><button class="btn btn-primary" style="width: 150px; margin-bottom: 20px;">문의하기</button></router-link>
 
   </div>

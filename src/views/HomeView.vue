@@ -21,6 +21,7 @@
 
           <!-- card -->
           <div class="col-md-4" v-for="community in communityList.slice(0, 3)" :key="community.id">
+            <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId}}">
             <div class="card-review justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <h6 class="card-title mb-3">{{ community.title }}</h6>
@@ -28,6 +29,7 @@
                 <p class="card-subtitle mb-2" style="color:#8FBDFC;">{{ community.memberNickname }}</p>
               </div>
             </div>
+          </router-link>
           </div>
         </div><!-- row end -->
       </div><!-- review section end -->
@@ -97,6 +99,7 @@
         <div class="row">
           <!-- card -->
           <div class="col-md-4" v-for="(popular, index) in popularList.slice(0, 3)" :key="index">
+            <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: popular.communityId}}">
             <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
               <div class="card-body">
                 <div class="row mb-3">
@@ -116,6 +119,7 @@
                   </p>
               </div>
             </div>
+          </router-link>
           </div>
 
         </div><!-- row end -->
