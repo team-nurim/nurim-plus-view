@@ -19,10 +19,14 @@ export default {
       policy: null,
     };
   },
-  created() {
-    const id = this.$route.params.id; // URL에서 ID를 추출
-    axios
-      .get(`http://localhost:8080/api/v1/housingdetails/purchasedRental/${id}`)
+  async created() {
+    const id = this.$route.params.id;
+    const accessToken = localStorage.getItem('accessToken');
+    await axios
+      .get(
+        `http://localhost:8080/api/v1/housingdetails/purchasedRental/${id}`,
+        {headers: {Authorization: `Bearer ${accessToken}`}}
+      )
       .then((response) => {
         this.policy = response.data;
       })

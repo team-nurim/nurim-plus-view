@@ -35,7 +35,7 @@
       <!-- 증빙 서류 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Expertfile" class="form-label">제출 증빙 서류</label>
-        <input type="file" id="Expertfile" class="form-control" ref="fileInput" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
+        <input type="file" id="Expertfile" class="form-control" style="height: auto;" ref="fileInput" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
         <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
           <p>{{ member.expertFile }}</p>
         </div>

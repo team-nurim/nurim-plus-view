@@ -241,6 +241,7 @@ export default {
   font-size: 17px;
   font-weight: 600;
   box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+  width: 100%;
 }
 
 .row {

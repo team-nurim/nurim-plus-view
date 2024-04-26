@@ -15,10 +15,14 @@ export default {
       policy: null,
     };
   },
-  created() {
+  async created() {
     const id = this.$route.params.id;
-    axios
-      .get(`http://localhost:8080/api/v1/housingdetails/publicsale/${id}`)
+    const accessToken = localStorage.getItem('accessToken');
+    await axios
+      .get(
+        `http://localhost:8080/api/v1/housingdetails/publicsale/${id}`,
+        {headers: {Authorization: `Bearer ${accessToken}`}}
+      )
       .then((response) => {
         this.policy = response.data;
       })
