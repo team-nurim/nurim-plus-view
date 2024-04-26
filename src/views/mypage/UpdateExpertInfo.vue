@@ -2,47 +2,62 @@
   <main style="background-color: #FAFBFC;">
     <div class="container mt-3 mb-3">
       <div class="row align-items-center">
-        <div class="col mt-3 mb-4">
-          <h4 style="font-weight: 700; font-size: 28px;">회원 정보 수정</h4>
-        </div>
-      </div>
-
-      <div class="row align-items-center">
-        <div class="col mt-3 align-items-end">
-          <img v-bind:src="member.memberProfileImage" alt="mdo" width="100" height="100" class="rounded-circle">
-        </div>
-      </div>
-
-      <!-- 프로필 이미지 -->
-      <div class="row mb-3 align-items-center">
-        <div class="col mt-3 align-items-end">
-          <input type="file" ref="fileInput" style="display: none" @change="uploadProfileImage">
-          <button type="button" class="btn btn-profile" style="margin-right: 10px;" @click="$refs.fileInput.click()">프로필 사진 수정</button>
-          <button type="button" class="btn btn-profile" @click="setDefaultImage">기본 이미지로 설정</button>
+        <div class="col mt-3 mb-3">
+          <h4 style="font-weight: 700; font-size: 28px;">내 경력 사항 수정</h4>
         </div>
       </div>
 
       <!-- 개인 정보 수정 -->
+      <!-- 이메일 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Email" class="form-label">이메일</label>
-        <input class="form-control" style="font-weight: bold;" type="text" id="Email" v-bind:value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
+        <input type="text" id="Email" class="form-control" :value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
       </div>
 
+      <!-- 닉네임 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Password" class="form-label">비밀번호</label>
-        <input type="password" id="Password" class="form-control" v-model="member.memberPw" placeholder="새로운 비밀번호를 입력하세요" aria-describedby="passwordHelpBlock">
-        <div id="passwordHelpBlock" class="form-text">
-          비밀번호 자리수 8자 이상 16자 이하
+        <label for="Nickname" class="form-label">닉네임</label>
+        <input type="text" id="Nickname" class="form-control" :value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
+      </div>
+
+      <!-- 증빙 서류 -->
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+        <label for="Expertfile" class="form-label">제출 증빙 서류</label>
+        <input type="file" id="Expertfile" class="form-control" ref="fileInput" @change="uploadExpertFileImage" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
+        <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
+          <p>{{ member.expertFile }}</p>
+        </div>
+        <img v-else :src="member.expertFile" class="custom-padding">
+        <button v-if="member.expertFile && member.expertFile !== '증빙서류가 등록되지 않았습니다.'" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" >제출 서류 변경</button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">제출 서류 변경</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>제출 서류를 변경하시겠습니까?</p>
+              <p>서류를 변경하기 위해서 이전 서류는 삭제합니다.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" @click="cancelImage" data-bs-dismiss="modal">변경하기</button>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <label for="Nickname" class="form-label">닉네임</label>
-        <input type="text" id="Nickname" class="form-control" v-model="member.memberNickname">
-      </div>
-
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-update" @click="updateMemberInfo">수정하기</button>
+        <div class="col">
+          <button type="button" class="btn btn-update" @click="cancelUpload">취소</button>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-update" :disabled="!isFileInputEnabled" @click="goForward">수정하기</button>
+        </div>
       </div>
 
     </div>
@@ -67,6 +82,7 @@ export default {
   data () {
     return {
       loggedIn: false,
+      agreed: false,  // 약관 동의 상태
       member: {
         memberId: 0,
         memberEmail: '',
@@ -80,35 +96,31 @@ export default {
         type: false,
         memberProfileImage: '',
         expertFile: ''
-      }
+      },
+      showHiddenText: false,
+      showModal: false
     }
   },
   async created () {
     const accessToken = localStorage.getItem('accessToken')
-    if (accessToken) {
-      // 로그인 상태가 있을 경우 Vuex 상태 업데이트
-      this.$store.commit('setLoggedIn', true)
-      this.$store.commit('setMemberInfo', this.member)
+
+    // 페이지 생성 시 로그인 상태 확인
+    if(accessToken != null) {
+      this.loggedIn = true;
     } else {
-      // 로그인 상태가 없을 경우 Vuex 상태 업데이트
-      this.$store.commit('setLoggedIn', false)
+      this.loggedIn = false;
     }
-    console.log('로그인 상태', this.loggedIn)
+    console.log('저장된 토큰: ' + accessToken)
+    console.log('로그인 여부: ' + this.loggedIn)
+    // 로그인 된 경우 회원 정보 불러오기
+    if (this.loggedIn) {
+      await this.fetchMemberInfo();
+    }
   },
-  watch: {
-    getLoggedIn(newValue) {
-      // Vuex 상태 변경 감지
-      this.loggedIn = newValue
-      // 로그인 상태가 되면 회원 정보를 다시 가져옴
-      if (newValue) {
-        this.fetchMemberInfo()
-      }
-    },
-    getmemberInfo(newValue) {
-      this.member = newValue
-      if(newValue) {
-        this.fetchMemberInfo()
-      }
+  computed: {
+      // 파일 입력이 활성화되었는지 여부를 반환하는 computed 속성 추가
+    isFileInputEnabled() {
+      return this.member.expertFile !== '증빙서류가 등록되지 않았습니다.';
     }
   },
   mounted() {
@@ -129,7 +141,7 @@ export default {
         console.error('회원정보를 불러오지 못했습니다.', error);
       }
     },
-    async uploadProfileImage(event) {
+    async uploadExpertFileImage(event) {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('files', file);
@@ -137,58 +149,62 @@ export default {
 
       try {
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.post(`/api/v1/images/upload`, formData, {
+        const response = await axios.post(`/api/v1/experts/upload`, formData, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
             'Content-Type': 'multipart/form-data'
           }
         });
-        window.location.reload();
-        this.member.memberProfileImage = response.data.uuid;
+        this.member.expertFile = response.data.url;
       } catch (error) {
-        console.error('프로필 이미지 업로드 실패:', error);
+        console.error('자격증 이미지 업로드 실패:', error);
       }
     },
-    async setDefaultImage() {
+    async cancelImage() {
       try {
         const memberId = this.member.memberId;
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.put(`api/v1/images/remove/${memberId}`, {}, {
+        const response = await axios.put(`api/v1/experts/remove/${memberId}`, {}, {
           headers: {
             'Authorization': `Bearer ${accessToken}`
           }
         })
         if(response.data.success) {
-          window.location.reload();
-          this.member.memberProfileImage = response.data.memberProfileImage;
-          console.log('프로필 이미지 삭제 성공')
+          this.member.expertFile = response.data.expertFile;
+          this.$router.push('/updateExpertInfo')
+          console.log('자격증 이미지 삭제 성공')
         } else {
-          console.log('프로필 이미지 삭제 실패')
+          console.log('자격증 이미지 삭제 실패')
         }
       } catch (error) {
-        console.error('프로필 이미지 삭제 실패: ', error)
+        console.error('자격증 이미지 삭제 실패: ', error)
       }
     },
-    async updateMemberInfo() {
+    async cancelUpload() {
       try {
         const memberId = this.member.memberId;
-        const updateData = {
-          memberPw: this.member.memberPw,
-          memberNickname: this.member.memberNickname
-        };
         const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.put(`api/v1/members/${memberId}`, updateData, {
+        const response = await axios.put(`api/v1/experts/remove/${memberId}`, {}, {
           headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': `application/json`
+            'Authorization': `Bearer ${accessToken}`
           }
-        });
-        console.log('회원 정보 수정 성공: ', response.data);
-        alert('회원 정보가 성공적으로 수정되었습니다.');
-        this.$router.push('/mypage')
+        })
+        if(response.data.success) {
+          this.member.expertFile = response.data.expertFile;
+          console.log('자격증 이미지 삭제 성공')
+          this.$router.push('/mypage')
+        } else {
+          console.log('자격증 이미지 삭제 실패')
+        }
       } catch (error) {
-        console.log('회원 정보 수정 실패: ', error)
-        alert('회원 정보 수정에 실패했습니다.');
+        console.error('자격증 이미지 삭제 실패: ', error)
+      }
+    },
+    async toggleText() {
+      try {
+        this.showHiddenText = !this.showHiddenText;
+      } catch (error) {
+        console.error('텍스트 숨기기/보이기 실패: ', error)
       }
     },
     logout () {
@@ -199,6 +215,10 @@ export default {
       this.loggedIn = false;
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
+    },
+    goForward () {
+      this.$router.push('/mypage')
+      alert('증빙서류 수정이 완료되었습니다.')
     }
   }
 }
@@ -220,28 +240,29 @@ export default {
 }
 
 .btn-profile {
-  height: 30px;
-  background-color: lightgray; /* 기본 배경색 */
-  color: black; /* 글씨색 */
+  background-color: #007bff; /* 기본 배경색 */
+  color: white; /* 글씨색 */
+  font-size: 10px; /* 글씨크기 */
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
-  font-size: 12px;
-  font-weight: 500;
 }
 
 .btn-profile:hover, .btn-profile:focus {
-  background-color: white; /* 호버 및 포커스 시 배경색 변경 */
-  color: black; /* 호버 및 포커스 시 글씨색 변경 */
+  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
+  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
 }
+
+/* .btn-menu:active {
+  background-color: #004085; /* 클릭 시 배경색 */
+/*  color: #ffc107; /* 클릭 시 글씨색 */
+/*} */
 
 .form-control {
   height: 70px;
   font-size: 17px;
   font-weight: 600;
   box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
-  width: 100%;
 }
 
 .row {
@@ -261,7 +282,6 @@ export default {
 }
 
 .form-text {
-  font-size: 15px;
   margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
   width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
   flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
@@ -271,21 +291,20 @@ export default {
 }
 
 .btn-update {
-  height: 70px;
+  height: 50px;
   padding: 8;
   background-color: #007bff; /* 기본 배경색 */
   color: white; /* 글씨색 */
-  font-size: 20px; /* 글씨크기 */
-  font-weight: bold;
+  font-size: 16px; /* 글씨크기 */
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+  width: 100%;
 }
 
 .btn-update:hover, .btn-update:focus {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: white; /* 호버 및 포커스 시 글씨색 변경 */
+  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
 </style>

@@ -12,6 +12,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -19,11 +20,13 @@ export default {
       policy: null,
     };
   },
-  created() {
+  async created() {
     const id = this.$route.params.id;
-    axios
+    const accessToken = localStorage.getItem('accessToken');
+    await axios
       .get(
-        `http://localhost:8080/api/v1/housingdetails/permanentPublicRental/${id}`
+        `http://localhost:8080/api/v1/housingdetails/permanentPublicRental/${id}`,
+        {headers: {Authorization: `Bearer ${accessToken}`}}
       )
       .then((response) => {
         this.policy = response.data;
