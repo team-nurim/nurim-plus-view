@@ -63,7 +63,7 @@
       <div class="row mt-3 mb-10 align-items-center address-padding">
           <label for="postcode" class="form-label">우편번호</label>
           <input type="text" class="mt-3 mb-3 form-control" id="postcode" v-model="postcode" placeholder="우편번호">
-          <button type="button" class="btn btn-update mb-3 mt-3" @click="execDaumPostcode">우편번호 찾기</button>
+          <button type="button" class="btn btn-update mb-4" @click="execDaumPostcode">우편번호 찾기</button>
           <label for="address" class="form-label">상세주소</label>
           <input type="text" class="mt-3 mb-3 form-control" id="address" v-model="address" placeholder="주소" readonly>
           <input type="text" class="mb-3 form-control" id="address" v-model="detailAddress" placeholder="상세주소">
@@ -124,7 +124,7 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <!-- <button type="button" class="btn btn-update" @click="updateMemberInfo">입력하기</button> -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-update" data-bs-toggle="modal" data-bs-target="#exampleModal">
           수정하기
         </button>
       </div>
