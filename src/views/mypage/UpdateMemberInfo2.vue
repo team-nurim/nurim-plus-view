@@ -138,11 +138,12 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              ...
+              <p>입력한 사항으로 내 맞춤 정보가 수정됩니다.</p>
+              <p>수정하시겠습니까?</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" @click="updateMemberInfo">수정</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="updateMemberInfo">수정</button>
             </div>
           </div>
         </div>
@@ -355,9 +356,9 @@ export default {
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
 }
 
-.btn-update:hover, .btn-update:focus {
+.btn-update:hover {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+  color: white; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
 .btn-choice {
