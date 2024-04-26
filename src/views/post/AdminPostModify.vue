@@ -12,12 +12,19 @@
                 <input v-model="postData.postTitle" type="text1" class="form-control" id="postTitle">
               </div>
             </div>
+            
             <div class="mb-3 row">
               <label for="postCategory" class="col-md-3 col-form-label">카테고리</label>
               <div class="col-md-9">
-                <input v-model="postData.postCategory" type="text1" class="form-control" id="postCategory">
+                <select v-model="postData.postCategory" class="form-select" id="postCategory">
+                  <!-- 현재 선택된 카테고리를 먼저 표시합니다 -->
+                  <option :value="postData.postCategory">{{ postData.postCategory }}</option>
+                  <!-- 나머지 카테고리를 반복하여 표시합니다 -->
+                  <option v-for="category in filteredCategories" :key="category.name" :value="category.name">{{ category.name }}</option>
+                </select>
               </div>
             </div>
+
             <div class="mb-3 row">
               <label for="postRegisterDate" class="col-md-3 col-form-label">등록일자</label>
               <div class="col-md-9">
@@ -166,6 +173,12 @@ export default {
         postImages: [] ,// postImages 속성 추가
         postImageIds: [],
       },
+      categories: [ // Update the variable name to 'categories'
+      { id: 1, name: '보육' },
+      { id: 2, name: '출산' },
+      { id: 3, name: '주거' },
+      { id: 4, name: '장례' }
+    ],
       imageFile: [],
       previewImages: [],
       modifyModalVisible: false, // 모달의 표시 여부
@@ -174,6 +187,12 @@ export default {
       // deletedImages: [], // 삭제된 이미지를 저장할 배열 추가
     }
   },
+  computed: {
+  filteredCategories() {
+    // 현재 선택된 카테고리와 중복되지 않은 카테고리만 필터링하여 반환합니다.
+    return this.categories.filter(category => category.name !== this.postData.postCategory);
+  }
+},
 
   mounted() {
     this.fetchData(this.postId);
@@ -445,6 +464,9 @@ input[type="text1"] {
   width: 80%;
 }
 input[type="date"] {
+  width: 80%;
+}
+select.form-select {
   width: 80%;
 }
 
