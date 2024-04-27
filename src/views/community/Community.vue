@@ -311,7 +311,7 @@ async searchCommunity() {
   }
 }
 </script>
-<style>
+<style scoped>
 /* 메인 타이틀 스타일 */
 .list-container {
   width: 100%;

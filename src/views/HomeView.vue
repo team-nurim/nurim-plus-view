@@ -184,7 +184,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .review-section {
   align-content: left;
 }
