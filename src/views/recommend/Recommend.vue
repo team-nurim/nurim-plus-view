@@ -1,12 +1,13 @@
 <template>
   <main style="background-color: #F5F5F5; position: relative;">
-    
+
     <div class="container mt-5 mb-5">
       <div style="padding:0;">
 
         <!-- 플로팅 버튼 -->
-        <div v-if="selectedSubject && selectedRegion && keyword && isAllSet" class="floating-button mt-5 mb-5" style="position:fixed; left:50%; transform:translateX(-50%); z-index:1000; bottom:4rem;">
-          <button class="btn btn-primary" style="padding:0.75rem 4rem; border-radius:1.5rem;" @click="goAsk">문의하기</button>
+        <div class="floating-button mt-5 mb-5"
+        v-if="selectedSubject && selectedRegion && keyword && isAllSet" style="position:fixed; left:50%; transform:translateX(-50%); z-index:1000; bottom:4rem;">
+          <button class="btn btn-primary" style="width:16rem; padding:0.65rem; border-radius:1.5rem;" @click="goAsk">문의하기</button>
         </div>
 
         <div class="d-flex flex-row p-3">
@@ -60,7 +61,7 @@
             </div>
             <img :src=member.memberProfileImage  width="44" height="44" class="rounded-circle">
           </div>
-        
+
 
         <!-- 2단계 -->
         <div class="d-flex flex-row p-3" v-if="selectedSubject">
@@ -90,14 +91,14 @@
                 <li><a class="dropdown-item" href="#" @click="selectRegion('세종특별시')">세종특별시</a></li>
                 <li><a class="dropdown-item" href="#" @click="selectRegion('제주특별시')">제주특별시</a></li>
                 <li><a class="dropdown-item" href="#" @click="selectRegion('강원특별시')">강원특별시</a></li>
-                <li><a class="dropdown-item" href="#" @click="selectRegion('전북특별시')">전북특별시</a></li>                
+                <li><a class="dropdown-item" href="#" @click="selectRegion('전북특별시')">전북특별시</a></li>
               </ul>
             </div>
 
             <!-- <button class="btn-primary" @click="saveRegion">다음</button> -->
           </div>
         </div>
-        
+
         <div v-if="selectedRegion">
           <div class="d-flex flex-row p-3 justify-content-end" >
             <div class="bg-white answer mr-2 p-4">
@@ -105,7 +106,7 @@
             </div>
             <img :src=member.memberProfileImage  width="44" height="44" class="rounded-circle">
           </div>
-          
+
 
           <!-- 3단계 -->
           <div class="d-flex flex-row p-3">
@@ -117,7 +118,7 @@
               </p>
               <!-- 키워드 입력필드 -->
               <div class="input-group input-group-sm mt-3 mb-3">
-                <input type="text" class="form-control" style="height:2rem;" v-model="keyword" @keydown.enter="submitKeyword">
+                <input type="text" class="form-control" style="height:2rem; font-size:0.8rem" v-model="keyword" @keydown.enter="submitKeyword">
               </div>
 
               <button class="btn-primary -1" @click="submitKeyword">입력하기</button>
@@ -169,7 +170,7 @@
           </div><!-- v-for -->
         </div><!-- v-if -->
 
-        <div v-if="selectedSubject === '통합지원' && selectedRegion != null && keyword != null && isAllSet === true" class="mt-3">
+        <div v-if="selectedSubject === '통합지원' && selectedRegion != null && keyword != null && isAllSet === true && accessToken != null" class="mt-3">
           <p class="mb-5">{{ results.length }}건이 조회되었습니다.</p>
 
           <div v-for="(result, index) in results" :key="index">
@@ -240,7 +241,19 @@ export default {
       this.submittedKeyword = this.keyword;
     },
     async fetchResults () {
+
       this.isAllSet = true
+
+      // 로그인 여부 확인
+      const accessToken = localStorage.getItem('accessToken')
+      console.log(accessToken)
+
+      if (!accessToken) {
+        if (confirm ('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
+          this.$router.push('/login')
+        }
+        return
+      }
 
       try {
         let endpoint = ''
@@ -326,6 +339,7 @@ export default {
 
 p {
   margin: 0;
+  font-size: 0.8rem !important;
 }
 
 .btn-primary {

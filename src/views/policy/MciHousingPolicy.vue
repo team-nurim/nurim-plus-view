@@ -118,11 +118,11 @@
       <!-- 최신 정책 콘텐츠 -->
       <div class="row mb-5">
         <div class="col-md-6 mb-2" v-for="post in posts" :key="post.postId">
-          <router-link
+          <!-- <router-link
             :to="{ name: 'PostView', params: { postId: post.postId } }"
             style="text-decoration: none; color: inherit"
-          >
-            <div class="card mb-3">
+          > -->
+            <div class="card mb-3" @click="goToPostView(post)">
               <div class="row g-0">
                 <div class="col-md-4">
                   <img :src="post.thumbImage" class="img-fluid rounded-start" />
@@ -138,7 +138,7 @@
                 </div>
               </div>
             </div>
-          </router-link>
+          <!-- </router-link> -->
         </div>
       </div>
     </div>
@@ -146,7 +146,7 @@
 
   <main style="background-color:#EFF7FF">
 
-    <div class="container mb-5">
+    <div class="container mb-5" style="max-width: 800px;">
       <div>
           <div class="row align-items-center mt-5 mb-3">
             <div class="col mt-3 mb-2">
@@ -293,11 +293,8 @@
 
                 <!-- 검색 버튼 -->
                 <div class="row">
-                  <button
-                    class="btn btn-primary mt-4"
-                    @click="fetchPolicies"
-                    style="border-radius:1.5rem; padding: 0.7rem; margin:0.7rem;"
-                  >
+                  <button class="btn btn-primary mt-4" @click="fetchPolicies"
+                    style="border-radius:1.5rem; padding: 0.7rem; margin:0.7rem;">
                     검색
                   </button>
                 </div>
@@ -381,7 +378,6 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      loggedIn: false,
       member: {
         memberId: 0,
         memberEmail: "",
@@ -516,21 +512,33 @@ export default {
         console.error("게시물을 불러오지 못했습니다.", error);
       }
     },
-    logout() {
-      // 로그아웃 시 로컬 스토리지 토큰 삭제
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("rememberMe");
-      // 로그아웃 시 헤더 상태 변경;
-      this.loggedIn = false;
-      // 로그아웃 후 리다이렉트
-      this.$router.push("/");
+    goToPostView (post) {
+      // 로그인 확인
+      const accessToken = localStorage.getItem('accessToken')
+
+      if (!accessToken) {
+        alert('로그인해주세요.')
+        this.$router.push('/login')
+
+      } else {
+        this.$router.push({ name: 'PostView', params: {postId: post.postId} })
+      }
     },
     fetchPolicies() {
       console.log(this.selectedCategory);
       if (!this.selectedCategory) {
-        console.log("카테고리를 선택해주세요.");
+        alert("카테고리를 선택해주세요.");
         return;
       }
+
+      const accessToken = localStorage.getItem("accessToken");
+      // 검색 버튼 클릭 시 로그인 상태 확인
+      if (!accessToken) {
+        alert('로그인해주세요.');
+        this.$router.push('/login');
+        return; // 로그인이 되어 있지 않으면 검색을 중단하고 로그인 페이지로 이동
+      }
+
       const apiPath =
         this.selectedCategory === "housing"
           ? "mcihousingpolicy/housingfilter" // 주거지원의 경우
@@ -560,7 +568,7 @@ export default {
             ? this.selectedOfferType.toLowerCase().trim()
             : undefined;
       }
-      const accessToken = localStorage.getItem("accessToken");
+
       const headers = {
         Authorization: `Bearer ${accessToken}`,
       };
@@ -841,6 +849,10 @@ h6 {
 
 .btn-policy:focus {
   outline: none; /* 클릭 시 포커스 테두리 제거 */
+}
+
+.col-md-6 select {
+  width: 100%; /* 부모 요소의 100% 너비로 설정 */
 }
 
 select option {
