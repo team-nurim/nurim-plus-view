@@ -3,7 +3,8 @@
     <div class="container  mt-3 mb-3">
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4 style="font-weight: 700; font-size: 28px;">계정 전환</h4>
+          <h4 v-if="member.type == false" style="font-weight: 700; font-size: 28px;">계정 전환</h4>
+          <h4 v-if="member.type == true" style="font-weight: 700; font-size: 28px;">내 경력 사항 수정</h4>
         </div>
       </div>
 
@@ -27,8 +28,8 @@
           확인하기
         </button>
         <div v-if="showHiddenText" class="row mt-3 mb-10 align-items-center custom-padding">
-          <p id="Status" v-if="member.type === false">계정 전환 심사 중입니다.</p>
-          <p id="Status" v-else-if="member.type === true">계정 전환이 완료되었습니다.</p>
+          <p id="Status" v-if="member.type === false" style="font-size: 20px; font-weight: 600;">계정 전환 심사 중입니다.</p>
+          <p id="Status" v-else-if="member.type === true" style="font-size: 20px; font-weight: 600;">전문가 계정입니다.</p>
         </div>
       </div>
 
@@ -37,7 +38,7 @@
         <label for="Expertfile" class="form-label">제출 증빙 서류</label>
         <input type="file" id="Expertfile" class="form-control" style="height: auto;" ref="fileInput" @change="handleFileChange" :disabled="member.expertFile !== '증빙서류가 등록되지 않았습니다.'">
         <div v-if="!member.expertFile || member.expertFile === '증빙서류가 등록되지 않았습니다.'" class="custom-padding">
-          <p>{{ member.expertFile }}</p>
+          <p class="mt-3" style="font-size: 20px;">{{ member.expertFile }}</p>
         </div>
         <img v-else :src="member.expertFile" class="mt-3 mb-3 custom-padding">
         <div class="row mt-3 mb-10 align-items-center custom-padding">
@@ -59,8 +60,8 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <p>제출 서류를 변경하시겠습니까?</p>
-              <p>서류를 변경하기 위해서 이전 서류는 삭제합니다.</p>
+              <p class="text-modal">제출 서류를 변경하시겠습니까?</p>
+              <p class="text-modal">서류를 변경하기 위해서 이전 서류는 삭제합니다.</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
@@ -90,23 +91,27 @@
               <p class="text-modal">6. 개인정보의 파기: 제출된 이미지는 목적 달성 후 즉시 안전하게 파기됩니다.</p>
               <p class="text-modal">7. 동의 철회: 이미지 제출에 대한 동의는 언제든지 철회할 수 있습니다. 동의 철회 시, 이미지는 파기되고 이후 사용되지 않습니다.</p>
               <p class="text-modal">8. 기타 권리: 개인 정보 보호법 및 관련 법령에 따라 사용자는 개인정보에 관한 열람, 정정, 삭제, 처리정지 등의 권리를 가지고 있습니다.</p>
+              <p style="font-size: 15px; font-weight: 600;">아래의 동의하기 버튼을 누르면 자동으로 계정 전환 신청이 완료됩니다.</p>
               <p style="font-size: 15px;">본 동의서에 동의하십니까?</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-              <button type="button" class="btn btn-primary" @click="agreedModal" data-bs-dismiss="modal">동의하기</button>
+              <button type="button" class="btn btn-primary" @click="agreedModal" data-bs-dismiss="modal" :disabled="!isFileInputEnabled">동의하기</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding" v-if="!member.type">
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
         <div class="col">
-          <button type="button" class="btn btn-cancel" @click="cancelUpload">계정 전환 취소</button>
+          <button type="button" class="btn btn-cancel" @click="goback">뒤로 가기</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == false || applied">계정 전환 신청</button>
+          <button v-if="agreed && !member.type" type="button" class="btn btn-cancel" @click="cancelUpload">계정 전환 취소</button>
         </div>
+        <!-- <div class="col">
+          <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == true || applied">계정 전환 신청</button>
+        </div> -->
       </div>
 
     </div>
@@ -206,6 +211,37 @@ export default {
     async agreedModal() {
       this.$store.commit('setAgreed', true)
       localStorage.setItem('agreed', true);
+
+      if(this.tempFile) {
+        const formData = new FormData();
+        formData.append('files', this.tempFile);
+        formData.append('memberId', this.member.memberId);
+
+        try {
+          const accessToken = localStorage.getItem('accessToken');
+          const response = await axios.post(`/api/v1/experts/upload`, formData, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          this.member.expertFile = response.data.url;
+          alert('계정 전환 신청이 완료되었습니다.')
+
+          this.$store.commit('setApplied', true);
+
+          // 상태를 로컬 스토리지에 저장합니다.
+          localStorage.setItem('applied', true);
+
+          // this.$store.commit('setAgreed', true);
+          // localStorage.setItem('agreed', true);
+        } catch (error) {
+          console.error('자격증 이미지 업로드 실패:', error);
+        }
+      } else {
+        // alert('자격증 이미지를 선택해주세요.')
+      }
+
     },
     async applyforAccount() {
 
@@ -325,6 +361,9 @@ export default {
       // 로그아웃 후 리다이렉트
       this.$router.push('/')
     },
+    goback() {
+      this.$router.push('/mypage')
+    }
   }
 }
 </script>
@@ -353,9 +392,9 @@ export default {
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
 }
 
-.btn-profile:hover, .btn-profile:focus {
+.btn-profile:hover {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+  color: white; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
 .form-control {
