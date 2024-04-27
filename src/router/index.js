@@ -251,7 +251,7 @@ router.beforeEach(async (to, from, next) => {
         }
       } else {
         // 사용자가 로그인되어 있지 않은 경우 로그인 페이지로 리다이렉트
-        next('/login');
+        next('/admin/login');
       }
     } catch (error) {
       console.error('권한 확인에 실패했습니다.', error);
