@@ -2,7 +2,7 @@
   <main class="mt-5 mb-5">
     <div class="container">
       <!-- 모달 팝업 -->
-      <div class="modal-dialog modal-dialog-scrollable black-bg" v-if="selectedPolicy">
+      <div class="black-bg" v-if="selectedPolicy">
         <div class="white-bg">
           <div class="modal-content">
             <!-- 동적으로 모달 내용 조정 -->
@@ -103,7 +103,7 @@
               </div>
             </div>
           </div>
-          <button @click="closeModal" class="btn btn-secondary rounded-pill">
+          <button @click="closeModal" class="btn btn-primary rounded-pill">
             닫기
           </button>
         </div>
@@ -307,7 +307,7 @@
                 "
               >
                 <!-- 선택된 카테고리가 주거지원이거나 통합지원일 때에만 표시 -->
-                <div v-if="filteredPolicies.length">
+                <div v-if="filteredPolicies.length" class="mt-3">
                   <!-- filteredPolicies 배열의 길이가 0이 아닐 때만 표시 -->
                   <!-- 리스트의 개수를 보여주는 부분 -->
                   <div style="text-align: left">
@@ -315,20 +315,22 @@
                       총 {{ filteredPolicies.length }}건
                     </h5>
                   </div>
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
+
+                  <hr class="mt-1" style="height: 1px; background-color: #6c757d" />
+
                   <ul class="policy-list min-vh-100 list-unstyled">
                     <li
                       v-for="(policy, index) in filteredPolicies"
                       :key="policy.id"
                       @click="selectPolicy(policy)"
                       class="text-start pl-5 fs-3"
+                      style="font-size: 1rem !important;"
                     >
                       {{ policy.businessOverview }}
                       <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
                       <hr
                         v-if="index !== policies.length - 1"
-                        style="height: 2px; background-color: #6c757d"
+                        style="height: 1px; background-color: #6c757d"
                       />
                     </li>
                   </ul>
@@ -794,5 +796,9 @@ h6 {
 
 select option {
   font-size: 0.8rem;
+}
+
+.text-start {
+  font-size: 0.9rem;
 }
 </style>
