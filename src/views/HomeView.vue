@@ -11,8 +11,8 @@
         <button class="btn btn-primary" style="padding:0.75rem 1.5rem; border-radius:1.5rem;" @click="goToRecommend">조회하고 지원받기</button>
       </div>
 
-      <div class="mt-4">
-        <img src="../assets/main_01.png" alt="main">
+      <div class="mt-4 d-flex justify-content-center">
+        <img src="../assets/main_01.png" alt="main" style="min-width:300px; max-width:30%; height: auto;">
       </div>
 
       <!-- 커뮤니티 리뷰 영역 -->
@@ -34,30 +34,42 @@
         </div><!-- row end -->
       </div><!-- review section end -->
 
+    </div>
+  </main>
+
+  <main>
+    <div class="container">
+
       <!-- 2단 카드 레이아웃 -->
       <div class="row" style="margin:4rem 0;">
 
-        <div class="col-md-6 d-flex" style="padding:0 1rem 0 0;">
+        <div class="col-md-6 d-flex justify-content-center" style="padding:0 1rem 0 0;">
           <div class="card" style="margin-bottom:1rem; border-radius: 1rem; border:none; background-color:#F0F0F0; text-align:left; padding:1.2rem 1.2rem 0 1.2rem;">
             <div class="card-body" style="padding-bottom:0;">
               <h6 class="card-title mb-4">신혼부부라면 누구나,<br>궁금했던 정부 지원 조회</h6>
-              <img src="../assets/2.jpg" style="max-width:100%; height:auto; bottom:0;">
+              <div style="display:flex; justify-content:center;">
+                <img src="../assets/support.png" style="max-width:72%; height:auto; bottom:0;">
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-6" style="padding:0;">
-          <div class="d-grid">
+        <div class="col-md-6 " style="padding:0;">
+          <div>
             <div class="card" style="margin-bottom:1rem; border-radius: 1rem; border:none; background-color:#F0F0F0; text-align:left; padding:1.2rem 1.2rem 0 1.2rem;">
-              <div class="card-body" style="padding-bottom:0;">
+              <div class="card-body">
                 <h6 class="card-title mb-4">놓치면 아까운 지원 정책<br>꼼꼼히 알려드려요</h6>
-                <img src="../assets/main_01.png" style="max-width: 100%; height: auto;">
+                <div style="display:flex; justify-content:center;">
+                  <img src="../assets/check.png" style="margin-left:0.6rem; max-width:180px; height:auto;">
+                </div>
               </div>
             </div>
             <div class="card" style="margin-bottom:1rem; border-radius: 1rem; border:none; background-color:#F0F0F0; text-align:left; padding:1.2rem 1.2rem 0 1.2rem;">
-              <div class="card-body" style="padding-bottom:0;">
+              <div class="card-body">
                 <h6 class="card-title mb-4">신혼부부 정책 대상자<br>2분이면 조회 완료!</h6>
-                <img src="../assets/main_01.png" style="max-width: 100%; height: auto;">
+                <div style="display:flex; justify-content:center;">
+                  <img src="../assets/time.png" style="margin-left:1rem; max-width:180px; height: auto;">
+                </div>
               </div>
             </div>
           </div>
@@ -99,34 +111,35 @@
         <div class="row"  v-if="popularList">
           <!-- card -->
           <div class="col-md-4" v-for="(popular, index) in popularList.slice(0, 3)" :key="index">
-            <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: popular.communityId}}">
-            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
-              <div class="card-body">
-                <div class="row mb-3">
-                  <div class="col-auto">
-                    <img :src=popular.memberProfileImage width="44" height="44" class="rounded-circle">
+            <!-- <router-link :to="{ name: 'CommunityDetailView', params: { communityId: popular.communityId}}" style="text-decoration:none; color:inherit;"> -->
+              <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: popular.communityId}}">
+            <div class="card-inquiry justify-content-center" style="margin-bottom:1rem; text-align:left; padding:1.2rem;">
+                <div class="card-body">
+                  <div class="row mb-3">
+                    <div class="col-auto">
+                      <img :src=popular.memberProfileImage width="44" height="44" class="rounded-circle">
+                    </div>
+                    <div class="col">
+                      <h4 class="card-title">{{ popular.memberNickname }}</h4>
+                      <span class="card-subtitle mb-2" style="color:#B4B4B4;">
+                        {{ popular.registerDate.slice(0, 10) }}
+                        </span>
+                    </div>
                   </div>
-                  <div class="col">
-                    <h4 class="card-title">{{ popular.memberNickname }}</h4>
-                    <span class="card-subtitle mb-2" style="color:#B4B4B4;">
-                      {{ popular.registerDate.slice(0, 10) }}
-                      </span>
-                  </div>
+                  <p class="card-text mt-2">
+                    {{ popular.content.slice(0, 100) }}
+                    <span v-if="popular.content.length > 60">...</span>
+                    </p>
                 </div>
-                <p class="card-text mt-2">
-                  {{ popular.content.slice(0, 100) }}
-                  <span v-if="popular.content.length > 60">...</span>
-                  </p>
               </div>
-            </div>
+            <!-- </router-link> -->
           </router-link>
           </div>
 
         </div>
       </div><!-- 문의 section end -->
 
-</div>
-
+    </div>
   </main>
 </template>
 
@@ -228,6 +241,3 @@ span {
   font-size: 0.8rem;
 }
 </style>
-
-
-
