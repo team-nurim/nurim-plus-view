@@ -170,7 +170,6 @@ export default {
       showModal: false,
       selectedMember: null,
       showEditForm: false,
-      searchQuery: '',
     searchCategory: 'memberNickname', // 초기 검색 카테고리 설정
     };
   },
@@ -252,12 +251,12 @@ async searchMembers() {
       this.fetchMembers(page);
     },
     fetchNextPage() {
-      const nextPage = this.currentPage + 1;
-      if (nextPage <= this.totalPages) {
-        const lastItemIndex = this.currentPage * this.pageSize - 1;
-        const lastItemId = this.membersList[lastItemIndex].memberId;
-        this.fetchMembers(nextPage, lastItemId);
-      }
+  const nextPage = this.currentPage + 1;
+  if (nextPage <= this.totalPages) {
+    const lastItemIndex = (this.currentPage - 1) * this.pageSize + this.displayedMembers.length - 1;
+    const lastItemId = this.membersList[lastItemIndex].memberId;
+    this.fetchMembers(nextPage, lastItemId);
+  }
     },
     searchMembers() {
       console.log(`Searching members with query: ${this.searchQuery} in category: ${this.searchCategory}`);
