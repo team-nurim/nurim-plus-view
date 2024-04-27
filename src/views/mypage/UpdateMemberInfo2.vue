@@ -12,7 +12,7 @@
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Nickname" class="form-label">닉네임</label>
         <div class="row">
-          <input class="form-control" type="text" id="Nickname" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
+          <input class="mt-3 mb-3 form-control" type="text" id="Nickname" v-bind:value="member.memberNickname" aria-label="Disabled input example" disabled readonly>
         </div>
       </div>
 
@@ -21,12 +21,12 @@
         <label for="Gender" class="form-label">성별</label>
         <div class="row" id="Gender">
           <div class="col">
-            <input type="radio" id="male" name="gender" class="btn-check" @click="setGender(0)">
-            <label class="btn btn-choice text-center" for="male">남성</label>
+            <input type="radio" id="male" name="gender" class="btn-select select" @click="setGender(0)">
+            <label class="btn btn-choice" for="male">남성</label>
           </div>
           <div class="col">
-            <input type="radio" id="female" name="gender" class="btn-check" @click="setGender(1)">
-            <label class="btn btn-choice text-center" for="female">여성</label>
+            <input type="radio" id="female" name="gender" class="btn-select select" @click="setGender(1)">
+            <label class="btn btn-choice" for="female">여성</label>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
       <!-- 연령대 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Age" class="form-label">연령대</label>
-        <div class="row">
+        <div class="row mt-3 mb-3 ">
           <div class="accordion" id="Age">
             <div class="accordion-item">
               <h2 class="accordion-header">
@@ -63,7 +63,7 @@
       <div class="row mt-3 mb-10 align-items-center address-padding">
           <label for="postcode" class="form-label">우편번호</label>
           <input type="text" class="mt-3 mb-3 form-control" id="postcode" v-model="postcode" placeholder="우편번호">
-          <button type="button" class="btn btn-update mb-3 mt-3" @click="execDaumPostcode">우편번호 찾기</button>
+          <button type="button" class="btn btn-address mb-4" @click="execDaumPostcode">우편번호 찾기</button>
           <label for="address" class="form-label">상세주소</label>
           <input type="text" class="mt-3 mb-3 form-control" id="address" v-model="address" placeholder="주소" readonly>
           <input type="text" class="mb-3 form-control" id="address" v-model="detailAddress" placeholder="상세주소">
@@ -74,12 +74,12 @@
         <label for="Marriage" class="form-label">결혼 여부</label>
         <div class="row" id="Marriage">
           <div class="col">
-            <input type="radio" id="married" name="marriage" class="btn-check" @click="setMarriage(1)">
-            <label class="btn btn-choice text-center" for="married">기혼</label>
+            <input type="radio" id="married" name="marriage" class="btn-select select" @click="setMarriage(1)">
+            <label class="btn btn-choice" for="married">기혼</label>
           </div>
           <div class="col">
-            <input type="radio" id="unmarried" name="marriage" class="btn-check" @click="setMarriage(0)">
-            <label class="btn btn-choice text-center" for="unmarried">미혼</label>
+            <input type="radio" id="unmarried" name="marriage" class="btn-select select" @click="setMarriage(0)">
+            <label class="btn btn-choice" for="unmarried">미혼</label>
           </div>
         </div>
       </div>
@@ -87,15 +87,15 @@
       <!-- 연간 소득 수준 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Income" class="form-label">연간 소득 수준</label>
-        <div class="row">
+        <div class="row mt-3 mb-3">
           <div class="accordion" id="Income">
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                   본인의 소득구간를 선택해주세요.
                 </button>
               </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div class="accordion-body" style="text-align: left;">
                   <input type="radio" class="btn-check" id="0" name="income" @click="setIncome('기초/차상위')">
                   <label class="btn btn-income" for="0">기초/차상위</label>
@@ -124,7 +124,7 @@
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <!-- <button type="button" class="btn btn-update" @click="updateMemberInfo">입력하기</button> -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="mt-3 mb-3 btn btn-update" data-bs-toggle="modal" data-bs-target="#exampleModal">
           수정하기
         </button>
       </div>
@@ -134,15 +134,16 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">내 맞춤 정보 수정</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel" style="font-weight: 600;">내 맞춤 정보 수정</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              ...
+              <p style="font-size: 20px;">입력한 사항으로 내 맞춤 정보가 수정됩니다.</p>
+              <p style="font-size: 20px;">수정하시겠습니까?</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" @click="updateMemberInfo">수정</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="updateMemberInfo">수정</button>
             </div>
           </div>
         </div>
@@ -328,7 +329,7 @@ export default {
   margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
   width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
   flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  font-size: 20px; /* 폰트 크기 조정 */
+  font-size: 25px; /* 폰트 크기 조정 */
   font-weight: bold; /* 폰트 두께 조정 */
   align-self: start; /* Flex 아이템 수직 중앙 정렬 */
   margin-right: 10px; /* 오른쪽 여백 추가 */
@@ -343,7 +344,7 @@ export default {
   margin-right: 10px; /* 오른쪽 여백 추가 */
 }
 
-.btn-update {
+.btn-address {
   height: 50px;
   width: 100%;
   padding: 8;
@@ -355,56 +356,119 @@ export default {
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
 }
 
-.btn-update:hover, .btn-update:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
-}
-
-.btn-choice {
-  height: 50px;
-  width: 100%;
-  padding: 8;
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 16px; /* 글씨크기 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-}
-
-.btn-choice:hover, .btn-choice:focus {
+.btn-address:hover {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
   color: white; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.btn-update {
+  height: 70px;
+  padding: 8;
+  background-color: #007bff; /* 기본 배경색 */
+  color: white; /* 글씨색 */
+  font-size: 20px; /* 글씨크기 */
+  font-weight: bold;
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+}
+
+.btn-update:hover {
+  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
+  color: white; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.select {
+  opacity: 0;
+}
+
+/* 선택되지 않은 라디오 버튼의 스타일 */
+.btn-select:not(:checked) + .btn-choice {
+  color: white; /* 버튼의 글자색 */
+  background-color: #007bff; /* 기본 배경색 */
+  height: 50px;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* 선택된 라디오 버튼의 스타일 */
+.btn-select:checked + .btn-choice {
+  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  color: white; /* 글씨색 */
+  font-size: 16px; /* 글씨크기 */
+  height: 50px;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 20px;
 }
 
 /* 선택되지 않은 라디오 버튼의 스타일 */
 .btn-check:not(:checked) + .btn-income {
   color: #000; /* 버튼의 글자색 */
   background-color: #fff; /* 버튼의 배경색 */
-  border-color: #ccc; /* 버튼의 테두리 색 */
   height: 50px;
   width: 100%;
-  padding: 8;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none; /* 외곽선 제거 */
+  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
+  font-weight: 600;
+  font-size: 20px;
 }
 
 /* 선택된 라디오 버튼의 스타일 */
 .btn-check:checked + .btn-income {
-  color: #fff; /* 선택된 버튼의 글자색 */
-  background-color: #aaa; /* 선택된 버튼의 배경색 */
-  border-color: #aaa; /* 선택된 버튼의 테두리 색 */
+  background-color: #f4f4f4; /* 선택된 버튼의 배경색 */
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-  color: white; /* 글씨색 */
+  color: black; /* 글씨색 */
   font-size: 16px; /* 글씨크기 */
   height: 50px;
   width: 100%;
-  padding: 8;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 20px;
 }
 
 .accordion-collapse {
-  max-height: 168px;
+  max-height: 400px;
   overflow-y: auto;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+}
+
+.accordion-button:not(.collapsed) {
+  background-color:  #f4f4f4;
+  font-weight: 600;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+}
+
+.accordion-button {
+  height: 70px;
+  font-size: 18px;
+  background-color:  #f4f4f4;
+  font-weight: 600;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
 }
 
 </style>
