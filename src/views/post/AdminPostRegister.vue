@@ -2,7 +2,7 @@
   <main class="mt-5 mb-5">
     <div class="container">
 
-      <h3 class="mt-2 mb-4" style="font-weight: bold">정책정보 등록</h3>
+      <h3 class="text-center mb-5" style="font-weight: bold">정책정보 등록</h3>
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
@@ -19,12 +19,19 @@
                 <input v-model="postData.postTitle" type="textreg" class="form-control" id="postTitle">
               </div>
             </div>
+
             <div class="mb-3 row">
               <label for="postCategory" class="col-md-3 col-form-label">카테고리</label>
-              <div class="col-md-9">
-                <input v-model="postData.postCategory" type="textreg" class="form-control" id="postCategory">
-              </div>
+                <div class="col-md-9">
+                <!-- 카테고리를 선택하는 셀렉트 폼 -->
+                <select v-model="postData.postCategory" class="form-select" id="postCategory">
+                  <option value="">카테고리를 선택하세요</option>
+                  <!-- 카테고리 목록을 동적으로 생성 -->
+                  <option v-for="category in categories" :key="category.name" :value="category.name">{{ category.name }}</option>
+                </select>
+                </div>
             </div>
+            
             <!-- 다른 입력 요소들도 동일하게 구성 -->
              <div class="mb-3 row">
               <label for="postRegisterDate" class="col-md-3 col-form-label" >등록일자</label>
@@ -115,6 +122,12 @@ export default {
         postContent: '', // 내용 입력 필드의 데이터
         postId:'',
       },
+      categories: [ // Update the variable name to 'categories'
+      { id: 1, name: '보육' },
+      { id: 2, name: '출산' },
+      { id: 3, name: '주거' },
+      { id: 4, name: '장례' }
+    ],
       imageFile: [],
       previewImages: [], // 이미지 파일들의 미리보기 URL을 저장할 배열
       modalVisible: false, // 모달의 표시 여부
@@ -259,7 +272,10 @@ export default {
         const registerResponse = await this.savePost();
         const postId = registerResponse.postId;
 
+         // 이미지가 있는 경우에만 이미지 업로드 함수를 실행합니다.
+       if (this.imageFile && this.imageFile.length > 0) {
         await this.uploadImage(postId);
+       }
         this.$router.push({ name: 'AdminPostRead', params: { postId: postId } });
         // 성공 시 처리
         // 성공 시 alert 메시지 표시
@@ -270,8 +286,11 @@ export default {
         // 리스트 페이지로 이동
         // this.$router.push('/admin/post/list');
       } catch(error) {
-        console.error('이미지 업로드 실패 이유:', error);
-      }
+    // 이미지 업로드 실패 이유가 없으면 콘솔에 오류를 출력하지 않음
+    if (error.response) {
+      console.error('이미지 업로드 실패 이유:', error.response.data);
+    }
+  }
     }
   }
 }
