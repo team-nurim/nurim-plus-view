@@ -19,12 +19,12 @@ export default {
   computed: {
     headerComponent() {
       // '/admin' 경로에 대한 헤더 컴포넌트 선택
-      if (this.$route.path.startsWith('/admin')) {
+      if (this.$route.path.startsWith('/admin') && !this.$route.path.startsWith('/admin/login')) {
         return 'HeaderAdmin';
       } else {
         // 기본값으로 헤더 컴포넌트 선택
         return 'Header';
-      }
+      } 
     }
   }
 }
