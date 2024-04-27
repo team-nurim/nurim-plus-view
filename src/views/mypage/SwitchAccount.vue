@@ -102,16 +102,20 @@
         </div>
       </div>
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div v-if="agreed && !member.type" class="row mt-3 mb-10 align-items-center custom-padding">
         <div class="col">
           <button type="button" class="btn btn-cancel" @click="goback">뒤로 가기</button>
         </div>
         <div class="col">
-          <button v-if="agreed && !member.type" type="button" class="btn btn-cancel" @click="cancelUpload">계정 전환 취소</button>
+          <button type="button" class="btn btn-cancel" @click="cancelUpload">계정 전환 취소</button>
         </div>
         <!-- <div class="col">
           <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == true || applied">계정 전환 신청</button>
         </div> -->
+      </div>
+
+      <div v-if="!agreed" class="row mt-3 mb-10 align-items-center custom-padding">
+        <button type="button" class="btn btn-cancel" @click="goback">뒤로 가기</button>
       </div>
 
     </div>
