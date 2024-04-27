@@ -2,7 +2,7 @@
   <main class="mt-5 mb-5">
     <div class="container">
       <!-- 모달 팝업 -->
-      <div class="black-bg" v-if="selectedPolicy">
+      <div class="modal-dialog modal-dialog-scrollable black-bg" v-if="selectedPolicy">
         <div class="white-bg">
           <div class="modal-content">
             <!-- 동적으로 모달 내용 조정 -->
@@ -397,10 +397,6 @@ export default {
         expertFile: "",
       },
       posts: [],
-      accordionId: "Residence", // 아코디언의 부모 요소 ID
-      collapseOne: "collapseOne", // 첫 번째 아코디언의 collapse ID
-      collapseTwo: "collapseTwo", // 두 번째 아코디언의 collapse ID
-      collapseThree: "collapseThree",
       policies: [], // 주택 정책 데이터를 저장할 배열
       selectedCategory: null, // 카테고리 선택 초기화
       selectedRegion: "all", // 지역 선택 초기화
@@ -746,33 +742,6 @@ export default {
   box-shadow: none; /* 그림자 제거 */
 }
 
-.custom-padding {
-  padding-right: 100px;
-  padding-left: 100px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.btn-profile {
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 10px; /* 글씨크기 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-}
-
-.btn-profile:hover,
-.btn-profile:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
-}
-
-/* .btn-menu:active {
-  background-color: #004085; /* 클릭 시 배경색 */
-/*  color: #ffc107; /* 클릭 시 글씨색 */
-/*} */
-
 .form-control {
   height: 50px;
 }
@@ -795,38 +764,6 @@ h6 {
   font-weight: bold; /* 폰트 두께 조정 */
   align-self: start; /* Flex 아이템 수직 중앙 정렬 */
   margin-right: 10px; /* 오른쪽 여백 추가 */
-}
-
-.form-text {
-  margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
-  width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
-  flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  color: darkgray; /* 글씨 색*/
-  align-self: start; /* Flex 아이템 수직 중앙 정렬 */
-  margin-right: 10px; /* 오른쪽 여백 추가 */
-}
-
-.btn-update {
-  height: 50px;
-  width: 100%;
-  padding: 8;
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 16px; /* 글씨크기 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-}
-
-.btn-update:hover,
-.btn-update:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
-}
-
-.accordion-collapse {
-  max-height: 168px;
-  overflow-y: auto;
 }
 
 .selected {
