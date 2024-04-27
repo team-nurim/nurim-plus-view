@@ -137,7 +137,7 @@
     <!-- 위로가기 버튼 -->
     <p style="position:fixed; bottom:20px; right:20px;">
       <a href="#">
-          <img src="../../assets/images/img_arr_top.png" alt="위로가기" style="width:2rem; height:2rem;">
+          <img src="../../assets/images/img_arr_top.png" alt="위로가기" style="width:2rem; height:2.2rem;">
       </a>
     </p>
 
