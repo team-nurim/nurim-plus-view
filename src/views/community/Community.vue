@@ -320,7 +320,7 @@ async searchCommunity() {
   align-items: center;
 }
 
-/*=======================화살표 스타일============================================*/
+/* 화살표 스타일 */
 .arrow-buttons {
   display: flex;
   align-items: center;
@@ -411,7 +411,7 @@ async searchCommunity() {
   padding: 0.5rem;
   margin-bottom: 1.2rem;
   }
-/*====================================카테고리 검색창=================================== */
+/* 카테고리 검색창 */
 .category-search {
   display: flex;
   align-items: flex-start;
@@ -484,23 +484,6 @@ async searchCommunity() {
 }
 
 /* 페이지네이션 스타일링 */
-.pagination {
-  margin: 2rem 0rem;
-}
-
-.pagination button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
 
 .boardRegister {
   background-color: #007bff; /* primary 색상 */

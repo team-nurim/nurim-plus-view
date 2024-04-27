@@ -5,8 +5,9 @@
       <div style="padding:0;">
 
         <!-- 플로팅 버튼 -->
-        <div v-if="selectedSubject && selectedRegion && keyword && isAllSet" class="floating-button mt-5 mb-5" style="position:fixed; left:50%; transform:translateX(-50%); z-index:1000; bottom:4rem;">
-          <button class="btn btn-primary" style="padding:0.75rem 1rem; border-radius:1.5rem;" @click="goAsk">문의하기</button>
+        <div class="floating-button mt-5 mb-5"
+        v-if="selectedSubject && selectedRegion && keyword && isAllSet" style="position:fixed; left:50%; transform:translateX(-50%); z-index:1000; bottom:4rem;">
+          <button class="btn btn-primary" style="width:16rem; padding:0.65rem; border-radius:1.5rem;" @click="goAsk">문의하기</button>
         </div>
 
         <div class="d-flex flex-row p-3">

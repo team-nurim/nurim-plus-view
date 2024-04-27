@@ -1,31 +1,34 @@
 <template>
-    <div class="detail-container">
+  <main class="mt-5 mb-5">
+    <div class="container">
       <div v-if="showModal" class="modal">
       <div class="modal-content">
         <p>{{ errorMessage }}</p>
         <span class="close" @click="closeModal">&times;</span>
       </div>
     </div>
-      <h1>{{ community.title}}
-      <div style="padding: 10px 0; float: right; margin-right: 30px;">
-                  <div class="dropdown">
-                    <svg width="5" height="15" id="dropdownMenuButton" xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="pointer-events: all;">
-                      <circle cx="2.5" cy="2.5" r="2" fill="black"/>
-                      <circle cx="2.5" cy="7.5" r="2" fill="black"/>
-                      <circle cx="2.5" cy="12.5" r="2" fill="black"/>
-                    </svg>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
-                      <li><a class="dropdown-item" @click="modifybutton(community)">게시물 수정</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" @click="deleteCommunity">게시물 삭제</a></li>
-                    </ul>
-                  </div>
-                </div>
-                </h1>
+    <div class="mb-3">
+      <h4 style="text-align:left;">{{ community.title}}
+      <div style="float:right;">
+          <div class="dropdown">
+            <svg width="5" height="15" id="dropdownMenuButton" xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="pointer-events: all;">
+              <circle cx="2.5" cy="2.5" r="2" fill="black"/>
+              <circle cx="2.5" cy="7.5" r="2" fill="black"/>
+              <circle cx="2.5" cy="12.5" r="2" fill="black"/>
+            </svg>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
+              <li><a class="dropdown-item" @click="modifybutton(community)">게시물 수정</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" @click="deleteCommunity">게시물 삭제</a></li>
+            </ul>
+          </div>
+      </div>
+      </h4>
+    </div>
       <div class="userInfo">
         <i class="fa-regular fa-user" style="margin-left: 5px"></i><span>{{  community.memberNickname }}</span>
         <i class="fa-solid fa-eye" style="margin-left: 10px"></i><span>{{ community.counts }}</span>
-        <span class="register-date" style="margin-right: 10px;">작성일:{{formatDate (community.registerDate)}}</span>
+        <span class="register-date">작성일 | {{formatDate (community.registerDate)}}</span>
       </div>
       <hr>
       <div class="content-container" style="font-size: 17px; text-align: left;">
@@ -44,8 +47,12 @@
 </div>
       </div>
       <hr>
-      <input type="text"  v-model="newReply" placeholder="댓글을 입력하세요" class="search-input" style="margin-right: 5px; width: 1000px;" @keyup.enter="submitReply">
-      <button class="btn btn-primary" @click="submitReply">등록</button>
+      <div class="row">
+        <div class="col" style="margin:0; padding:0;">
+          <input type="text" v-model="newReply" placeholder="댓글을 입력하세요" class="search-input mb-3" @keyup.enter="submitReply">
+          <button class="btn btn-primary text-end" @click="submitReply">등록</button>
+        </div>
+      </div>
       <hr>
       <div class="reply-container">
   <div v-for="(reply, index) in replyList" :key="index" class="replyList">
@@ -71,8 +78,9 @@
     </div>
   </div>
 </div>
-</div>
-  </template>
+    </div>
+  </main>
+</template>
 
 <script>
 // eslint-disable-next-line
@@ -307,9 +315,12 @@ import { TrackOpTypes } from 'vue';
   }
   </script>
 
-  <style>
-  /*모달 스타일 */
-  .modal {
+<style>
+.container {
+  max-width: 800px !important;
+}
+/*모달 스타일 */
+.modal {
   display: block;
   position: fixed;
   z-index: 1;
