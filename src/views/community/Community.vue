@@ -203,7 +203,7 @@ export default {
       return this.currentPage1 > 0
     },
     goAsk () {
-      this.$router.push('/community')
+      this.$router.push('/CommunityCreate')
     }
   },
   mounted () {
