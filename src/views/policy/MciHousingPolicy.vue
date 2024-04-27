@@ -8,99 +8,97 @@
             <!-- 동적으로 모달 내용 조정 -->
             <div v-if="selectedCategory === 'housing'">
               <!-- 주거지원 정보 -->
-              <div class="modal-section">
-                <h3 class="detail-box"><strong>사업개요</strong></h3>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>사업개요</strong></p>
                 <div
-                  class="info-box h3"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.businessOverview"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원내용</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원내용</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.supportDetails"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>사업구분</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>사업구분</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.businessClassification"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>소득기준</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>소득기준</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.incomeCriteria"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>자산기준</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>자산기준</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.assetCriteria"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>결혼기준</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>결혼기준</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.marriageCriteria"
                 ></div>
               </div>
             </div>
             <div v-if="selectedCategory === 'integrated'">
               <!-- 통합지원 정보 -->
-              <div class="modal-section">
-                <h3 class="detail-box"><strong>사업개요</strong></h3>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>사업개요</strong></p>
                 <div
-                  class="info-box h3"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.businessOverview"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원내용</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원내용</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.supportDetails"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>제공유형</strong></p>
-                <div class="info-box" v-html="selectedPolicy.offerType"></div>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>제공유형</strong></p>
+                <div class="col-6 info-box" v-html="selectedPolicy.offerType"></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원금액</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원금액</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.paymentAmount"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원대상</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원대상</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.supportTarget"
                 ></div>
               </div>
             </div>
             <!-- 공통 섹션 -->
-            <div class="modal-section">
-              <p class="detail-box"><strong>사업주체</strong></p>
+            <div class="row modal-section">
+              <p class="col-6 detail-box"><strong>사업주체</strong></p>
               <div
-                class="info-box"
+                class="col-6 info-box"
                 v-html="selectedPolicy.businessEntity"
               ></div>
             </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>홈페이지</strong></p>
-              <div class="d-flex justify-content-center" style="width: 100%">
-                <button @click="websiteClick" class="btn detail-box">
+            <div class="row modal-section">
+              <p class="col-6 detail-box"><strong>홈페이지</strong></p>
+                <button @click="websiteClick" class="col-6 btn" style="width: 100%; align-items: center;">
                   바로가기
                 </button>
-              </div>
             </div>
           </div>
           <button @click="closeModal" class="btn btn-primary rounded-pill">
@@ -326,7 +324,9 @@
                       class="text-start pl-5 fs-3"
                       style="font-size: 1rem !important;"
                     >
+
                       {{ policy.businessOverview }}
+
                       <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
                       <hr
                         v-if="index !== policies.length - 1"
@@ -698,7 +698,8 @@ export default {
 
 .white-bg {
   width: 50%; /* 내부 박스 너비 */
-  height: 100;
+  height: 90%;
+  overflow-y: auto;
   padding: 20px; /* 패딩 */
   background-color: white; /* 백그라운드 컬러 */
   border-radius: 8px; /* 모서리 둥글게 */
@@ -715,9 +716,9 @@ export default {
 
 .modal-section {
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
   align-items: flex-start;
-  margin-bottom: 20px; /* 섹션 간 간격 조정 */
+  margin: 10px 20px;
 }
 
 .detail-box {
@@ -730,6 +731,7 @@ export default {
   flex-basis: 20%; /* detail-box 너비 설정 */
   flex-shrink: 0; /* 축소하지 않음 */
   text-align: center;
+  font-size: 20px;
 }
 
 .info-box {
@@ -751,6 +753,13 @@ export default {
   text-transform: none; /* 텍스트 변형 없음 */
   box-shadow: none; /* 그림자 제거 */
 }
+
+.btn-primary {
+  width: 100%;
+  margin-top: 20px; /* 모달 내의 버튼과의 간격을 조정합니다. */
+  align-self: center; /* 버튼을 가운데로 정렬합니다. */
+}
+
 
 .form-control {
   height: 50px;

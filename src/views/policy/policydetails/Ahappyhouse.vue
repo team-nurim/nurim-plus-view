@@ -29,7 +29,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .content-left {
   align-items: center;
 }
@@ -37,8 +37,8 @@ export default {
 .content-left h2 {
   /* content-left 클래스 내의 h2 태그에 스타일 적용 */
   min-width: 100px; /* 최소 너비 설정 */
-  border: 1px solid #cccccc; /* 회색 테두리 */
-  background-color: blue; /* 반투명 회색 배경 */
+  border: none;
+  background-color: #f4f4f4; /* 반투명 회색 배경 */
   padding: 5px; /* 내부 여백 */
   margin-bottom: 10px; /* 요소 사이의 간격 */
   border-radius: 8px; /* 모서리 둥글게 */
