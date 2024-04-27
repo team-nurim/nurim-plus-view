@@ -236,13 +236,13 @@ export default {
 }
 
 .btn-menu:hover, .btn-menu:focus {
-  background-color: lightgray; /* 호버 및 포커스 시 배경색 변경 */
+  background-color: #f4f4f4; /* 호버 및 포커스 시 배경색 변경 */
   color: black; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
 .btn-profile {
   height: 40px;
-  background-color: lightgray; /* 기본 배경색 */
+  background-color: #f4f4f4; /* 기본 배경색 */
   color: black; /* 글씨색 */
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
