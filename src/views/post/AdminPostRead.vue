@@ -1,12 +1,9 @@
 <template>
   <main class="mt-2">
      <div class="containerpostread">
-       <div class="row mb-3">
-         <div class="col-md-7">
-           <h2 class="text">{{ postRead.postTitle }}</h2>
-         </div>
-         <div class="col-md-5">
-          <router-link :to="`/admin/post/modify/${postRead.postId}`" class="btn btn-lg btn-primary me-3">수정하기</router-link>
+       <div class="row">
+         <div class="col-md-6">
+           <h2 class="text mb-5">{{ postRead.postTitle }}</h2>
          </div>
        </div>
        <div class="row">
