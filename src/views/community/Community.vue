@@ -98,8 +98,12 @@
         </div>
 
         <div class="col-md-6 mb-3">
-          <input type="text" v-model="searchQuery" placeholder="검색어를 입력해주세요." class="search-input" style="magin:0;" @keyup.enter="searchCommunity">
-          <i class="fa-solid fa-magnifying-glass search-icon" style="color:#333; cursor:pointer;" @click="searchCommunity"></i>
+          <div class="input-group">
+            <input type="text" v-model="searchQuery" placeholder="검색어를 입력해주세요." class="form-control search-input" @keyup.enter="searchCommunity">
+            <span class="input-group-text">
+              <i class="fa-solid fa-magnifying-glass search-icon" style="color:#333; cursor:pointer;" @click="searchCommunity"></i>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -133,7 +137,7 @@
     <!-- 위로가기 버튼 -->
     <p style="position:fixed; bottom:20px; right:20px;">
       <a href="#">
-          <img src="../../assets/images/img_arr_top.png" alt="위로가기" style="width:2.6rem; height:2.6rem;">
+          <img src="../../assets/images/img_arr_top.png" alt="위로가기" style="width:2rem; height:2rem;">
       </a>
     </p>
 
@@ -193,6 +197,9 @@ export default {
     },
     hasInsqirePreviousData () {
       return this.currentPage1 > 0
+    },
+    goAsk () {
+      this.$router.push('/community')
     }
   },
   mounted () {
@@ -313,7 +320,7 @@ async searchCommunity() {
   align-items: center;
 }
 
-/*=======================화살표 스타일============================================*/
+/* 화살표 스타일 */
 .arrow-buttons {
   display: flex;
   align-items: center;
@@ -404,7 +411,7 @@ async searchCommunity() {
   padding: 0.5rem;
   margin-bottom: 1.2rem;
   }
-/*====================================카테고리 검색창=================================== */
+/* 카테고리 검색창 */
 .category-search {
   display: flex;
   align-items: flex-start;
@@ -477,23 +484,6 @@ async searchCommunity() {
 }
 
 /* 페이지네이션 스타일링 */
-.pagination {
-  margin: 2rem 0rem;
-}
-
-.pagination button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
 
 .boardRegister {
   background-color: #007bff; /* primary 색상 */
