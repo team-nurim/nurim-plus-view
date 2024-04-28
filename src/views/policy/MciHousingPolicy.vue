@@ -96,12 +96,14 @@
             </div>
             <div class="row modal-section">
               <p class="col-6 detail-box"><strong>홈페이지</strong></p>
-                <button @click="websiteClick" class="col-6 btn" style="width: 100%; align-items: center;">
-                  바로가기
+              <div class="col-6" style="margin-left: 0.5rem;">
+                <button @click="websiteClick" class="btn btn-primary" style="font-size: 23px; font-weight: 600; width: 100%; align-items: center; margin-bottom: 20px;">
+                바로가기
                 </button>
+              </div>
             </div>
           </div>
-          <button @click="closeModal" class="btn btn-primary rounded-pill">
+          <button @click="closeModal" class="btn btn-primary rounded-pill" style="font-size: 23px; font-weight: 600;">
             닫기
           </button>
         </div>
@@ -731,7 +733,7 @@ export default {
   flex-basis: 20%; /* detail-box 너비 설정 */
   flex-shrink: 0; /* 축소하지 않음 */
   text-align: center;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .info-box {
@@ -743,6 +745,8 @@ export default {
   overflow-wrap: break-word; /* 긴 텍스트 줄바꿈 */
   flex-grow: 1; /* 남은 공간을 채우도록 설정 */
   margin-left: 10px; /* detail-box와의 간격 */
+  font-size: 23px;
+  font-weight: 600;
 }
 
 .btn.detail-box {
