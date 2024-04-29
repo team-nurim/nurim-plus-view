@@ -8,102 +8,102 @@
             <!-- 동적으로 모달 내용 조정 -->
             <div v-if="selectedCategory === 'housing'">
               <!-- 주거지원 정보 -->
-              <div class="modal-section">
-                <h3 class="detail-box"><strong>사업개요</strong></h3>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>사업개요</strong></p>
                 <div
-                  class="info-box h3"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.businessOverview"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원내용</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원내용</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.supportDetails"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>사업구분</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>사업구분</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.businessClassification"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>소득기준</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>소득기준</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.incomeCriteria"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>자산기준</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>자산기준</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.assetCriteria"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>결혼기준</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>결혼기준</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.marriageCriteria"
                 ></div>
               </div>
             </div>
             <div v-if="selectedCategory === 'integrated'">
               <!-- 통합지원 정보 -->
-              <div class="modal-section">
-                <h3 class="detail-box"><strong>사업개요</strong></h3>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>사업개요</strong></p>
                 <div
-                  class="info-box h3"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.businessOverview"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원내용</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원내용</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.supportDetails"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>제공유형</strong></p>
-                <div class="info-box" v-html="selectedPolicy.offerType"></div>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>제공유형</strong></p>
+                <div class="col-6 info-box" v-html="selectedPolicy.offerType"></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원금액</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원금액</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.paymentAmount"
                 ></div>
               </div>
-              <div class="modal-section">
-                <p class="detail-box"><strong>지원대상</strong></p>
+              <div class="row modal-section">
+                <p class="col-6 detail-box"><strong>지원대상</strong></p>
                 <div
-                  class="info-box"
+                  class="col-6 info-box"
                   v-html="selectedPolicy.supportTarget"
                 ></div>
               </div>
             </div>
             <!-- 공통 섹션 -->
-            <div class="modal-section">
-              <p class="detail-box"><strong>사업주체</strong></p>
+            <div class="row modal-section">
+              <p class="col-6 detail-box"><strong>사업주체</strong></p>
               <div
-                class="info-box"
+                class="col-6 info-box"
                 v-html="selectedPolicy.businessEntity"
               ></div>
             </div>
-            <div class="modal-section">
-              <p class="detail-box"><strong>홈페이지</strong></p>
-              <div class="d-flex justify-content-center" style="width: 100%">
-                <button @click="websiteClick" class="btn detail-box">
-                  바로가기
+            <div class="row modal-section">
+              <p class="col-6 detail-box"><strong>홈페이지</strong></p>
+              <div class="col-6" style="margin-left: 0.5rem;">
+                <button @click="websiteClick" class="btn btn-primary" style="font-size: 1.2rem; font-weight: 400; width: 100%; align-items: center; margin-bottom: 20px;">
+                바로가기
                 </button>
               </div>
             </div>
           </div>
-          <button @click="closeModal" class="btn btn-secondary rounded-pill">
+          <button @click="closeModal" class="btn btn-primary rounded-pill" style="font-size: 23px; font-weight: 600;">
             닫기
           </button>
         </div>
@@ -307,7 +307,7 @@
                 "
               >
                 <!-- 선택된 카테고리가 주거지원이거나 통합지원일 때에만 표시 -->
-                <div v-if="filteredPolicies.length">
+                <div v-if="filteredPolicies.length" class="mt-3">
                   <!-- filteredPolicies 배열의 길이가 0이 아닐 때만 표시 -->
                   <!-- 리스트의 개수를 보여주는 부분 -->
                   <div style="text-align: left">
@@ -315,20 +315,24 @@
                       총 {{ filteredPolicies.length }}건
                     </h5>
                   </div>
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
+
+                  <hr class="mt-1" style="height: 1px; background-color: #6c757d" />
+
                   <ul class="policy-list min-vh-100 list-unstyled">
                     <li
                       v-for="(policy, index) in filteredPolicies"
                       :key="policy.id"
                       @click="selectPolicy(policy)"
                       class="text-start pl-5 fs-3"
+                      style="font-size: 1rem !important;"
                     >
+
                       {{ policy.businessOverview }}
+
                       <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
                       <hr
                         v-if="index !== policies.length - 1"
-                        style="height: 2px; background-color: #6c757d"
+                        style="height: 1px; background-color: #6c757d"
                       />
                     </li>
                   </ul>
@@ -391,10 +395,6 @@ export default {
         expertFile: "",
       },
       posts: [],
-      accordionId: "Residence", // 아코디언의 부모 요소 ID
-      collapseOne: "collapseOne", // 첫 번째 아코디언의 collapse ID
-      collapseTwo: "collapseTwo", // 두 번째 아코디언의 collapse ID
-      collapseThree: "collapseThree",
       policies: [], // 주택 정책 데이터를 저장할 배열
       selectedCategory: null, // 카테고리 선택 초기화
       selectedRegion: "all", // 지역 선택 초기화
@@ -697,8 +697,11 @@ export default {
 }
 
 .white-bg {
-  width: 50%; /* 내부 박스 너비 */
-  height: 100;
+  width: 100%; /* 내부 박스 너비 */
+  max-width: 900px;
+  margin: 1rem;
+  height: 90%;
+  overflow-y: auto;
   padding: 20px; /* 패딩 */
   background-color: white; /* 백그라운드 컬러 */
   border-radius: 8px; /* 모서리 둥글게 */
@@ -715,9 +718,9 @@ export default {
 
 .modal-section {
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
   align-items: flex-start;
-  margin-bottom: 20px; /* 섹션 간 간격 조정 */
+  margin: 10px 20px;
 }
 
 .detail-box {
@@ -730,6 +733,7 @@ export default {
   flex-basis: 20%; /* detail-box 너비 설정 */
   flex-shrink: 0; /* 축소하지 않음 */
   text-align: center;
+  font-size: 1.2rem;
 }
 
 .info-box {
@@ -741,6 +745,8 @@ export default {
   overflow-wrap: break-word; /* 긴 텍스트 줄바꿈 */
   flex-grow: 1; /* 남은 공간을 채우도록 설정 */
   margin-left: 10px; /* detail-box와의 간격 */
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
 .btn.detail-box {
@@ -752,32 +758,12 @@ export default {
   box-shadow: none; /* 그림자 제거 */
 }
 
-.custom-padding {
-  padding-right: 100px;
-  padding-left: 100px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.btn-primary {
+  width: 100%;
+  margin-top: 20px; /* 모달 내의 버튼과의 간격을 조정합니다. */
+  align-self: center; /* 버튼을 가운데로 정렬합니다. */
 }
 
-.btn-profile {
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 10px; /* 글씨크기 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-}
-
-.btn-profile:hover,
-.btn-profile:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
-}
-
-/* .btn-menu:active {
-  background-color: #004085; /* 클릭 시 배경색 */
-/*  color: #ffc107; /* 클릭 시 글씨색 */
-/*} */
 
 .form-control {
   height: 50px;
@@ -803,38 +789,6 @@ h6 {
   margin-right: 10px; /* 오른쪽 여백 추가 */
 }
 
-.form-text {
-  margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
-  width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
-  flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  color: darkgray; /* 글씨 색*/
-  align-self: start; /* Flex 아이템 수직 중앙 정렬 */
-  margin-right: 10px; /* 오른쪽 여백 추가 */
-}
-
-.btn-update {
-  height: 50px;
-  width: 100%;
-  padding: 8;
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 16px; /* 글씨크기 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-}
-
-.btn-update:hover,
-.btn-update:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
-}
-
-.accordion-collapse {
-  max-height: 168px;
-  overflow-y: auto;
-}
-
 .selected {
   background-color: lightblue; /* 선택한 지역의 배경색을 변경 */
   color: black; /* 선택한 지역의 글자색을 변경 */
@@ -855,5 +809,9 @@ h6 {
 
 select option {
   font-size: 0.8rem;
+}
+
+.text-start {
+  font-size: 0.9rem;
 }
 </style>

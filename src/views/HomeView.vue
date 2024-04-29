@@ -16,8 +16,8 @@
       </div>
 
       <!-- 커뮤니티 리뷰 영역 -->
-      <div class="review-section mt-5 mb-5">
-        <div class="row"  v-if="communityList">
+      <div class="review-section mt-5 mb-5" v-if="communityList && communityList.length > 0">
+        <div class="row">
 
           <!-- card -->
           <div class="col-md-4" v-for="community in communityList.slice(0, 3)" :key="community.id">
@@ -79,7 +79,7 @@
       <div class="post-contents mt-5 mb-5">
         <h4 class="mb-5">최신 정책 정보</h4>
 
-        <div class="row"  v-if="postList">
+        <div class="row"  v-if="postList && postList.length > 0">
           <div class="col-md-3" v-for="post in postList" :key="post.id">
             <router-link :to="{ name: 'PostView', params: { postId: post.postId }}" style="text-decoration: none; color: inherit;">
               <div class="card" style="margin-right:1rem; margin-bottom:1.5rem; border:none; text-align: left; padding-left: 0;">
@@ -106,7 +106,7 @@
       <div class="inquiry-section mt-5 mb-5">
         <h4 class="mb-5">가장 많이 본 문의</h4>
 
-        <div class="row"  v-if="popularList">
+        <div class="row"  v-if="popularList && popularList.length > 0">
           <!-- card -->
           <div class="col-md-4" v-for="(popular, index) in popularList.slice(0, 3)" :key="index">
             <!-- <router-link :to="{ name: 'CommunityDetailView', params: { communityId: popular.communityId}}" style="text-decoration:none; color:inherit;"> -->
@@ -157,12 +157,13 @@ export default {
       communityList: []
     };
   },
-  async created () {
-    await this.fetchCommunity()
-    await this.fetchPosts()
-    await this.fetchPopular()
+  created () {
+    this.fetchData();
   },
   methods: {
+    async fetchData () {
+      await Promise.all([this.fetchCommunity(), this.fetchPosts(), this.fetchPopular()]);
+    },
     async fetchPosts () {
       try {
         const response = await axios.get('/api/v1/home/postList');
