@@ -2,6 +2,7 @@
   <div>
     <main class="mt-5 mb-5">
       <div class="container">
+        
         <!-- 모달 팝업 -->
         <div class="black-bg" v-if="selectedPolicy">
           <div class="white-bg">
