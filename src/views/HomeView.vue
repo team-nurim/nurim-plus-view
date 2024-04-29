@@ -2,7 +2,6 @@
 /* eslint-disable */ -->
 <template>
   <main>
-
     <div class="container mt-5">
 
       <div class="main-title mb-5">
