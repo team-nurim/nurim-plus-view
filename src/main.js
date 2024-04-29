@@ -11,6 +11,8 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
 const app = createApp(App); // Vue 애플리케이션을 생성
 
+axios.defaults.baseURL = 'http://localhost:8080'	
+
 // Axios 인스턴스 생성 및 기본 설정
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8080/api/v1",
