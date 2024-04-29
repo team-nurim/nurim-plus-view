@@ -34,7 +34,7 @@
               <ul class="dropdown-menu dropdown-menu-end text-small">
                 <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b></li>
                 <li><hr class="dropdown-divider"></li>
-                <li v-if="member.memberEmail === 'admin'" style="padding:0.5rem 1rem"><a href="/">누림플러스 홈</a></li>
+                <li v-if="member.memberRole === 'ADMIN'" style="padding:0.5rem 1rem"><a href="/">누림플러스 홈</a></li>
                 <li style="padding:0.5rem 1rem"><router-link to="#" @click="logout">로그아웃</router-link></li>
               </ul>
             </div>
