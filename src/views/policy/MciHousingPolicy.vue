@@ -69,7 +69,10 @@
               </div>
               <div class="row modal-section">
                 <p class="col-6 detail-box"><strong>제공유형</strong></p>
-                <div class="col-6 info-box" v-html="selectedPolicy.offerType"></div>
+                <div
+                  class="col-6 info-box"
+                  v-html="selectedPolicy.offerType"
+                ></div>
               </div>
               <div class="row modal-section">
                 <p class="col-6 detail-box"><strong>지원금액</strong></p>
@@ -96,14 +99,28 @@
             </div>
             <div class="row modal-section">
               <p class="col-6 detail-box"><strong>홈페이지</strong></p>
-              <div class="col-6" style="margin-left: 0.5rem;">
-                <button @click="websiteClick" class="btn btn-primary" style="font-size: 1.2rem; font-weight: 400; width: 100%; align-items: center; margin-bottom: 20px;">
-                바로가기
+              <div class="col-6" style="margin-left: 0.5rem">
+                <button
+                  @click="websiteClick"
+                  class="btn btn-primary"
+                  style="
+                    font-size: 1.2rem;
+                    font-weight: 400;
+                    width: 100%;
+                    align-items: center;
+                    margin-bottom: 20px;
+                  "
+                >
+                  바로가기
                 </button>
               </div>
             </div>
           </div>
-          <button @click="closeModal" class="btn btn-primary rounded-pill" style="font-size: 23px; font-weight: 600;">
+          <button
+            @click="closeModal"
+            class="btn btn-primary rounded-pill"
+            style="font-size: 23px; font-weight: 600"
+          >
             닫기
           </button>
         </div>
@@ -122,255 +139,277 @@
             :to="{ name: 'PostView', params: { postId: post.postId } }"
             style="text-decoration: none; color: inherit"
           > -->
-            <div class="card mb-3" @click="goToPostView(post)">
-              <div class="row g-0">
-                <div class="col-md-4">
-                  <img :src="post.thumbImage" class="img-fluid rounded-start" />
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body" style="text-align: left">
-                    <h6 class="card-title mb-2">{{ post.postTitle }}</h6>
-                    <span class="card-text">
-                      {{ post.postContent.slice(0, 30) }}
-                      <span v-if="post.postContent.length > 30">...</span>
-                    </span>
-                  </div>
+          <div class="card mb-3" @click="goToPostView(post)">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img :src="post.thumbImage" class="img-fluid rounded-start" />
+              </div>
+              <div class="col-md-8">
+                <div class="card-body" style="text-align: left">
+                  <h6 class="card-title mb-2">{{ post.postTitle }}</h6>
+                  <span class="card-text">
+                    {{ post.postContent.slice(0, 30) }}
+                    <span v-if="post.postContent.length > 30">...</span>
+                  </span>
                 </div>
               </div>
             </div>
+          </div>
           <!-- </router-link> -->
         </div>
       </div>
     </div>
   </main>
 
-  <main style="background-color:#EFF7FF">
-
-    <div class="container mb-5" style="max-width: 800px;">
+  <main style="background-color: #eff7ff">
+    <div class="container mb-5" style="max-width: 800px">
       <div>
-          <div class="row align-items-center mt-5 mb-3">
-            <div class="col mt-3 mb-2">
-              <h4>한눈에 보는 정부정책</h4>
-            </div>
+        <div class="row align-items-center mt-5 mb-3">
+          <div class="col mt-3 mb-2">
+            <h4>한눈에 보는 정부정책</h4>
           </div>
+        </div>
 
-          <div class="d-flex flex-column justify-content-between">
-            <div class="flex-grow-1">
-              <div class="row align-items-center">
-                <!-- 지원선택 카테고리 -->
-                <div class="col-md-6 mb-3">
-                  <div class="form-group row">
-                    <label class="col-form-label col-5 mr-1 text-start">지원선택</label>
-                    <div class="col-12">
-                      <select
-                        class="form-select form-control-lg"
-                        v-model="selectedCategory"
-                      >
-                        <option disabled selected value="">전체</option>
-                        <option value="housing">주거지원</option>
-                        <option value="integrated">통합지원</option>
-                      </select>
-                    </div>
+        <div class="d-flex flex-column justify-content-between">
+          <div class="flex-grow-1">
+            <div class="row align-items-center">
+              <!-- 지원선택 카테고리 -->
+              <div class="col-md-6 mb-3">
+                <div class="form-group row">
+                  <label class="col-form-label col-5 mr-1 text-start"
+                    >지원선택</label
+                  >
+                  <div class="col-12">
+                    <select
+                      class="form-select form-control-lg"
+                      v-model="selectedCategory"
+                    >
+                      <option disabled selected value="">전체</option>
+                      <option value="housing">주거지원</option>
+                      <option value="integrated">통합지원</option>
+                    </select>
                   </div>
-                </div>
-
-                <!-- 지역 정보 선택 드롭다운 -->
-                <div class="col-md-6 mb-3">
-                  <div class="form-group row">
-                    <label class="col-form-label col-5 text-start">지역정보</label>
-                    <div class="col-12">
-                      <select class="form-select form-control-lg" v-model="selectedRegion">
-                        <option value="all">전체</option>
-                        <option value="서울특별시">서울특별시</option>
-                        <option value="부산광역시">부산광역시</option>
-                        <option value="대구광역시">대구광역시</option>
-                        <option value="인천광역시">인천광역시</option>
-                        <option value="광주광역시">광주광역시</option>
-                        <option value="대전광역시">대전광역시</option>
-                        <option value="경기도">경기도</option>
-                        <option value="충청북도">충청북도</option>
-                        <option value="충청남도">충청남도</option>
-                        <option value="전라남도">전라남도</option>
-                        <option value="경상북도">경상북도</option>
-                        <option value="경상남도">경상남도</option>
-                        <option value="세종특별자치시">세종특별시</option>
-                        <option value="제주특별자치도">제주특별시</option>
-                        <option value="강원특별자치도">강원특별시</option>
-                        <option value="전북특별자치도">전북특별시</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 사업 구분 선택 드롭다운 -->
-                <div class="col-md-6 mb-3">
-                  <div class="form-group row">
-                    <label class="col-form-label col-5 text-start">{{
-                      selectedCategory === "housing" ? "사업구분" : "제공유형"
-                    }}</label>
-                    <div class="col-12">
-                      <select
-                        class="form-select form-control-lg"
-                        v-model="birateralClassification"
-                      >
-                        <option value="all">전체</option>
-                        <option
-                          v-if="selectedCategory === 'housing'"
-                          value="공공분양"
-                        >
-                          공공분양
-                        </option>
-                        <option
-                          v-if="selectedCategory === 'housing'"
-                          value="공공임대"
-                        >
-                          공공임대
-                        </option>
-                        <option
-                          v-if="selectedCategory === 'housing'"
-                          value="민간분양"
-                        >
-                          민간분양
-                        </option>
-                        <option
-                          v-if="selectedCategory === 'housing'"
-                          value="민간임대"
-                        >
-                          민간임대
-                        </option>
-                        <!-- 통합지원 제공유형 옵션 추가 예시 -->
-                        <option
-                          v-if="selectedCategory === 'integrated'"
-                          value="현금지급"
-                        >
-                          현금지급
-                        </option>
-                        <option
-                          v-if="selectedCategory === 'integrated'"
-                          value="전자바우처"
-                        >
-                          전자바우처
-                        </option>
-                        <option
-                          v-if="selectedCategory === 'integrated'"
-                          value="현금지급 전자바우처"
-                        >
-                          현금지급 전자바우처
-                        </option>
-                        <option
-                          v-if="selectedCategory === 'integrated'"
-                          value="프로그램 서비스"
-                        >
-                          프로그램 서비스
-                        </option>
-                        <option
-                          v-if="selectedCategory === 'integrated'"
-                          value="기타"
-                        >
-                          기타
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 사업주체 선택 드롭다운 -->
-                <div class="col-md-6 mb-3">
-                  <div class="form-group row">
-                    <label class="col-form-label col-5 text-start">사업주체</label>
-                    <div class="col-12">
-                      <select
-                        class="form-select form-control-lg"
-                        v-model="selectedBusinessEntity"
-                      >
-                        <option value="all">전체</option>
-                        <option value="중앙정부">중앙정부</option>
-                        <option value="지자체">지자체</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 검색 버튼 -->
-                <div class="row">
-                  <button class="btn btn-primary mt-4" @click="fetchPolicies"
-                    style="border-radius:1.5rem; padding: 0.7rem; margin:0.7rem;">
-                    검색
-                  </button>
                 </div>
               </div>
-              <!-- 리스트 표시 -->
-              <div
-                v-if="
-                  selectedCategory === 'housing' ||
-                  selectedCategory === 'integrated'
-                "
-              >
-                <!-- 선택된 카테고리가 주거지원이거나 통합지원일 때에만 표시 -->
-                <div v-if="filteredPolicies.length" class="mt-3">
-                  <!-- filteredPolicies 배열의 길이가 0이 아닐 때만 표시 -->
-                  <!-- 리스트의 개수를 보여주는 부분 -->
-                  <div style="text-align: left">
-                    <h5 class="text-start pl-2">
-                      총 {{ filteredPolicies.length }}건
-                    </h5>
-                  </div>
 
-                  <hr class="mt-1" style="height: 1px; background-color: #6c757d" />
-
-                  <ul class="policy-list min-vh-100 list-unstyled">
-                    <li
-                      v-for="(policy, index) in filteredPolicies"
-                      :key="policy.id"
-                      @click="selectPolicy(policy)"
-                      class="text-start pl-5 fs-3"
-                      style="font-size: 1rem !important;"
+              <!-- 지역 정보 선택 드롭다운 -->
+              <div class="col-md-6 mb-3">
+                <div class="form-group row">
+                  <label class="col-form-label col-5 text-start"
+                    >지역정보</label
+                  >
+                  <div class="col-12">
+                    <select
+                      class="form-select form-control-lg"
+                      v-model="selectedRegion"
                     >
+                      <option value="all">전체</option>
+                      <option value="서울특별시">서울특별시</option>
+                      <option value="부산광역시">부산광역시</option>
+                      <option value="대구광역시">대구광역시</option>
+                      <option value="인천광역시">인천광역시</option>
+                      <option value="광주광역시">광주광역시</option>
+                      <option value="대전광역시">대전광역시</option>
+                      <option value="경기도">경기도</option>
+                      <option value="충청북도">충청북도</option>
+                      <option value="충청남도">충청남도</option>
+                      <option value="전라남도">전라남도</option>
+                      <option value="경상북도">경상북도</option>
+                      <option value="경상남도">경상남도</option>
+                      <option value="세종특별자치시">세종특별시</option>
+                      <option value="제주특별자치도">제주특별시</option>
+                      <option value="강원특별자치도">강원특별시</option>
+                      <option value="전북특별자치도">전북특별시</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-                      {{ policy.businessOverview }}
+              <!-- 사업 구분 선택 드롭다운 -->
+              <div class="col-md-6 mb-3">
+                <div class="form-group row">
+                  <label class="col-form-label col-5 text-start">{{
+                    selectedCategory === "housing" ? "사업구분" : "제공유형"
+                  }}</label>
+                  <div class="col-12">
+                    <select
+                      class="form-select form-control-lg"
+                      v-model="birateralClassification"
+                    >
+                      <option value="all">전체</option>
+                      <option
+                        v-if="selectedCategory === 'housing'"
+                        value="공공분양"
+                      >
+                        공공분양
+                      </option>
+                      <option
+                        v-if="selectedCategory === 'housing'"
+                        value="공공임대"
+                      >
+                        공공임대
+                      </option>
+                      <option
+                        v-if="selectedCategory === 'housing'"
+                        value="민간분양"
+                      >
+                        민간분양
+                      </option>
+                      <option
+                        v-if="selectedCategory === 'housing'"
+                        value="민간임대"
+                      >
+                        민간임대
+                      </option>
+                      <!-- 통합지원 제공유형 옵션 추가 예시 -->
+                      <option
+                        v-if="selectedCategory === 'integrated'"
+                        value="현금지급"
+                      >
+                        현금지급
+                      </option>
+                      <option
+                        v-if="selectedCategory === 'integrated'"
+                        value="전자바우처"
+                      >
+                        전자바우처
+                      </option>
+                      <option
+                        v-if="selectedCategory === 'integrated'"
+                        value="현금지급 전자바우처"
+                      >
+                        현금지급 전자바우처
+                      </option>
+                      <option
+                        v-if="selectedCategory === 'integrated'"
+                        value="프로그램 서비스"
+                      >
+                        프로그램 서비스
+                      </option>
+                      <option
+                        v-if="selectedCategory === 'integrated'"
+                        value="기타"
+                      >
+                        기타
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-                      <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
-                      <hr
-                        v-if="index !== policies.length - 1"
-                        style="height: 1px; background-color: #6c757d"
-                      />
+              <!-- 사업주체 선택 드롭다운 -->
+              <div class="col-md-6 mb-3">
+                <div class="form-group row">
+                  <label class="col-form-label col-5 text-start"
+                    >사업주체</label
+                  >
+                  <div class="col-12">
+                    <select
+                      class="form-select form-control-lg"
+                      v-model="selectedBusinessEntity"
+                    >
+                      <option value="all">전체</option>
+                      <option value="중앙정부">중앙정부</option>
+                      <option value="지자체">지자체</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 검색 버튼 -->
+              <div class="row">
+                <button
+                  class="btn btn-primary mt-4"
+                  @click="fetchPolicies"
+                  style="border-radius: 1.5rem; padding: 0.7rem; margin: 0.7rem"
+                >
+                  검색
+                </button>
+              </div>
+            </div>
+            <!-- 리스트 표시 -->
+            <div
+              v-if="
+                selectedCategory === 'housing' ||
+                selectedCategory === 'integrated'
+              "
+            >
+              <!-- 선택된 카테고리가 주거지원이거나 통합지원일 때에만 표시 -->
+              <div v-if="filteredPolicies.length" class="mt-3">
+                <!-- filteredPolicies 배열의 길이가 0이 아닐 때만 표시 -->
+                <!-- 리스트의 개수를 보여주는 부분 -->
+                <div style="text-align: left">
+                  <h5 class="text-start pl-2">
+                    총 {{ filteredPolicies.length }}건
+                  </h5>
+                </div>
+
+                <hr
+                  class="mt-1"
+                  style="height: 1px; background-color: #6c757d"
+                />
+
+                <ul class="policy-list min-vh-100 list-unstyled">
+                  <li
+                    v-for="(policy, index) in filteredPolicies"
+                    :key="policy.id"
+                    @click="selectPolicy(policy)"
+                    class="text-start pl-5 fs-3"
+                    style="font-size: 1rem !important"
+                  >
+                    {{ policy.businessOverview }}
+
+                    <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
+                    <hr
+                      v-if="index !== policies.length - 1"
+                      style="height: 1px; background-color: #6c757d"
+                    />
+                  </li>
+                </ul>
+                <hr
+                  class="mt-1"
+                  style="height: 2px; background-color: #6c757d"
+                />
+                <hr
+                  class="mt-1"
+                  style="height: 2px; background-color: #6c757d"
+                />
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                    <li
+                      class="page-item"
+                      :class="{ disabled: currentPage === 1 }"
+                    >
+                      <a class="page-link" href="#" @click="prevPage"
+                        >&laquo;</a
+                      >
+                    </li>
+                    <li
+                      class="page-item"
+                      v-for="page in pageCount"
+                      :key="page"
+                      :class="{ active: currentPage === page }"
+                    >
+                      <a class="page-link" href="#" @click="setPage(page)">{{
+                        page
+                      }}</a>
+                    </li>
+                    <li
+                      class="page-item"
+                      :class="{ disabled: currentPage === pageCount }"
+                    >
+                      <a class="page-link" href="#" @click="nextPage"
+                        >&raquo;</a
+                      >
                     </li>
                   </ul>
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-                  <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                      <li
-                        class="page-item"
-                        :class="{ disabled: currentPage === 1 }"
-                      >
-                        <a class="page-link" href="#" @click="prevPage">&laquo;</a>
-                      </li>
-                      <li
-                        class="page-item"
-                        v-for="page in pageCount"
-                        :key="page"
-                        :class="{ active: currentPage === page }"
-                      >
-                        <a class="page-link" href="#" @click="setPage(page)">{{
-                          page
-                        }}</a>
-                      </li>
-                      <li
-                        class="page-item"
-                        :class="{ disabled: currentPage === pageCount }"
-                      >
-                        <a class="page-link" href="#" @click="nextPage">&raquo;</a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
+                </nav>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
-
   </main>
 </template>
 <script>
@@ -510,16 +549,18 @@ export default {
         console.error("게시물을 불러오지 못했습니다.", error);
       }
     },
-    goToPostView (post) {
+    goToPostView(post) {
       // 로그인 확인
-      const accessToken = localStorage.getItem('accessToken')
+      const accessToken = localStorage.getItem("accessToken");
 
       if (!accessToken) {
-        alert('로그인해주세요.')
-        this.$router.push('/login')
-
+        alert("로그인해주세요.");
+        this.$router.push("/login");
       } else {
-        this.$router.push({ name: 'PostView', params: {postId: post.postId} })
+        this.$router.push({
+          name: "PostView",
+          params: { postId: post.postId },
+        });
       }
     },
     fetchPolicies() {
@@ -532,8 +573,8 @@ export default {
       const accessToken = localStorage.getItem("accessToken");
       // 검색 버튼 클릭 시 로그인 상태 확인
       if (!accessToken) {
-        alert('로그인해주세요.');
-        this.$router.push('/login');
+        alert("로그인해주세요.");
+        this.$router.push("/login");
         return; // 로그인이 되어 있지 않으면 검색을 중단하고 로그인 페이지로 이동
       }
 
@@ -763,7 +804,6 @@ export default {
   margin-top: 20px; /* 모달 내의 버튼과의 간격을 조정합니다. */
   align-self: center; /* 버튼을 가운데로 정렬합니다. */
 }
-
 
 .form-control {
   height: 50px;
