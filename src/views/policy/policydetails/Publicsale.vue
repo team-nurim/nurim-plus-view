@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3">
+  <div class="container mt-3 mb-5">
     <h1>공공분양</h1>
     <div v-if="policy" v-html="policy.publicsale" class="content-left"></div>
     <p v-else>Loading or No data available</p>
@@ -81,15 +81,8 @@ export default {
 .content-left table {
   width: 100%;
   align-items: center;
-/*  border: 1px solid #000; /* 전체 테이블에 테두리 설정 */
-/*  border-collapse: collapse; /* 테두리 겹침 방지 */
+  overflow-x: auto;
 }
-
-/* .content-left table th + th, .table td + td, .table th + td {
-  border-right: 1px solid #000;
-  border-left: 1px solid #000;
-  border-collapse: collapse;
-} */
 
 .content-left p {
   font-size: 16px;

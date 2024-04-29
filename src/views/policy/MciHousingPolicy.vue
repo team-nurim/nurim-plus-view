@@ -97,7 +97,7 @@
             <div class="row modal-section">
               <p class="col-6 detail-box"><strong>홈페이지</strong></p>
               <div class="col-6" style="margin-left: 0.5rem;">
-                <button @click="websiteClick" class="btn btn-primary" style="font-size: 23px; font-weight: 600; width: 100%; align-items: center; margin-bottom: 20px;">
+                <button @click="websiteClick" class="btn btn-primary" style="font-size: 1.2rem; font-weight: 400; width: 100%; align-items: center; margin-bottom: 20px;">
                 바로가기
                 </button>
               </div>
@@ -697,7 +697,9 @@ export default {
 }
 
 .white-bg {
-  width: 50%; /* 내부 박스 너비 */
+  width: 100%; /* 내부 박스 너비 */
+  max-width: 900px;
+  margin: 1rem;
   height: 90%;
   overflow-y: auto;
   padding: 20px; /* 패딩 */
@@ -731,7 +733,7 @@ export default {
   flex-basis: 20%; /* detail-box 너비 설정 */
   flex-shrink: 0; /* 축소하지 않음 */
   text-align: center;
-  font-size: 25px;
+  font-size: 1.2rem;
 }
 
 .info-box {
@@ -743,8 +745,8 @@ export default {
   overflow-wrap: break-word; /* 긴 텍스트 줄바꿈 */
   flex-grow: 1; /* 남은 공간을 채우도록 설정 */
   margin-left: 10px; /* detail-box와의 간격 */
-  font-size: 23px;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
 .btn.detail-box {
