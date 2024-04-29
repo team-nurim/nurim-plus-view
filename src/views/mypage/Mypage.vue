@@ -1,43 +1,48 @@
 <template>
   <main style="background-color: #FAFBFC;">
-    <div class="container mt-3 mb-4">
+    <div class="container mt-3 mb-4" style="max-width:800px;">
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4 style="font-weight: 700; font-size: 28px;">마이페이지</h4>
+          <h4 style="font-weight:700; font-size:1.8rem;">마이페이지</h4>
         </div>
       </div>
 
-      <div class="row align-items-center">
-        <div class="col-6 mt-3 align-items-center">
-          <img v-bind:src="member.memberProfileImage" alt="mdo" width="70" height="70" class="rounded-circle">
-          <img v-if="member.type == true" src="../../assets/images/expert_badge.png" alt="mdo" width="50" height="50" style="margin-left: 200px;">
+      <div class="row align-items-center text-start mb-3">
+        <div class="col-5 align-items-center">
+          <img v-bind:src="member.memberProfileImage" alt="mdo" width="70" height="70" class="rounded-circle me-3">
+          <img v-if="member.type == true" src="../../assets/images/expert_badge.png" alt="mdo" width="50" height="50">
         </div>
-        <div class="col-2 align-items-center">
-          <div style="font-size: 20px; font-weight: 500;">{{ member.memberNickname }} 님</div><br>
-          <div style="font-size: 15px; font-weight: 500;">{{ member.memberEmail }}</div>
-        </div>
-        <div class="col-4 align-items-center">
-          <button type="button" @click="goForward" class="btn btn-profile">회원 정보 수정</button>
+        <div class="col-7 align-items-center">
+          <div style="font-size:1.5rem; font-weight:500;">
+            <h4>{{ member.memberNickname }} 님</h4>
+            <p style="margin-bottom:0;">{{ member.memberEmail }}</p>
+          </div>
+        </div>        
+      </div>
+
+      <div class="row">
+        <div class="align-items-center">
+          <button type="button" @click="goForward" class="btn btn-primary w-100">회원정보수정</button>
         </div>
       </div>
 
       <hr class="custom-divider hr-sm">
 
-      <div v-if="member.type == false" class="row mt-3 mb-10 align-items-center custom-padding">
+      <div v-if="member.type == false" class="row mt-3 mb-1 align-items-center">
         <button type="button" @click="goForward2" class="btn btn-menu">
           <span class="menu-text mx-2">내 맞춤 정보 수정</span>
           <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
-      <div v-if="member.type == true" class="row mt-3 mb-10 align-items-center custom-padding">
+      <div v-if="member.type == true" class="row mt-3 mb-1 align-items-center">
         <button type="button" @click="goForward4" class="btn btn-menu">
           <span class="menu-text mx-2">내 경력 사항 수정</span>
           <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
-      <div v-if="member.type ==  false" class="row mt-3 mb-10 align-items-center custom-padding">
+      <div v-if="member.type ==  false" class="row mt-3 mb-1 align-items-center">
         <button type="button" @click="goForward3" class="btn btn-menu">
           <span class="menu-text mx-2">계정 전환</span>
           <span class="menu-text mx-2">〉</span>
@@ -46,21 +51,21 @@
 
       <hr class="custom-divider hr-sm">
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div class="row mt-3 mb-1 align-items-center">
         <button type="button" class="btn btn-menu" @click="goForward5">
           <span class="menu-text mx-2">내가 받을 수 있는 지원금</span>
           <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div class="row mt-3 mb-1 align-items-center">
         <button type="button" class="btn btn-menu" @click="goForward6">
           <span class="menu-text mx-2">정책 정보</span>
           <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div class="row mt-3 mb-1 align-items-center">
         <button type="button" class="btn btn-menu" @click="goForward7">
           <span class="menu-text mx-2">지식 커뮤니티</span>
           <span class="menu-text mx-2">〉</span>
@@ -69,12 +74,14 @@
 
       <hr class="custom-divider hr-sm">
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
+      <div class="row mt-3 mb-1 align-items-center">
         <button type="button" class="btn btn-menu" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <span class="menu-text mx-2">계정 탈퇴</span>
           <span class="menu-text mx-2">〉</span>
         </button>
       </div>
+
+
 
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -224,44 +231,24 @@ export default {
   border: none; /* 테두리 없음 */
   height: 2px; /* 높이 조절 (원하는 높이로 변경) */
   background-color: #ccc; /* 배경색 지정 */
-  margin: 20px 0; /* 위아래 여백 지정 (원하는 여백으로 변경) */
-}
-
-.custom-padding {
-  padding-right: 100px;
-  padding-left: 100px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  margin: 1rem 0; /* 위아래 여백 지정 (원하는 여백으로 변경) */
 }
 
 .btn-menu {
+  text-align: left;
   height: 70px;
-  background-color: white; /* 기본 배경색 */
-  color: black; /* 글씨색 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  background-color: white;
+  color: black;
+  border: none;
+  outline: none;
   box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
-  display: flex;
   justify-content: space-between;
-  align-items: center;
+
 }
 
 .btn-menu:hover {
   background-color: #f4f4f4; /* 호버 및 포커스 시 배경색 변경 */
   color: black; /* 호버 및 포커스 시 글씨색 변경 */
-}
-
-.btn-profile {
-  height: 40px;
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
-  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
-  font-size: 16px;
-  font-weight: 500;
 }
 
 .btn-profile:hover {
@@ -271,7 +258,7 @@ export default {
 
 .menu-text {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 </style>

@@ -65,9 +65,9 @@
                 <li style="padding:0.5rem 1rem"><b>{{ member.memberNickname }}님</b><img v-if="member.type == true" src="../../assets/images/expert_badge.png" alt="mdo2" width="32" height="32" style="margin-left: 30px;"></li>
                 <li><hr class="dropdown-divider"></li>
                 <!-- memberEmail이 admin일 경우 다르게 드롭다운 표시 -->
-                <li v-if="member.memberEmail === 'admin'" style="padding:0.5rem 1rem"><router-link to="/admin/post/list">관리자 페이지</router-link></li>
-                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
-                <li v-if="member.memberEmail !== 'admin'" style="padding:0.5rem 1rem"><router-link to="/switchAccount">계정 전환</router-link></li>
+                <li v-if="member.memberRole === 'ADMIN'" style="padding:0.5rem 1rem"><router-link to="/admin/post/list">관리자 페이지</router-link></li>
+                <li v-if="member.memberRole !== 'ADMIN'" style="padding:0.5rem 1rem"><router-link to="/mypage" href="#">마이페이지</router-link></li>
+                <li v-if="member.memberRole !== 'ADMIN'" style="padding:0.5rem 1rem"><router-link to="/switchAccount">계정 전환</router-link></li>
                 <li style="padding:0.5rem 1rem"><router-link to="#" @click="logout">로그아웃</router-link></li>
               </ul>
             </div>
