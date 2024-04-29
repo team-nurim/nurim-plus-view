@@ -59,10 +59,6 @@
 /* eslint-disable */
 import axios from 'axios'
 
-function saveUserInfo(userInfo) {
-  localStorage.setItem('userInfo', JSON.stringify(userInfo))
-}
-
 export default {
   components: {},
   data () {
@@ -80,13 +76,13 @@ export default {
           memberEmail: this.memberEmail,
           memberPw: this.memberPw
         })
-        const userInfo = response.data
-        saveUserInfo(userInfo)
+
         // JWT 토큰 출력
         console.log('서버 응답 데이터:', response.data.accessToken)
 
         // JWT 토큰 로컬스토리지에 저장
         localStorage.setItem('accessToken', response.data.accessToken)
+        localStorage.setItem('memberEmail', response.data.memberEmail)
 
         // 로컬스토리지에 자동로그인 정보 저장
         if (this.rememberMe) {
@@ -111,7 +107,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .container {
   display: flex;
   align-items: center;
@@ -121,7 +117,7 @@ export default {
 .loginBox {
   min-width: 330px;
   max-width: 28%;
-  margin: 10% auto 0;
+  margin: 12% auto 16%;
   text-align: left;
 }
 

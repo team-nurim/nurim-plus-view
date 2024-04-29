@@ -1,119 +1,149 @@
-c<template>
-  <!-- full page 영역 -->
-  <div class="List-container">
-    <h4 class="mb-3">무엇이든 물어보세요</h4>
-    <button class="btn btn-primary" style="padding:0.75rem 1.5rem; border-radius:1.5rem;" @click="goWrite">문의하기</button>
+<template>
+<main>
+
+  <!-- 플로팅 버튼 -->
+  <div class="floating-button mt-5 mb-5"
+  style="position:fixed; left:50%; transform:translateX(-50%); z-index:1000; bottom:1.5rem;">
+    <button class="btn btn-primary" style="width:16rem; padding:0.65rem; border-radius:1.5rem;" @click="goWrite">문의하기</button>
   </div>
 
-  <div class="container">
+    <!-- full page 영역 -->
+  <div class="list-container">
+    <img src="../../assets/inquiry.png" class="mb-3">
+    <h3 class="mb-3">무엇이든 물어보세요</h3>
+    <!-- <button class="btn btn-primary" style="padding:0.5rem 3rem; border-radius:1.5rem;" @click="goWrite">문의하기</button> -->
+  </div>
 
-  <!--가장많이 본 게시물 -->
-  <div>
+    <div class="container">
+
+  <!--가장 많이 본 게시물 -->
+  <div class="mt-5 mb-5">
 
     <div class="row">
-      <div class="col">
-        <h3 class="text-start">가장 많이 본 게시물</h3>
-      </div>
-      <div class="col">
-        <div class="arrow-buttons">
-          <a @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button1">‹</a>
-          <a @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
+      <div class="col d-flex align-items-start  mb-2">
+        <h4 class="text-start">가장 많이 본 게시물</h4>
+        <div class="arrow-buttons ms-auto" >
+          <span @click="prevPopluarPage" :disabled="currentPage === 0" class="arrow-button-prev">‹</span>
+          <span @click="nextPopluarPage" :disabled="currentPage === totalPages - 1" class="arrow-button-next">›</span>
         </div>
       </div>
     </div>
 
-    <div class="popularContainer">
+    <div class="row">
       <!-- card -->
-      <div class="col-md-4" v-for="(community, index) in popluarVisbleBoards" :key="index">
-        <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
-          <div class="card justify-content-center" style="margin-bottom:1rem; text-align: left; padding: 1.2rem;">
-            <div class="card-body">
-              <div class="row mb-3">
+      <div class="col-md-4" v-for="(community, index) in popluarVisbleBoards" :key="index" style="margin-bottom:1rem;">
+        <router-link style="text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId }}">
+          <div class="card" style="border-radius:1rem;">
                 <div class="col">
                   <h4 class="card-title">{{ community.memberNickname }}</h4>
-                    <span class="card-subtitle mb-2" style="color:#B4B4B4;">
-                      등록일자:{{ formatDate(community.registerDate) }}  |  조회수:{{ community.counts }}
-                    </span>
-                </div>
-              </div>
+                  <span class="card-subtitle mb-2" style="color:#B4B4B4;">
+                    등록일자:{{ formatDate(community.registerDate) }}  |  조회수:{{ community.counts }}
+                  </span>
               <p class="card-text mt-2">
                 {{ community.content.slice(0, 100) }}
                 <span v-if="community.content.length > 60">...</span>
-                </p>
+              </p>
             </div>
           </div>
         </router-link>
       </div>
-
     </div>
+
   </div>
 
   <!--답변을 기다리는 게시물-->
-  <div class="inquire-container">
-    <div class="arrow-buttons">
-      <h3 class="inquire-title" style="font-size: 30px; margin-left: 300px">답변을 기다리는 게시물</h3>
-      <a @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button1" style="margin-left: 930px">‹</a>
-      <a @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button">›</a>
+  <div class="mb-5">
+    <div class="col d-flex align-items-start mb-2">
+      <h4>답변을 기다리는 게시물</h4>
+      <div class="arrow-buttons ms-auto">
+        <span @click="InsqireprevPage" :disabled="currentPage === 0" class="arrow-button-prev">‹</span>
+        <span @click="InsqirenextPage" :disabled="currentPage === totalPages - 1" class="arrow-button-next">›</span>
+      </div>
     </div>
-  <div class="inquire-card">
-    <router-link style="text-decoration: none; color: black;" v-for="(inquire, index) in insqireVisbleBoards" :key="index" :to="{ name: 'CommunityDetailView', params: { communityId: inquire.communityId }}" class="inquireView-card">
-    <div class="category-info">
-    <p class="category" style="border-radius: 30px;">{{ inquire.category }}</p>
-  </div>
-    <h2 class="inquire-title">{{ inquire.title }}</h2>
-    <p class="content">{{ inquire.content }}</p>
-    </router-link>
-    </div>
-  </div>
-<!--답변을 기다리는 게시물-->
-<!--카테고리 및 검색창-->
-<div class="container1">
-<div class="category-search">
-<div class="category-buttons">
-  <button class="btn btn-outline-secondary" @click="selectCategory('전체')" style="border-radius: 17px;">전체</button>
-  <button class="btn btn-outline-secondary" @click="selectCategory('보육')" style="border-radius: 17px;">보육</button>
-  <button class="btn btn-outline-secondary" @click="selectCategory('출산')" style="border-radius: 17px;">출산/양육</button>
-  <button class="btn btn-outline-secondary" @click="selectCategory('주거')" style="border-radius: 17px;">주거</button>
-  <button class="btn btn-outline-secondary" @click="selectCategory('장례')" style="border-radius: 17px;">장례</button>
-</div>
-<div class="search-container">
-<input type="text" v-model="searchQuery" placeholder="검색하실 제목을 입력해주세요." class="search-input">
-<i class="fa-solid fa-magnifying-glass search-icon" style="color: skyblue; cursor: pointer;" @click="searchCommunity"></i>
-</div>
-</div>
 
-<!-- 게시물 리스트 -->
-<div class="list-container" style="display: grid;">
-<div v-for="(community, index) in communityList" :key="index" class="List-card" style="place-items: center;">
-  <router-link style = "text-decoration: none; color: black;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId}}">
-  <div class="listInfo">
-    <p style="margin-right: 20px; margin-left: 10px;">닉네임:{{ community.memberNickname }}</p>
-    <p style="margin-right: 20px;">등록일:{{ formatDate(community.registerDate) }}</p>
-    <p >조회수:{{ community.counts }}</p>
+    <div class="row">
+      <router-link class="col-md-3" style="margin-bottom:1rem; text-decoration:none;" v-for="(inquire, index) in insqireVisbleBoards" :key="index" :to="{ name: 'CommunityDetailView', params: { communityId: inquire.communityId }}">
+        <div class="card" style="border-radius:1rem;">
+          <div class="card-body" style="padding:0;">
+            <span class="category" style="font-size:0.75rem !important; color:#FFF; background-color:#333;">{{ inquire.category }}</span>
+            <h5 class="mt-2">{{ inquire.title }}</h5>
+            <p class="card-text">
+              {{ inquire.content.slice(0, 100) }}
+              <span v-if="inquire.content.length > 60">...</span>
+            </p>
+          </div>
+        </div>
+      </router-link>
+    </div>
+
   </div>
-    <p class="list-title" style="margin-left: 10px;">
-      {{ community.title }}
+
+  </div>
+</main>
+
+<main style="background-color:#EFF7FF;">
+  <div class="container" style="max-width:800px;">
+
+      <!--카테고리 및 검색창-->
+    <div class="mt-5 mb-5">
+
+      <br>
+      <div class="row">
+        <div class="col-md-6 text-start mb-3">
+          <button class="btn btn-outline-dark me-1 mb-1" @click="selectCategory('전체')" style="font-size:0.75rem; border-radius:1.2rem;">전체</button>
+          <button class="btn btn-outline-dark me-1 mb-1" @click="selectCategory('보육')" style="font-size:0.75rem; border-radius:1.2rem;">보육</button>
+          <button class="btn btn-outline-dark me-1 mb-1" @click="selectCategory('출산')" style="font-size:0.75rem; border-radius:1.2rem;">출산/양육</button>
+          <button class="btn btn-outline-dark me-1 mb-1" @click="selectCategory('주거')" style="font-size:0.75rem; border-radius:1.2rem;">주거</button>
+          <button class="btn btn-outline-dark me-1 mb-1" @click="selectCategory('장례')" style="font-size:0.75rem; border-radius:1.2rem;">장례</button>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <div class="input-group">
+            <input type="text" v-model="searchQuery" placeholder="검색어를 입력해주세요." class="form-control search-input" @keyup.enter="searchCommunity">
+            <span class="input-group-text">
+              <i class="fa-solid fa-magnifying-glass search-icon" style="color:#333; cursor:pointer;" @click="searchCommunity"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 게시물 리스트 -->
+      <div>
+        <div v-for="(community, index) in communityList" :key="index" class="list-card" style="place-items: center;">
+          <router-link style="text-decoration:none; color:black; magin:0;" :to="{ name: 'CommunityDetailView', params: { communityId: community.communityId}}">
+          <div class="text-start mb-2">
+            <span style="margin-right: 1rem;">닉네임: {{ community.memberNickname }}</span>
+            <span style="margin-right: 1rem;">등록일: {{ formatDate(community.registerDate) }}</span>
+            <span style="margin-right: 1rem;" >조회수: {{ community.counts }}</span>
+          </div>
+            <p style="text-align:left;">
+              {{ community.title }}
+            </p>
+            </router-link>
+        </div>
+      </div>
+
+      <!-- 페이지네이션 -->
+      <div class="d-flex justify-content-center mt-3">
+          <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
+          <div v-for="pageNumber in totalPages" :key="pageNumber">
+            <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
+          </div>
+          <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
+      </div>
+
+    </div>
+
+    <!-- 위로가기 버튼 -->
+    <p style="position:fixed; bottom:20px; right:20px;">
+      <a href="#">
+          <img src="../../assets/images/img_arr_top.png" alt="위로가기" style="width:2rem; height:2.2rem;">
+      </a>
     </p>
-    </router-link>
-</div>
-</div>
-
-<!-- 페이지네이션 -->
-<div class="d-flex justify-content-center mt-3">
-    <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
-    <div v-for="pageNumber in totalPages" :key="pageNumber">
-      <button class="btn btn-white mr-2" @click="goToPage(pageNumber)" :class="{ 'btn-white': currentPage === pageNumber }">{{ pageNumber }}</button>
-    </div>
-    <button class="btn btn-white" @click="nextPage" :disabled="currentPage === totalPages -1" style="margin-bottom: 50px;">›</button>
-</div>
-<router-link to="/CommunityCreate"><button class="btn btn-primary" style="width: 100px;">문의하기</button></router-link>
-</div>
-<!-- 위로가기 버튼 -->
-<p class="fixed_top">
-    <a href="#">위로</a>
-</p>
 
   </div>
+
+</main>
 </template>
 <script>
 // eslint-disable-next-line
@@ -121,7 +151,6 @@ c<template>
 import axios from 'axios'
 export default {
   name: 'CommunityView',
-
   data () {
     return {
       popluarBoards: [],
@@ -168,6 +197,9 @@ export default {
     },
     hasInsqirePreviousData () {
       return this.currentPage1 > 0
+    },
+    goAsk () {
+      this.$router.push('/community')
     }
   },
   mounted () {
@@ -214,41 +246,41 @@ export default {
       }
     },
     async axiosCommunityList(category = '전체') {
-  try {
-    const accessToken = localStorage.getItem('accessToken')
-    let url = `http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`
-    if (category !== '전체') {
-      url = `http://localhost:8080/api/v1/categoryPage/${category}?page=${this.currentPage}&size=${this.pageSize}`;
-    }
-    const response = await axios.get(url,{
-    headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }});
-    this.communityList = response.data.content;
-    this.totalPages = response.data.totalPages;
-  } catch (err) {
-    console.error('리스트를 불러올 수 없습니다:', err);
-  }
-},
-async selectCategory(category) {
-  this.selectedCategory = category;
-  await this.axiosCommunityList(category);
-},
-async searchCommunity() {
-  try {
-    const accessToken = localStorage.getItem('accessToken')
-    let url = `http://localhost:8080/api/v1/community/Search?title=${this.searchQuery}`
-    const response = await axios.get(url,{
-      headers : {
-        'Authorization': `Bearer ${accessToken}`
+    try {
+      const accessToken = localStorage.getItem('accessToken')
+      let url = `http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`
+      if (category !== '전체') {
+        url = `http://localhost:8080/api/v1/categoryPage/${category}?page=${this.currentPage}&size=${this.pageSize}`;
       }
-    });
-    this.communityList = response.data.content;
-    this.totalPages = response.data.totalPages;
-  } catch (err) {
-    console.log('검색 실패:', err);
-  }
-},
+      const response = await axios.get(url,{
+      headers: {
+              'Authorization': `Bearer ${accessToken}`
+          }});
+      this.communityList = response.data.content;
+      this.totalPages = response.data.totalPages;
+    } catch (err) {
+      console.error('리스트를 불러올 수 없습니다:', err);
+    }
+    },
+    async selectCategory(category) {
+      this.selectedCategory = category;
+      await this.axiosCommunityList(category);
+    },
+    async searchCommunity() {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+        let url = `http://localhost:8080/api/v1/community/Search?keyword=${this.searchQuery}`
+        const response = await axios.get(url,{
+          headers : {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        this.communityList = response.data.content;
+        this.totalPages = response.data.totalPages;
+      } catch (err) {
+        console.log('검색 실패:', err);
+      }
+    },
     nextPopluarPage () {
       if (this.popluarCurrentPage < this.popluarTotalPages - 1 && this.hasNextData) {
         this.popluarCurrentPage++
@@ -279,124 +311,107 @@ async searchCommunity() {
   }
 }
 </script>
-<style>
-/*=======================화살표 스타일============================================*/
-.arrow-buttons {
-  display: flex;
-  align-content: center;
-}
-.arrow-button1 {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  background: url('../../assets/images/left_arrow.png');
-  text-indent: -9999px;
-  margin-right: 5px; /* 화살표 간 간격 조정 */
-}
-.arrow-button {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  background: url('../../assets/images/right_arrow.png');
-  text-indent: -9999px;
-}
-/*=======================메인 타이틀 스타일============================================*/
-.List-container {
+<style scoped>
+/* 메인 타이틀 스타일 */
+.list-container {
   width: 100%;
-  height: 28vh;
-  flex-direction: column;
+  padding: 3rem 0rem;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
-  padding-top: 60px;
-  margin-bottom: 100px;
 }
+
+/* 화살표 스타일 */
+.arrow-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.arrow-button-prev,
+.arrow-button-next {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.3rem; /* 화살표 간 간격 조정 */
+  font-size: 2rem; /* 화살표 아이콘 크기 조정 */
+  padding-bottom: 0.6rem;
+  font-weight: 200;
+}
+
 .subtitle {
   font-size: 16px;
   margin-top: 20px;
 }
+
 /*======================가장많이 본 게시물 스타일==========================================*/
-.favorite-container {
-  margin-bottom: 100px;
-}
 .favorite-header {
   align-items: center;
   margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
-  margin-left: 300px;
 }
+
 .favoriteboards-title {
   margin-right: auto;
 }
+
 .popularContainer {
-display: flex;
-flex-wrap: wrap;
-flex: 1;
-justify-content: center;
 }
+
+/* 카드 스타일 */
+.card {
+  text-align: left;
+  padding: 1.2rem;
+}
+
 .most-view-card {
   border: 1px solid #ccc;
   border-radius: 1rem;
   padding: 1.2rem;
-  margin: 1rem;
 }
+
 .info {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
 }
-.category-info {
-  display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-    justify-content: flex-start;
-}
+
 .counts{
   margin-left: 20px;
-}
-.info p {
-    font-size: 14px;
 }
 
 .content {
     font-size: 16px;
     color: #666;
 }
-  /*=======================답변을 기다리는 게시물 스타일==================================*/
-  .inquire-container{
-    margin-bottom: 100px;
+
+/* 답변을 기다리는 게시물 스타일 */
+.inquire-title {
+  margin-right: center;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.inquire-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
+  width: 1300px;
+  margin-left: 300px;
+  flex-direction: column;
+}
+
+.inquireView-card {
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  background-color: #fff;
+  padding: 0.5rem;
+  margin-bottom: 1.2rem;
   }
-  .inquire-title{
-    margin-right: center;
-    font-size: 20px;
-      text-align: start;
-  }
-  .inquire-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0px; /* 인기글과 화살표 간 간격 조정 */
-    width: 1300px;
-    margin-left: 300px;
-    flex-direction: column;
-  }
-  .inquire-card {
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1;
-    justify-content: center;
-    }
-  .inquireView-card{
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: calc(35.23% - 40px); /* 가로 여백 제외한 1/3 너비로 설정 */
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    margin-left: 20px;
-    }
-   /*====================================================================================*/
-   /*====================================카테고리 검색창=================================== */
+/* 카테고리 검색창 */
 .category-search {
   display: flex;
   align-items: flex-start;
@@ -406,7 +421,7 @@ justify-content: center;
 
 .category-buttons {
   display: flex;
-  gap: 10px;
+  gap: 0.1rem;
   margin-right: 30px;
 }
 
@@ -417,26 +432,19 @@ justify-content: center;
   padding: 10px 20px;
   cursor: pointer;
 }
+
 .category {
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 10px; /* 원하는 둥근 정도로 조절 */
-  background-color: #ccc; /* 배경색 설정 */
-  padding: 5px 10px; /* 카테고리 내부 패딩 설정 */
+  font-size: 0.35rem;
+  border: 1px solid #333;
+  font-weight: 300;
+  border-radius: 1.2rem;
+  padding: 0.2rem 0.6rem 0.3rem 0.6rem;
 }
 
 .search-input {
   border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 8px;
-  width: 600px;
-}
-.search-container {
-  position: relative;
-}
-
-.search-input {
-  padding-right: 30px; /* 아이콘을 위한 오른쪽 패딩 */
+  border-radius: 0.4rem;
+  padding: 0.4rem;
 }
 
 .search-icon {
@@ -446,63 +454,38 @@ justify-content: center;
   transform: translateY(-50%);
 }
 
-   /* ======================================카드 스타일링================================= */
-.list-container {
-  justify-content: center;
-  margin-top: 20px;
+/* 카드 스타일링 */
+.container {
+  max-width: 1000px;
 }
 
-.List-card {
-  border-radius: 10px;
-  margin-bottom: 20px;
-  width: 1000px;
-  height: 100px;
+.list-card {
+  border-radius: 1rem;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  min-height: 3rem;
   text-align: center;
-  background-color: #f0f0f0;
+  background-color: #FFF;
 }
+
 .listInfo {
   margin-top: 10px;
   display: flex;
   justify-content: start;
 }
 
-.card-content {
-  padding: 20px;
-}
-
 .card h3 {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: bold;
 }
 
-.card p {
-  font-size: 16px;
-  margin-bottom: 10px;
-}
 .list-title{
   text-align: left;
 }
 
-/* ======================================페이지네이션 스타일링==================================================== */
-.pagination {
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
+/* 페이지네이션 스타일링 */
 
-.pagination button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-.boardRegister{
+.boardRegister {
   background-color: #007bff; /* primary 색상 */
   color: white; /* 텍스트 색상 */
   border: none; /* 테두리 없음 */
@@ -513,34 +496,28 @@ justify-content: center;
   width: 340px;
   font-size: 16px;
 }
-/* .fixed-button {
+
+.fixed-button {
   position: fixed;
   bottom: 100px;
   right: 100px;
   z-index: 999;
-} */
-/*위로가기 스타일*/
-.fixed_top{
-        position: fixed;
-        top: 49%;
-        right: 5%;
-        width: 33px;
-        height: 33px;
-        margin: 0;
-        z-index: 1;
-    }
-    .fixed_top a{
-        display: block;
-        width: 33px;
-        height: 33px;
-        background: url("../../assets/images/img_arr_top.png") no-repeat;
-        text-indent: -99999999px;
-        overflow: hidden;
-    }
+}
 
 .card-inquiry {
   border: 1px solid #E0E0E0;
   border-radius: 1rem;
   margin: 0 auto;
 }
-  </style>
+
+p {
+  font-size: 0.75rem;
+}
+
+.floating-button button {
+  border-radius: 1rem;
+  padding: 15px;
+  font-size: 16px;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.13);
+}
+</style>

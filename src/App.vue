@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+/* eslint-disable */
 <template>
   <div id="app">
     <component :is="headerComponent" />
@@ -17,12 +19,12 @@ export default {
   computed: {
     headerComponent() {
       // '/admin' 경로에 대한 헤더 컴포넌트 선택
-      if (this.$route.path.startsWith('/admin')) {
+      if (this.$route.path.startsWith('/admin') && !this.$route.path.startsWith('/admin/login')) {
         return 'HeaderAdmin';
       } else {
         // 기본값으로 헤더 컴포넌트 선택
         return 'Header';
-      }
+      } 
     }
   }
 }
@@ -35,7 +37,7 @@ export default {
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 84vh;
+  min-height: 100vh;
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
   text-align: center;

@@ -1,9 +1,9 @@
 <template>
-  <main>
-    <div class="container">
+  <main style="background-color: #FAFBFC;">
+    <div class="container mt-3 mb-3">
       <div class="row align-items-center">
-        <div class="col mt-3 mb-3">
-          <h4>회원 정보 수정</h4>
+        <div class="col mt-3 mb-4">
+          <h4 style="font-weight: 700; font-size: 28px;">회원 정보 수정</h4>
         </div>
       </div>
 
@@ -17,7 +17,7 @@
       <div class="row mb-3 align-items-center">
         <div class="col mt-3 align-items-end">
           <input type="file" ref="fileInput" style="display: none" @change="uploadProfileImage">
-          <button type="button" class="btn btn-profile" @click="$refs.fileInput.click()">프로필 사진 수정</button>
+          <button type="button" class="btn btn-profile" style="margin-right: 10px;" @click="$refs.fileInput.click()">프로필 사진 수정</button>
           <button type="button" class="btn btn-profile" @click="setDefaultImage">기본 이미지로 설정</button>
         </div>
       </div>
@@ -25,14 +25,14 @@
       <!-- 개인 정보 수정 -->
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Email" class="form-label">이메일</label>
-        <input class="form-control" type="text" id="Email" v-bind:value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
+        <input class="form-control" style="font-weight: bold;" type="text" id="Email" v-bind:value="member.memberEmail" aria-label="Disabled input example" disabled readonly>
       </div>
 
       <div class="row mt-3 mb-10 align-items-center custom-padding">
         <label for="Password" class="form-label">비밀번호</label>
-        <input type="password" id="Password" class="form-control" v-model="member.memberPw" aria-describedby="passwordHelpBlock">
+        <input type="password" id="Password" class="form-control" v-model="member.memberPw" placeholder="새로운 비밀번호를 입력하세요" aria-describedby="passwordHelpBlock">
         <div id="passwordHelpBlock" class="form-text">
-          비밀번호 자리수, 문자 숫자 등 얼마나 포함하는지 빈칸,이모지 사용 안됨.
+          비밀번호 자리수 8자 이상 16자 이하
         </div>
       </div>
 
@@ -85,18 +85,30 @@ export default {
   },
   async created () {
     const accessToken = localStorage.getItem('accessToken')
-
-    // 페이지 생성 시 로그인 상태 확인
-    if(accessToken != null) {
-      this.loggedIn = true;
+    if (accessToken) {
+      // 로그인 상태가 있을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', true)
+      this.$store.commit('setMemberInfo', this.member)
     } else {
-      this.loggedIn = false;
+      // 로그인 상태가 없을 경우 Vuex 상태 업데이트
+      this.$store.commit('setLoggedIn', false)
     }
-    console.log('저장된 토큰: ' + accessToken)
-    console.log('로그인 여부: ' + this.loggedIn)
-    // 로그인 된 경우 회원 정보 불러오기
-    if (this.loggedIn) {
-      await this.fetchMemberInfo();
+    console.log('로그인 상태', this.loggedIn)
+  },
+  watch: {
+    getLoggedIn(newValue) {
+      // Vuex 상태 변경 감지
+      this.loggedIn = newValue
+      // 로그인 상태가 되면 회원 정보를 다시 가져옴
+      if (newValue) {
+        this.fetchMemberInfo()
+      }
+    },
+    getmemberInfo(newValue) {
+      this.member = newValue
+      if(newValue) {
+        this.fetchMemberInfo()
+      }
     }
   },
   mounted() {
@@ -131,6 +143,7 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         });
+        window.location.reload();
         this.member.memberProfileImage = response.data.uuid;
       } catch (error) {
         console.error('프로필 이미지 업로드 실패:', error);
@@ -146,6 +159,7 @@ export default {
           }
         })
         if(response.data.success) {
+          window.location.reload();
           this.member.memberProfileImage = response.data.memberProfileImage;
           console.log('프로필 이미지 삭제 성공')
         } else {
@@ -171,6 +185,7 @@ export default {
         });
         console.log('회원 정보 수정 성공: ', response.data);
         alert('회원 정보가 성공적으로 수정되었습니다.');
+        this.$router.push('/mypage')
       } catch (error) {
         console.log('회원 정보 수정 실패: ', error)
         alert('회원 정보 수정에 실패했습니다.');
@@ -205,26 +220,28 @@ export default {
 }
 
 .btn-profile {
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 10px; /* 글씨크기 */
+  height: 30px;
+  background-color: lightgray; /* 기본 배경색 */
+  color: black; /* 글씨색 */
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .btn-profile:hover, .btn-profile:focus {
-  background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+  background-color: white; /* 호버 및 포커스 시 배경색 변경 */
+  color: black; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
-/* .btn-menu:active {
-  background-color: #004085; /* 클릭 시 배경색 */
-/*  color: #ffc107; /* 클릭 시 글씨색 */
-/*} */
-
 .form-control {
-  height: 50px;
+  height: 70px;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+  width: 100%;
 }
 
 .row {
@@ -237,13 +254,14 @@ export default {
   margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
   width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
   flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
-  font-size: 1.2rem; /* 폰트 크기 조정 */
+  font-size: 20px; /* 폰트 크기 조정 */
   font-weight: bold; /* 폰트 두께 조정 */
   align-self: start; /* Flex 아이템 수직 중앙 정렬 */
   margin-right: 10px; /* 오른쪽 여백 추가 */
 }
 
 .form-text {
+  font-size: 15px;
   margin-right: 1rem; /* 레이블과 입력 필드 사이에 공간 추가 */
   width: auto; /* 필요한 만큼 너비를 자동으로 설정 */
   flex-shrink: 0; /* 화면 크기가 줄어들 때 레이블의 크기가 줄어들지 않도록 설정 */
@@ -253,19 +271,21 @@ export default {
 }
 
 .btn-update {
-  height: 50px;
+  height: 70px;
   padding: 8;
   background-color: #007bff; /* 기본 배경색 */
   color: white; /* 글씨색 */
-  font-size: 16px; /* 글씨크기 */
+  font-size: 20px; /* 글씨크기 */
+  font-weight: bold;
   border: none; /* 외곽선 제거 */
   outline: none; /* 클릭 시 나타나는 외곽선 제거 */
   transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
 }
 
 .btn-update:hover, .btn-update:focus {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+  color: white; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
 </style>

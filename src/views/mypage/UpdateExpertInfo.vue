@@ -91,7 +91,7 @@
               <p class="text-modal">6. 개인정보의 파기: 제출된 이미지는 목적 달성 후 즉시 안전하게 파기됩니다.</p>
               <p class="text-modal">7. 동의 철회: 이미지 제출에 대한 동의는 언제든지 철회할 수 있습니다. 동의 철회 시, 이미지는 파기되고 이후 사용되지 않습니다.</p>
               <p class="text-modal">8. 기타 권리: 개인 정보 보호법 및 관련 법령에 따라 사용자는 개인정보에 관한 열람, 정정, 삭제, 처리정지 등의 권리를 가지고 있습니다.</p>
-              <p style="font-size: 15px; font-weight: 600;">아래의 동의하기 버튼을 누르면 자동으로 계정 전환 신청이 완료됩니다.</p>
+              <p style="font-size: 15px; font-weight: 600;">아래의 동의하기 버튼을 누르면 자동으로 제출 서류가 변경됩니다.</p>
               <p style="font-size: 15px;">본 동의서에 동의하십니까?</p>
             </div>
             <div class="modal-footer">
@@ -102,20 +102,15 @@
         </div>
       </div>
 
-      <div v-if="agreed && !member.type" class="row mt-3 mb-10 align-items-center custom-padding">
-        <div class="col">
-          <button type="button" class="btn btn-cancel" @click="goback">뒤로 가기</button>
-        </div>
-        <div class="col">
-          <button type="button" class="btn btn-cancel" @click="cancelUpload">계정 전환 취소</button>
-        </div>
+      <div class="row mt-3 mb-10 align-items-center custom-padding">
+
+          <button type="button" class="btn btn-cancel" style="margin-right: 8px;" @click="goback">뒤로 가기</button>
+
+          <button v-if="agreed && !member.type" type="button" class="btn btn-cancel" @click="cancelUpload">계정 전환 취소</button>
+
         <!-- <div class="col">
           <button type="button" class="btn btn-update" @click="applyforAccount" :disabled="!isFileInputEnabled || agreed == true || applied">계정 전환 신청</button>
         </div> -->
-      </div>
-
-      <div v-if="!agreed" class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-cancel" @click="goback">뒤로 가기</button>
       </div>
 
     </div>
@@ -230,7 +225,7 @@ export default {
             }
           });
           this.member.expertFile = response.data.url;
-          alert('계정 전환 신청이 완료되었습니다.')
+          alert('제출 서류 수정이 완료되었습니다.')
 
           this.$store.commit('setApplied', true);
 
@@ -263,24 +258,18 @@ export default {
             }
           });
           this.member.expertFile = response.data.url;
-          alert('계정 전환 신청이 완료되었습니다.')
+          alert('제출 서류 수정이 완료되었습니다.')
 
           this.$store.commit('setApplied', true);
-
           // 상태를 로컬 스토리지에 저장합니다.
           localStorage.setItem('applied', true);
 
-          // this.$store.commit('setAgreed', true);
-          // localStorage.setItem('agreed', true);
         } catch (error) {
           console.error('자격증 이미지 업로드 실패:', error);
         }
       } else {
         alert('자격증 이미지를 선택해주세요.')
       }
-
-      // this.$store.commit('setApplied', true)
-      // alert('계정 전환 신청이 완료되었습니다.')
     },
     handleFileChange(event) {
       this.tempFile = event.target.files[0];

@@ -12,12 +12,19 @@
                 <input v-model="postData.postTitle" type="text1" class="form-control" id="postTitle">
               </div>
             </div>
+            
             <div class="mb-3 row">
               <label for="postCategory" class="col-md-3 col-form-label">카테고리</label>
               <div class="col-md-9">
-                <input v-model="postData.postCategory" type="text1" class="form-control" id="postCategory">
+                <select v-model="postData.postCategory" class="form-select" id="postCategory">
+                  <!-- 현재 선택된 카테고리를 먼저 표시합니다 -->
+                  <option :value="postData.postCategory">{{ postData.postCategory }}</option>
+                  <!-- 나머지 카테고리를 반복하여 표시합니다 -->
+                  <option v-for="category in filteredCategories" :key="category.name" :value="category.name">{{ category.name }}</option>
+                </select>
               </div>
             </div>
+
             <div class="mb-3 row">
               <label for="postRegisterDate" class="col-md-3 col-form-label">등록일자</label>
               <div class="col-md-9">
@@ -84,7 +91,7 @@
         <div class="col-md-8 offset-md-2 d-flex justify-content-center">
           <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
           <!-- 수정하기 버튼에 savePost 메서드 연결 -->
-          <button type="button" class="btn btn-lg btn-primary me-3" @click="showModifyModal">수정하기</button>
+          <button type="button" class="btn btn-lg btn-primary me-3" @click="showModifyModal">수정완료</button>
           <button type="button" class="btn btn-lg btn-danger" @click="showDeleteModal">삭제하기</button>
         </div>
       </div>
@@ -166,6 +173,12 @@ export default {
         postImages: [] ,// postImages 속성 추가
         postImageIds: [],
       },
+      categories: [ // Update the variable name to 'categories'
+      { id: 1, name: '보육' },
+      { id: 2, name: '출산' },
+      { id: 3, name: '주거' },
+      { id: 4, name: '장례' }
+    ],
       imageFile: [],
       previewImages: [],
       modifyModalVisible: false, // 모달의 표시 여부
@@ -174,6 +187,12 @@ export default {
       // deletedImages: [], // 삭제된 이미지를 저장할 배열 추가
     }
   },
+  computed: {
+  filteredCategories() {
+    // 현재 선택된 카테고리와 중복되지 않은 카테고리만 필터링하여 반환합니다.
+    return this.categories.filter(category => category.name !== this.postData.postCategory);
+  }
+},
 
   mounted() {
     this.fetchData(this.postId);
@@ -220,9 +239,9 @@ export default {
         formData.append('postWriter', this.postData.postWriter);
         formData.append('postContent', this.postData.postContent);
 
-        if (this.imageFile) {
-          formData.append('image', this.imageFile);
-        }
+        // if (this.imageFile) {
+        //   formData.append('image', this.imageFile);
+        // }
 
         const accessToken = localStorage.getItem('accessToken')
         const url = `http://localhost:8080/api/v1/posts/post/update/${this.postId}`;
@@ -269,7 +288,9 @@ export default {
       this.modifyModalVisible  = false; // 모달 숨김
     },
     modifyPostAndHideModal() {
+    if (this.imageFile && this.imageFile.length > 0) { // 이미지를 등록한 경우에만 업로드 수행
       this.uploadImage(this.postId); // 이미지 저장
+    }
       this.modifyPost(); // 게시물 저장
       this.hideModal(); // 모달 숨김
     },
@@ -342,7 +363,7 @@ export default {
         for (let i = 0; i < this.imageFile.length; i++) {
           formData.append('files', this.imageFile[i]);
         }
-        formData.append('postId', this.postId); // 수정된 부분
+        // formData.append('postId', this.postId); // 수정된 부분
 
         try {
           console.log('Uploaded image:', this.imageFile);
@@ -443,6 +464,9 @@ input[type="text1"] {
   width: 80%;
 }
 input[type="date"] {
+  width: 80%;
+}
+select.form-select {
   width: 80%;
 }
 

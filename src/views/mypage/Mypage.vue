@@ -1,87 +1,102 @@
 <template>
-  <main>
-    <div class="container">
+  <main style="background-color: #FAFBFC;">
+    <div class="container mt-3 mb-4" style="max-width:800px;">
       <div class="row align-items-center">
         <div class="col mt-3 mb-3">
-          <h4>마이페이지</h4>
+          <h4 style="font-weight:700; font-size:1.8rem;">마이페이지</h4>
         </div>
       </div>
 
-      <div class="row align-items-center">
-        <div class="col-3 mt-3 align-items-end">
-          <img v-bind:src="member.memberProfileImage" alt="mdo" width="70" height="70" class="rounded-circle">
+      <div class="row align-items-center text-start mb-3">
+        <div class="col-5 align-items-center">
+          <img v-bind:src="member.memberProfileImage" alt="mdo" width="70" height="70" class="rounded-circle me-3">
+          <img v-if="member.type == true" src="../../assets/images/expert_badge.png" alt="mdo" width="50" height="50">
         </div>
-        <div class="col-3 align-items-start">
-          <div>{{ member.memberNickname }}</div><br>
-          <div>{{ member.memberEmail }}</div>
-        </div>
-        <div class="col-6 align-items-center">
-          <button type="button" @click="goForward" class="btn btn-outline-primary">회원 정보 수정</button>
+        <div class="col-7 align-items-center">
+          <div style="font-size:1.5rem; font-weight:500;">
+            <h4>{{ member.memberNickname }} 님</h4>
+            <p style="margin-bottom:0;">{{ member.memberEmail }}</p>
+          </div>
+        </div>        
+      </div>
+
+      <div class="row">
+        <div class="align-items-center">
+          <button type="button" @click="goForward" class="btn btn-primary w-100">회원정보수정</button>
         </div>
       </div>
 
       <hr class="custom-divider hr-sm">
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" @click="goForward2" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">내 맞춤 정보 수정</span>
-          <span class="mx-2">></span>
+      <div v-if="member.type == false" class="row mt-3 mb-1 align-items-center">
+        <button type="button" @click="goForward2" class="btn btn-menu">
+          <span class="menu-text mx-2">내 맞춤 정보 수정</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" @click="goForward3" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">계정 전환</span>
-          <span class="mx-2">></span>
+      <div v-if="member.type == true" class="row mt-3 mb-1 align-items-center">
+        <button type="button" @click="goForward4" class="btn btn-menu">
+          <span class="menu-text mx-2">내 경력 사항 수정</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
-      <hr class="custom-divider hr-sm">
-
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">내가 받을 수 있는 지원금</span>
-          <span class="mx-2">></span>
-        </button>
-      </div>
-
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">정책 정보</span>
-          <span class="mx-2">></span>
-        </button>
-      </div>
-
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center">
-          <span class="mx-2">지식 커뮤니티</span>
-          <span class="mx-2">></span>
+      <div v-if="member.type ==  false" class="row mt-3 mb-1 align-items-center">
+        <button type="button" @click="goForward3" class="btn btn-menu">
+          <span class="menu-text mx-2">계정 전환</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
 
       <hr class="custom-divider hr-sm">
 
-      <div class="row mt-3 mb-10 align-items-center custom-padding">
-        <button type="button" class="btn btn-menu d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          <span class="mx-2">계정 탈퇴</span>
-          <span class="mx-2">></span>
+      <div class="row mt-3 mb-1 align-items-center">
+        <button type="button" class="btn btn-menu" @click="goForward5">
+          <span class="menu-text mx-2">내가 받을 수 있는 지원금</span>
+          <span class="menu-text mx-2">〉</span>
         </button>
       </div>
+
+      <div class="row mt-3 mb-1 align-items-center">
+        <button type="button" class="btn btn-menu" @click="goForward6">
+          <span class="menu-text mx-2">정책 정보</span>
+          <span class="menu-text mx-2">〉</span>
+        </button>
+      </div>
+
+      <div class="row mt-3 mb-1 align-items-center">
+        <button type="button" class="btn btn-menu" @click="goForward7">
+          <span class="menu-text mx-2">지식 커뮤니티</span>
+          <span class="menu-text mx-2">〉</span>
+        </button>
+      </div>
+
+      <hr class="custom-divider hr-sm">
+
+      <div class="row mt-3 mb-1 align-items-center">
+        <button type="button" class="btn btn-menu" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <span class="menu-text mx-2">계정 탈퇴</span>
+          <span class="menu-text mx-2">〉</span>
+        </button>
+      </div>
+
+
 
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">계정 탈퇴</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close mb-8" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               정말 탈퇴하시겠습니까?
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" @click="deleteMemberInfo">탈퇴하기</button>
+              <button type="button" class="btn btn-primary" @click="deleteMemberInfo" data-bs-dismiss="modal">탈퇴하기</button>
             </div>
           </div>
         </div>
@@ -163,16 +178,17 @@ export default {
       try {
         const memberId = this.member.memberId;
         const accessToken = localStorage.getItem('accessToken')
-        const response = await axios.delete(`/api/v1/members/${memberId}`, {}, {
+        const response = await axios.delete(`/api/v1/members/${memberId}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,   // 토큰 헤더에 추가
             'Content-Type': `application/json`
           }
         });
         console.log('계정 삭제 성공: ', response.data);
-        alert('계정 삭제가 성공적으로 수정되었습니다.');
+        alert('정상적으로 탈퇴되었습니다.');
+        this.$router.push('/join')
       } catch (error) {
-        console.log('계정 삭제 실패: ', error)
+        console.error('계정 삭제 실패: ', error)
         alert('계정 삭제에 실패했습니다.');
       }
     },
@@ -193,6 +209,18 @@ export default {
     },
     goForward3 () {
       this.$router.push('/switchAccount')
+    },
+    goForward4 () {
+      this.$router.push('/updateExpertInfo')
+    },
+    goForward5 () {
+      this.$router.push('/recommend-main')
+    },
+    goForward6 () {
+      this.$router.push('/policy')
+    },
+    goForward7 () {
+      this.$router.push('/community')
     }
   }
 }
@@ -203,34 +231,34 @@ export default {
   border: none; /* 테두리 없음 */
   height: 2px; /* 높이 조절 (원하는 높이로 변경) */
   background-color: #ccc; /* 배경색 지정 */
-  margin: 20px 0; /* 위아래 여백 지정 (원하는 여백으로 변경) */
-}
-
-.custom-padding {
-  padding-right: 100px;
-  padding-left: 100px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  margin: 1rem 0; /* 위아래 여백 지정 (원하는 여백으로 변경) */
 }
 
 .btn-menu {
+  text-align: left;
   height: 70px;
-  background-color: #007bff; /* 기본 배경색 */
-  color: white; /* 글씨색 */
-  font-size: 16px; /* 글씨크기 */
-  border: none; /* 외곽선 제거 */
-  outline: none; /* 클릭 시 나타나는 외곽선 제거 */
-  transition: background-color 0.3s, color 0.3s; /* 색상 변화에 애니메이션 효과 적용 */
+  background-color: white;
+  color: black;
+  border: none;
+  outline: none;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1); /* X축 오프셋, Y축 오프셋, 흐림 반경, 색상 */
+  justify-content: space-between;
+
 }
 
-.btn-menu:hover, .btn-menu:focus {
+.btn-menu:hover {
+  background-color: #f4f4f4; /* 호버 및 포커스 시 배경색 변경 */
+  color: black; /* 호버 및 포커스 시 글씨색 변경 */
+}
+
+.btn-profile:hover {
   background-color: #0056b3; /* 호버 및 포커스 시 배경색 변경 */
-  color: #ffdd00; /* 호버 및 포커스 시 글씨색 변경 */
+  color: white; /* 호버 및 포커스 시 글씨색 변경 */
 }
 
-/* .btn-menu:active {
-  background-color: #004085; /* 클릭 시 배경색 */
-/*  color: #ffc107; /* 클릭 시 글씨색 */
-/*} */
+.menu-text {
+  font-size: 18px;
+  font-weight: 500;
+}
 
 </style>

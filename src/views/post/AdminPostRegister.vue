@@ -1,7 +1,8 @@
 <template>
-  <div class="mt-5">
+  <main class="mt-5 mb-5">
     <div class="container">
-      <h2 class="text-center mb-5">정책정보 등록</h2>
+
+      <h3 class="text-center mb-5" style="font-weight: bold">정책정보 등록</h3>
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <form>
@@ -18,17 +19,24 @@
                 <input v-model="postData.postTitle" type="textreg" class="form-control" id="postTitle">
               </div>
             </div>
+
             <div class="mb-3 row">
               <label for="postCategory" class="col-md-3 col-form-label">카테고리</label>
-              <div class="col-md-9">
-                <input v-model="postData.postCategory" type="textreg" class="form-control" id="postCategory">
-              </div>
+                <div class="col-md-9">
+                <!-- 카테고리를 선택하는 셀렉트 폼 -->
+                <select v-model="postData.postCategory" class="form-select" id="postCategory">
+                  <option value="">카테고리를 선택하세요</option>
+                  <!-- 카테고리 목록을 동적으로 생성 -->
+                  <option v-for="category in categories" :key="category.name" :value="category.name">{{ category.name }}</option>
+                </select>
+                </div>
             </div>
+            
             <!-- 다른 입력 요소들도 동일하게 구성 -->
              <div class="mb-3 row">
-              <label for="postRegisterDate" class="col-md-3 col-form-label">등록일자</label>
+              <label for="postRegisterDate" class="col-md-3 col-form-label" >등록일자</label>
               <div class="col-md-9">
-                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate">
+                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate" style="width:80%;">
               </div>
             </div>
              <div class="mb-3 row">
@@ -39,15 +47,15 @@
             </div>
              <div class="mb-3 row">
               <label for="postContent" class="col-md-3 col-form-label">내용</label>
-              <div class="col-md-9">
-                <textarea v-model="postData.postContent" class="form-control" id="postContent" style="height: 390px;"></textarea>
+              <div class="col-md-9 d-flex ">
+                <textarea v-model="postData.postContent" class="form-control" id="postContent" style="height:380px;"></textarea>
               </div>
             </div>
             <!-- 이미지 업로드를 위한 input 요소 추가 -->
             <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
-                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload">
+                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload" style="width:80%;">
               </div>
             </div>
             <!-- 이미지 미리보기 -->
@@ -69,13 +77,13 @@
       </div>
       <div class="row mb-5">
         <div class="col-md-8 offset-md-2 d-flex justify-content-center">
-          <router-link to="/admin/post/list" class="btn btn-lg btn-primary me-3">목록으로</router-link>
+          <router-link to="/admin/post/list" class="btn btn-dark btn-primary me-2">목록으로</router-link>
   <!-- 저장하기 버튼에 savePost 메서드 연결 -->
-          <button type="button" class="btn btn-lg btn-primary" @click="showModal">저장하기</button>
+          <button type="button" class="btn btn-primary" @click="showModal">저장하기</button>
         </div>
       </div>
     </div>
-  </div>
+  </main>
    <!-- 모달 -->
     <div v-if="modalVisible" class="modal fade show" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0, 0, 0, 0.5);">
       <div class="modal-dialog" role="document">
@@ -114,6 +122,12 @@ export default {
         postContent: '', // 내용 입력 필드의 데이터
         postId:'',
       },
+      categories: [ // Update the variable name to 'categories'
+      { id: 1, name: '보육' },
+      { id: 2, name: '출산' },
+      { id: 3, name: '주거' },
+      { id: 4, name: '장례' }
+    ],
       imageFile: [],
       previewImages: [], // 이미지 파일들의 미리보기 URL을 저장할 배열
       modalVisible: false, // 모달의 표시 여부
@@ -123,15 +137,35 @@ export default {
     this.setPostWriter(); // 컴포넌트가 마운트될 때 작성자 정보 설정
   },
   methods: {
-    setPostWriter() {
-      const adminNickname = localStorage.getItem('getLoggedIn'); // 로컬 스토리지에서 관리자 닉네임 가져오기
-      if (adminNickname) {
-        this.postData.postWriter = adminNickname; // 작성자 정보 설정
-      } else {
-        // 닉네임이 없으면 기본 값으로 설정
-        this.postData.postWriter = 'admin'; 
+    async setPostWriter() {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+
+    if (!accessToken) {
+      console.error('토큰을 가져오는 데 실패했습니다.');
+      return;
+    }
+
+    const responsenick = await axios.get('/api/v1/members/mypage', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
       }
-    },
+    });
+
+    // 응답 상태코드 확인
+    console.log('응답 상태코드:', responsenick.status);
+
+    // responsenick.data가 undefined가 아닌 경우에만 닉네임 설정
+    if (responsenick && responsenick.data && responsenick.data.memberNickname) {
+      this.postData.postWriter = responsenick.data.memberNickname;
+    } else {
+      this.postData.postWriter = '관리자'; 
+    }
+  } catch (error) {
+    console.error('닉네임을 가져오는 데 실패했습니다: ', error);
+    this.postData.postWriter = '관리자';
+  }
+},
     async savePost() {
       try {
         // FormData 객체 생성
@@ -258,7 +292,10 @@ export default {
         const registerResponse = await this.savePost();
         const postId = registerResponse.postId;
 
+         // 이미지가 있는 경우에만 이미지 업로드 함수를 실행합니다.
+       if (this.imageFile && this.imageFile.length > 0) {
         await this.uploadImage(postId);
+       }
         this.$router.push({ name: 'AdminPostRead', params: { postId: postId } });
         // 성공 시 처리
         // 성공 시 alert 메시지 표시
@@ -269,47 +306,23 @@ export default {
         // 리스트 페이지로 이동
         // this.$router.push('/admin/post/list');
       } catch(error) {
-        console.error('이미지 업로드 실패 이유:', error);
-      }
+    // 이미지 업로드 실패 이유가 없으면 콘솔에 오류를 출력하지 않음
+    if (error.response) {
+      console.error('이미지 업로드 실패 이유:', error.response.data);
+    }
+  }
     }
   }
 }
 </script>
 
 <style>
-/* textarea 요소를 더 크게 만듭니다 */
+/* 모든 입력 필드의 너비를 동일하게 설정 */
+input[type="textreg"]{
+  width: 80%;
+}
 textarea {
-  width: 100%;
-  resize: vertical; /* 사용자가 크기를 조절할 수 있도록 합니다 */
-  background-color: #f8f9fa;
-  border: 1px solid #ced4da;
-  border-radius: 0.3rem;
-  box-sizing: border-box; /* 패딩과 테두리를 포함하여 요소의 전체 크기를 계산합니다 */
-}
-
-/* ============푸터 디자인===================== */
-#app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  width: calc(100% - 1rem); /* 부트스트랩의 col-md-9 클래스가 가진 패딩(0.5rem)을 고려하여 너비 계산 */
 }
 
 </style>

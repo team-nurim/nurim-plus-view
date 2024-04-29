@@ -2,6 +2,8 @@
 /* eslint-disable */ -->
 <template>
 
+<div class="container">
+
   <div class="containeradminlogin">
     <div class="row mt-2 d-flex justify-content-center">
     <h3 class="mt-3" style="font-weight: bold">관리자 로그인</h3>
@@ -56,6 +58,8 @@
     </div>
   </div>
 
+</div>
+
 </template>
 <script>
 // eslint-disable-next-line
@@ -75,17 +79,31 @@ export default {
   methods: {
     async login () {
       try {
-        // memberEmail이 'admin'이 아닌 경우에만 로그인 시도
-        if (this.memberEmail !== 'admin') {
-        // memberEmail이 'admin'이 아닌 경우, 로그인을 거부하고 경고 메시지 출력
-        alert('관리자만 로그인할 수 있습니다.');
-        return;
-        }
-        
-        const response = await axios.post('/generateToken', {
-          memberEmail: this.memberEmail,
-          memberPw: this.memberPw
-        })
+    const response = await axios.post('/generateToken', {
+      memberEmail: this.memberEmail,
+      memberPw: this.memberPw
+    });
+
+    // Fetch user information including role
+    const memberResponse = await axios.get('/api/v1/members/mypage', {
+      headers: {
+        Authorization: `Bearer ${response.data.accessToken}`
+      }
+    });
+
+    // Check if the user's role is 'ADMIN'
+    if (memberResponse.data.memberRole !== 'ADMIN') {
+      alert('관리자만 로그인할 수 있습니다.');
+      return;
+    }
+
+    // Store token and proceed with login
+    localStorage.setItem('accessToken', response.data.accessToken);
+
+    // Store rememberMe status if needed
+    if (this.rememberMe) {
+      localStorage.setItem('rememberMe', true);
+    }
         // JWT 토큰 출력
         console.log('서버 응답 데이터:', response.data.accessToken)
 
@@ -117,7 +135,7 @@ export default {
 
 <style>
 .containeradminlogin {
-  margin-top: 5%;
+  margin: 10% 0%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,7 +143,7 @@ export default {
 
 .loginBox {
   min-width: 330px;
-  max-width: 28%;
+  max-width: 20%;
   margin: 12% auto 0;
   text-align: left;
 }

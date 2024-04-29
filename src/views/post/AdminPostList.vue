@@ -1,11 +1,11 @@
 <template>
-  <main class="mt-3 mb-5">
+  <main class="mt-5 mb-5">
     <div class="container mb-5">
       <div class="row d-flex justify-content-center">
           <h3 class="mt-3" style="font-weight: bold">정책정보관리</h3>
-        <div class="col-12 d-flex justify-content-center">
+        <div class="col-12 d-flex justify-content-center mb-4">
           <!-- 카테고리 선택 드롭다운 -->
-          <select class="form-select form-select mt-3" style="width: 500px;" @change="handleCategoryChange($event)">
+          <select class="form-select form-select mt-3" style="width:330px;" @change="handleCategoryChange($event)">
             <option value="전체">전체</option>
             <option value='보육'>보육</option>
             <option value="출산">출산</option>
@@ -15,7 +15,7 @@
         </div>
         <div class="d-flex justify-content-end mt-2">
            <a href="/admin/post/register">
-            <button class="btn btn-dark" style="background-color: white; color: black;">정책정보 등록</button>
+            <button class="btn btn-dark" style="color:white;"><b>정책정보 등록</b></button>
           </a>
         </div>
       </div>
@@ -40,7 +40,7 @@
                 <div style="padding: 10px 0;">{{ post.postId }}</div>
               </td>
               <td>
-                <div style="padding: 10px 0;">
+                <div style="padding: 10px 0; text-align:left;">
                   <router-link style="text-decoration: none; color: black; font-weight: bold; font-size: 16px; cursor: pointer; text-decoration: underline;" :to="`read/${post.postId}`" @mouseover="onMouseOver" @mouseleave="onMouseLeave">{{ post.postTitle }}</router-link>
                 </div>
               </td>
@@ -62,13 +62,13 @@
                       <circle cx="2.5" cy="12.5" r="2" fill="black"/>
                     </svg>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: auto;">
-                      <li><a @click="readPost(post.postId)" class="dropdown-item" href="#">게시물 보기
+                      <li><router-link :to="`read/${post.postId}`" class="dropdown-item" href="#">게시물 보기
                       <span><i class="fa-solid fa-magnifying-glass" style="padding:0.5rem"></i></span>
-                      </a></li>
+                      </router-link></li> 
                       <li><hr class="dropdown-divider"></li>
-                      <li><a @click="editPost(post.postId)" class="dropdown-item" href="#">게시물 수정
+                      <li><router-link :to="`modify/${post.postId}`" class="dropdown-item" href="#">게시물 수정
                         <span><i class="fa-solid fa-gear" style="padding:0.5rem"></i></span>
-                      </a></li>
+                      </router-link></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a @click="showModal(post.postId)" class="dropdown-item" href="#">게시물 삭제
                       <span><i class="fa-solid fa-trash-can" style="padding:0.5rem"></i></span>
@@ -149,6 +149,9 @@ export default {
         this.postList = response.data.content;
         this.totalPages = response.data.totalPages;
       } catch (err) {
+        // alert('관리자만 이용할 수 있습니다.');
+        // this.$store.commit('setLoggedIn', this.loggedIn)
+        // this.$router.push('/');
         console.error('리스트를 불러 올 수 없습니다.', err);
       }
     },
