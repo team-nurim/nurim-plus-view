@@ -42,7 +42,7 @@
              <div class="mb-3 row">
               <label for="postWriter" class="col-md-3 col-form-label">작성자</label>
               <div class="col-md-9">
-                <input v-model="postData.postWriter" type="textreg" class="form-control" id="postWriter">
+                <input v-model="postData.postWriter" type="textreg" class="form-control" id="postWriter" readonly>
               </div>
             </div>
              <div class="mb-3 row">
@@ -137,15 +137,35 @@ export default {
     this.setPostWriter(); // 컴포넌트가 마운트될 때 작성자 정보 설정
   },
   methods: {
-    setPostWriter() {
-      const adminNickname = localStorage.getItem('getLoggedIn'); // 로컬 스토리지에서 관리자 닉네임 가져오기
-      if (adminNickname) {
-        this.postData.postWriter = adminNickname; // 작성자 정보 설정
-      } else {
-        // 닉네임이 없으면 기본 값으로 설정
-        this.postData.postWriter = '관리자'; 
+    async setPostWriter() {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+
+    if (!accessToken) {
+      console.error('토큰을 가져오는 데 실패했습니다.');
+      return;
+    }
+
+    const responsenick = await axios.get('/api/v1/members/mypage', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
       }
-    },
+    });
+
+    // 응답 상태코드 확인
+    console.log('응답 상태코드:', responsenick.status);
+
+    // responsenick.data가 undefined가 아닌 경우에만 닉네임 설정
+    if (responsenick && responsenick.data && responsenick.data.memberNickname) {
+      this.postData.postWriter = responsenick.data.memberNickname;
+    } else {
+      this.postData.postWriter = '관리자'; 
+    }
+  } catch (error) {
+    console.error('닉네임을 가져오는 데 실패했습니다: ', error);
+    this.postData.postWriter = '관리자';
+  }
+},
     async savePost() {
       try {
         // FormData 객체 생성
