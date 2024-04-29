@@ -2,7 +2,7 @@
   <main class="mt-2">
      <div class="containerpostread">
        <div class="row">
-         <div class="col-md-7">
+         <div class="col-md-6">
            <h2 class="text mb-5">{{ postRead.postTitle }}</h2>
          </div>
        </div>
@@ -110,6 +110,8 @@
  <style scoped>
    /* 컨테이너 스타일링 */
    .containerpostread {
+    max-width: 1400px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 가운데 정렬을 위해 margin 추가 */
      padding: 50px;
      border-radius: 15px;
      background-color: #f8f9fa;

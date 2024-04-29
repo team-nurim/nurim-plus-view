@@ -315,7 +315,7 @@ import { TrackOpTypes } from 'vue';
   }
   </script>
 
-<style>
+<style scoped>
 .container {
   max-width: 800px !important;
 }
@@ -423,4 +423,4 @@ import { TrackOpTypes } from 'vue';
   border: 1px solid #ccc;
 }
 
-  </style>
+</style>

@@ -36,7 +36,7 @@
              <div class="mb-3 row">
               <label for="postRegisterDate" class="col-md-3 col-form-label" >등록일자</label>
               <div class="col-md-9">
-                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate" style="width:100%;">
+                <input v-model="postData.postRegisterDate" type="date" class="form-control" id="postRegisterDate" style="width:80%;">
               </div>
             </div>
              <div class="mb-3 row">
@@ -55,7 +55,7 @@
             <div class="mb-3 row">
               <label for="image" class="col-md-3 col-form-label">이미지 업로드</label>
               <div class="col-md-9">
-                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload" style="width:100%;">
+                <input type="file" class="form-control" id="image" accept="image/*" multiple @change="handleImageUpload" style="width:80%;">
               </div>
             </div>
             <!-- 이미지 미리보기 -->
@@ -298,8 +298,9 @@ export default {
 
 <style>
 /* 모든 입력 필드의 너비를 동일하게 설정 */
-input[type="text"],
-input[type="date"],
+input[type="textreg"]{
+  width: 80%;
+}
 textarea {
   width: calc(100% - 1rem); /* 부트스트랩의 col-md-9 클래스가 가진 패딩(0.5rem)을 고려하여 너비 계산 */
 }

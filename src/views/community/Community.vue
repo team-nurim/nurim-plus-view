@@ -4,7 +4,7 @@
   <!-- 플로팅 버튼 -->
   <div class="floating-button mt-5 mb-5"
   style="position:fixed; left:50%; transform:translateX(-50%); z-index:1000; bottom:1.5rem;">
-    <button class="btn btn-primary" style="width:16rem; padding:0.65rem; border-radius:1.5rem;" @click="goAsk">문의하기</button>
+    <button class="btn btn-primary" style="width:16rem; padding:0.65rem; border-radius:1.5rem;" @click="goWrite">문의하기</button>
   </div>
 
     <!-- full page 영역 -->
@@ -137,7 +137,7 @@
     <!-- 위로가기 버튼 -->
     <p style="position:fixed; bottom:20px; right:20px;">
       <a href="#">
-          <img src="../../assets/images/img_arr_top.png" alt="위로가기" style="width:2rem; height:2rem;">
+          <img src="../../assets/images/img_arr_top.png" alt="위로가기" style="width:2rem; height:2.2rem;">
       </a>
     </p>
 
@@ -246,41 +246,41 @@ export default {
       }
     },
     async axiosCommunityList(category = '전체') {
-  try {
-    const accessToken = localStorage.getItem('accessToken')
-    let url = `http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`
-    if (category !== '전체') {
-      url = `http://localhost:8080/api/v1/categoryPage/${category}?page=${this.currentPage}&size=${this.pageSize}`;
-    }
-    const response = await axios.get(url,{
-    headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }});
-    this.communityList = response.data.content;
-    this.totalPages = response.data.totalPages;
-  } catch (err) {
-    console.error('리스트를 불러올 수 없습니다:', err);
-  }
-},
-async selectCategory(category) {
-  this.selectedCategory = category;
-  await this.axiosCommunityList(category);
-},
-async searchCommunity() {
-  try {
-    const accessToken = localStorage.getItem('accessToken')
-    let url = `http://localhost:8080/api/v1/community/Search?keyword=${this.searchQuery}`
-    const response = await axios.get(url,{
-      headers : {
-        'Authorization': `Bearer ${accessToken}`
+    try {
+      const accessToken = localStorage.getItem('accessToken')
+      let url = `http://localhost:8080/api/v1/communityList?page=${this.currentPage}&size=${this.pageSize}`
+      if (category !== '전체') {
+        url = `http://localhost:8080/api/v1/categoryPage/${category}?page=${this.currentPage}&size=${this.pageSize}`;
       }
-    });
-    this.communityList = response.data.content;
-    this.totalPages = response.data.totalPages;
-  } catch (err) {
-    console.log('검색 실패:', err);
-  }
-},
+      const response = await axios.get(url,{
+      headers: {
+              'Authorization': `Bearer ${accessToken}`
+          }});
+      this.communityList = response.data.content;
+      this.totalPages = response.data.totalPages;
+    } catch (err) {
+      console.error('리스트를 불러올 수 없습니다:', err);
+    }
+    },
+    async selectCategory(category) {
+      this.selectedCategory = category;
+      await this.axiosCommunityList(category);
+    },
+    async searchCommunity() {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+        let url = `http://localhost:8080/api/v1/community/Search?keyword=${this.searchQuery}`
+        const response = await axios.get(url,{
+          headers : {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        this.communityList = response.data.content;
+        this.totalPages = response.data.totalPages;
+      } catch (err) {
+        console.log('검색 실패:', err);
+      }
+    },
     nextPopluarPage () {
       if (this.popluarCurrentPage < this.popluarTotalPages - 1 && this.hasNextData) {
         this.popluarCurrentPage++
@@ -311,7 +311,7 @@ async searchCommunity() {
   }
 }
 </script>
-<style>
+<style scoped>
 /* 메인 타이틀 스타일 */
 .list-container {
   width: 100%;
