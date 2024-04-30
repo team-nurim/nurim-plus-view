@@ -43,7 +43,7 @@
             <td>{{ member.memberEmail }}</td>
             <td>{{ member.memberNickname }}</td>
             <td>{{ member.memberAge }}</td>
-            <td>{{ member.type === 0 ? '전문가' : '일반회원'}}</td>
+            <td>{{ member.type ? '전문가' : '일반회원' }}</td>
             
             <td><button class="blue-button" @click="openModal(member)">조회</button></td>
             <td>
@@ -114,7 +114,7 @@
             <td>{{ selectedMember.memberIncome }}</td>
           </tr>
           <tr>
-            <td>전문가 변경</td>
+            <td>회원종류</td>
             <td v-if="selectedMember.type == true">전문가</td>
             <td v-else-if="selectedMember.type == false">일반회원</td>
           </tr>
@@ -134,7 +134,7 @@
             <label for="memberIncome">월소득:</label>
             <input type="text" id="memberIncome" v-model="selectedMember.memberIncome" />
 
-            <div class="row mt-3 mb-10 align-items-center custom-padding">
+            <!-- <div class="row mt-3 mb-10 align-items-center custom-padding">
           <div class="row" id="Gender">
             <div class="col">
               <input type="radio" id="male" value="true" v-model="selectedMember.gender" />
@@ -145,10 +145,10 @@
             <label for="female" class="radio-label">여성</label>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
-            <div class="row mt-3 mb-10 align-items-center custom-padding">
+            <!-- <div class="row mt-3 mb-10 align-items-center custom-padding">
           <div class="row" id="Gender">
             <div class="col">
     <input type="radio" id="male" value="false" v-model="selectedMember.memberMarriage" />
@@ -160,21 +160,21 @@
     <label for="female" class="radio-label">미혼</label>
 </div>
 </div>
-</div>
+</div> -->
             
             
-            <div class="row mt-3 mb-10 align-items-center custom-padding">
-          <div class="row" id="Gender">
-            <div class="col">
-    <input type="radio" id="user" value="false" v-model="selectedMember.type" />
-    <label for="user" class="radio-label">일반회원</label>
-  </div>
-          <div class="col">
-    <input type="radio" id="expert" value="true" v-model="selectedMember.type" />
-    <label for="expert" class="radio-label">전문가회원</label>
-</div>
-</div>
-</div>
+            <div class="row mt-3 mb-5 align-items-center custom-padding">
+              <div class="row" id="Gender">
+                <div class="col">
+                  <input type="radio" id="user" value="false" v-model="selectedMember.type" />
+                  <label for="user" class="radio-label">일반회원</label>
+                </div>
+                <div class="col">
+                  <input type="radio" id="expert" value="true" v-model="selectedMember.type" />
+                  <label for="expert" class="radio-label">전문가</label>
+                </div>
+              </div>
+            </div>
             <label for="isExpert">전문가 자료:</label>
             <img v-if="selectedMember.expertFile" :src="selectedMember.expertFile" alt="전문가 자료" />
             <!-- 수정 버튼 대신 저장 버튼 사용 -->
@@ -198,6 +198,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      originalSelectedMember: null,
       loading: false,
       searchQuery: '',
       searchCategory: 'memberNickname',
@@ -318,7 +319,8 @@ async searchMembers() {
     },
 
     openModal(member) {
-      this.selectedMember = member;
+      this.selectedMember = { ...member }; // 선택된 회원 정보 복사본 생성
+      this.originalSelectedMember = { ...member }; // 원래의 회원 정보 복사본 생
       this.showModal = true;
     },
     selectAllMembers() {
@@ -464,6 +466,8 @@ async searchMembers() {
     },
     // 수정 폼 닫기
     closeEditForm() {
+       // 취소 버튼 클릭 시 원래의 회원 정보로 복원
+       this.selectedMember = { ...this.originalSelectedMember };
       this.showEditForm = false;
     },
     // 저장 버튼 클릭 시 처리
