@@ -43,7 +43,8 @@
             <td>{{ member.memberEmail }}</td>
             <td>{{ member.memberNickname }}</td>
             <td>{{ member.memberAge }}</td>
-            <td>{{ member.type }}</td>
+            <td>{{ member.type ? '전문가' : '일반회원' }}</td>
+            
             <td><button class="blue-button" @click="openModal(member)">조회</button></td>
             <td>
               <input type="checkbox" :id="'checkbox-' + member.memberId" v-model="selectedMembers" :value="member" class="checkbox" />
@@ -96,7 +97,8 @@
           </tr>
           <tr>
             <td>성별</td>
-            <td>{{ selectedMember.gender }}</td>
+            <td v-if="selectedMember.gender == true">남자</td>
+            <td v-else-if="selectedMember.gender == false">여자</td>
           </tr>
           <tr>
             <td>주소</td>
@@ -104,19 +106,17 @@
           </tr>
           <tr>
             <td>결혼여부</td>
-            <td>{{ selectedMember.memberMarriage }}</td>
-          </tr>
-          <tr>
-            <td>가입일</td>
-            <td>{{ selectedMember.joinDate }}</td>
+            <td v-if="selectedMember.memberMarriage == false">기혼</td>
+            <td v-else-if="selectedMember.memberMarriage == true">미혼</td>
           </tr>
           <tr>
             <td>월소득</td>
             <td>{{ selectedMember.memberIncome }}</td>
           </tr>
           <tr>
-            <td>전문가 변경</td>
-            <td>{{ selectedMember.type }}</td>
+            <td>회원종류</td>
+            <td v-if="selectedMember.type == true">전문가</td>
+            <td v-else-if="selectedMember.type == false">일반회원</td>
           </tr>
         </table>
         <!-- 수정 폼 부분 -->
@@ -129,19 +129,59 @@
             <input type="text" id="email" v-model="selectedMember.memberEmail" />
             <label for="memberAge">나이:</label>
             <input type="text" id="memberAge" v-model="selectedMember.memberAge" />
-            <label for="gender">성별:</label>
-            <input type="text" id="gender" v-model="selectedMember.gender" />
             <label for="memberResidence">주소:</label>
             <input type="text" id="memberResidence" v-model="selectedMember.memberResidence" />
-            <label for="memberMarriage">결혼여부:</label>
-            <input type="text" id="memberMarriage" v-model="selectedMember.memberMarriage" />
             <label for="memberIncome">월소득:</label>
             <input type="text" id="memberIncome" v-model="selectedMember.memberIncome" />
-            <label for="isExpert">전문가 변경:</label>
-            <input type="text" id="isExpert" v-model="selectedMember.type" />
+
+            <!-- <div class="row mt-3 mb-10 align-items-center custom-padding">
+          <div class="row" id="Gender">
+            <div class="col">
+              <input type="radio" id="male" value="true" v-model="selectedMember.gender" />
+              <label for="male" class="radio-label">남성</label>
+            </div>
+          <div class="col">
+            <input type="radio" id="female" value="false" v-model="selectedMember.gender" />
+            <label for="female" class="radio-label">여성</label>
+          </div>
+        </div>
+      </div> -->
+
+
+            <!-- <div class="row mt-3 mb-10 align-items-center custom-padding">
+          <div class="row" id="Gender">
+            <div class="col">
+    <input type="radio" id="male" value="false" v-model="selectedMember.memberMarriage" />
+    <label for="male" class="radio-label">기혼</label>
+    </div>
+
+    <div class="col">
+    <input type="radio" id="female" value="true" v-model="selectedMember.memberMarriage" />
+    <label for="female" class="radio-label">미혼</label>
+</div>
+</div>
+</div> -->
+            
+            
+            <div class="row mt-3 mb-5 align-items-center custom-padding">
+              <div class="row" id="Gender">
+                <div class="col">
+                  <input type="radio" id="user" value="false" v-model="selectedMember.type" />
+                  <label for="user" class="radio-label">일반회원</label>
+                </div>
+                <div class="col">
+                  <input type="radio" id="expert" value="true" v-model="selectedMember.type" />
+                  <label for="expert" class="radio-label">전문가</label>
+                </div>
+              </div>
+            </div>
+            <label for="isExpert">전문가 자료:</label>
+            <img v-if="selectedMember.expertFile" :src="selectedMember.expertFile" alt="전문가 자료" />
             <!-- 수정 버튼 대신 저장 버튼 사용 -->
+            <div class="mt-3">
             <button type="button" class="blue-button" @click="saveForm">저장</button>
             <button type="button" class="red-button" @click="closeEditForm">취소</button>
+          </div>
           </form>
         </div>
       </div>
@@ -158,6 +198,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      originalSelectedMember: null,
       loading: false,
       searchQuery: '',
       searchCategory: 'memberNickname',
@@ -178,11 +219,17 @@ export default {
     displayedMembers() {
   if (!this.membersList) {
     return []; // membersList가 정의되지 않은 경우 빈 배열 반환
+
   }
+  
   const startIndex = (this.currentPage - 1) * this.pageSize;
   const endIndex = Math.min(startIndex + this.pageSize, this.membersList.length);
   return this.membersList.slice(startIndex, endIndex);
 },
+transformedGender() {
+    // selectedMember의 gender 속성값에 따라 변환된 성별을 반환
+    return this.selectedMember.gender === 0 ? '남성' : '여성';
+  },
     displayedPages() {
       let startPage;
       let endPage;
@@ -220,6 +267,10 @@ export default {
     this.membersList = response.data.content;
     this.totalPages = response.data.totalPages;
     this.currentPage = page;
+
+   // 기존의 성별 정보를 선택된 회원의 성별로 설정
+    // this.selectedMember.gender = this.membersList.gender;
+
     this.loading = false;
   } catch (error) {
     console.error('멤버를 조회할 수 없습니다:', error);
@@ -268,7 +319,8 @@ async searchMembers() {
     },
 
     openModal(member) {
-      this.selectedMember = member;
+      this.selectedMember = { ...member }; // 선택된 회원 정보 복사본 생성
+      this.originalSelectedMember = { ...member }; // 원래의 회원 정보 복사본 생
       this.showModal = true;
     },
     selectAllMembers() {
@@ -414,6 +466,8 @@ async searchMembers() {
     },
     // 수정 폼 닫기
     closeEditForm() {
+       // 취소 버튼 클릭 시 원래의 회원 정보로 복원
+       this.selectedMember = { ...this.originalSelectedMember };
       this.showEditForm = false;
     },
     // 저장 버튼 클릭 시 처리
@@ -638,4 +692,22 @@ th {
 .edit-form button {
   margin-right: 10px;
 }
+.radio-input {
+  display: none; /* Hide the default radio input */
+}
+
+.radio-label {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.radio-input:checked + .radio-label {
+  background-color: #0056b3;
+}
+
 </style>
