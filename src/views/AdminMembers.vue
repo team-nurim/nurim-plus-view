@@ -138,6 +138,12 @@
             <label for="memberIncome">월소득:</label>
             <input type="text" id="memberIncome" v-model="selectedMember.memberIncome" />
             <label for="isExpert">전문가 변경:</label>
+            <div id="isExpert">
+              <input type="radio" id="user" value="user" @click="setType(false)" />
+              <label for="user">일반</label>
+              <input type="radio" id="expert" value="expert" @click="setType(true)" />
+              <label for="expert">전문가</label>
+            </div>
             <input type="text" id="isExpert" v-model="selectedMember.type" />
             <!-- 수정 버튼 대신 저장 버튼 사용 -->
             <button type="button" class="blue-button" @click="saveForm">저장</button>
@@ -420,6 +426,9 @@ async searchMembers() {
     saveForm() {
       this.submitForm();
       this.closeEditForm(); // 확인 메시지는 여기서 표시하지 않음
+    },
+    setType(type) {
+      this.selectedMember.type = type;
     }
   }
 };
