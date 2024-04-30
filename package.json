@@ -36,9 +36,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.0.0",
+    "mini-css-extract-plugin": "^2.9.0",
     "vue": "^3.4.21",
-    "vue-loader": "^17.4.2",
-    "mini-css-extract-plugin": "^2.9.0"
+    "vue-loader": "^17.4.2"
   },
   "eslintConfig": {
     "root": true,
