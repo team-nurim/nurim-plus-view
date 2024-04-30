@@ -124,7 +124,6 @@
       </div>
 
       <!-- 페이지네이션 -->
-      <!-- 페이지네이션 -->
     <div class="d-flex justify-content-center mt-3">
     <button class="btn btn-white mr-2" @click="previousPage" :disabled="currentPage === 0" style="margin-bottom: 50px;">‹</button>
     <template v-for="groupIndex in Math.ceil(totalPages / 10)">

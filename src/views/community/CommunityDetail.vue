@@ -71,7 +71,7 @@
       <p class="reply-text">{{ reply.replyText }}</p>
       </template>
       <template v-else>
-        <input type="text" v-model="reply.editedText" rows="3" cols="50" style="width: 93.3%; float: left; border: none; outline: none; border-bottom: 1px solid #ccc;" >
+        <input type="text" v-model="reply.editedText" rows="3" cols="50" style="width: 87.3%; float: left; border: none; outline: none; border-bottom: 1px solid #ccc;" >
       <button class="btn btn-sm" @click="saveEdit(reply)">수정</button>
       <button class="btn btn-sm" @click="cancelEdit(reply)">취소</button>
     </template>
@@ -141,21 +141,30 @@ import { TrackOpTypes } from 'vue';
         }
       },
       async deleteCommunity () {
-        try{
-          const accessToken = localStorage.getItem('accessToken')
-          if(!accessToken){
+    try {
+        const accessToken = localStorage.getItem('accessToken')
+        const currentUser = localStorage.getItem('memberEmail')
+        if (!accessToken) {
             throw new Error('삭제할 권한이 없습니다.')
-          }
-          const response = await axios.delete(`http://localhost:8080/api/v1/communityDelete/${this.communityId}/${accessToken}`,{
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }})
-        this.$router.push("/community")
-        }catch (error) {
-          this.errorMessage = '작성자만 삭제할 수 있습니다.'
-          alert(this.errorMessage)
         }
-      },
+        if(currentUser === this.community.memberEmail){
+            const confirmDelete = confirm("게시글을 삭제하시겠습니까?\n삭제한 내용은 영원히 복구를 할 수 없습니다.")
+            if (confirmDelete) {
+                const response = await axios.delete(`http://localhost:8080/api/v1/communityDelete/${this.communityId}/${accessToken}`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+                this.$router.push("/community")
+            }
+        } else {
+            throw new Error('작성자만 삭제할 수 있습니다.')
+        }
+    } catch (error) {
+        this.errorMessage = error.message
+        alert(this.errorMessage)
+    }
+},
       async submitReply() {
     try {
       const accessToken = localStorage.getItem('accessToken');
