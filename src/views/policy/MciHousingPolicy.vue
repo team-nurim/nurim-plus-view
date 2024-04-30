@@ -1,124 +1,143 @@
 <template>
-  <main class="mt-5 mb-5">
-    <div class="container">
-      <!-- 모달 팝업 -->
-      <div class="black-bg" v-if="selectedPolicy">
-        <div class="white-bg">
-          <div class="modal-content">
-            <!-- 동적으로 모달 내용 조정 -->
-            <div v-if="selectedCategory === 'housing'">
-              <!-- 주거지원 정보 -->
+  <div>
+    <main class="mt-5 mb-5">
+      <div class="container">
+        
+        <!-- 모달 팝업 -->
+        <div class="black-bg" v-if="selectedPolicy">
+          <div class="white-bg">
+            <div class="modal-content">
+              <!-- 동적으로 모달 내용 조정 -->
+              <div v-if="selectedCategory === 'housing'">
+                <!-- 주거지원 정보 -->
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>사업개요</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.businessOverview"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>지원내용</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.supportDetails"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>사업구분</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.businessClassification"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>소득기준</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.incomeCriteria"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>자산기준</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.assetCriteria"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>결혼기준</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.marriageCriteria"
+                  ></div>
+                </div>
+              </div>
+              <div v-if="selectedCategory === 'integrated'">
+                <!-- 통합지원 정보 -->
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>사업개요</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.businessOverview"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>지원내용</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.supportDetails"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>제공유형</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.offerType"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>지원금액</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.paymentAmount"
+                  ></div>
+                </div>
+                <div class="row modal-section">
+                  <p class="col-6 detail-box"><strong>지원대상</strong></p>
+                  <div
+                    class="col-6 info-box"
+                    v-html="selectedPolicy.supportTarget"
+                  ></div>
+                </div>
+              </div>
+              <!-- 공통 섹션 -->
               <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>사업개요</strong></p>
+                <p class="col-6 detail-box"><strong>사업주체</strong></p>
                 <div
                   class="col-6 info-box"
-                  v-html="selectedPolicy.businessOverview"
+                  v-html="selectedPolicy.businessEntity"
                 ></div>
               </div>
               <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>지원내용</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.supportDetails"
-                ></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>사업구분</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.businessClassification"
-                ></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>소득기준</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.incomeCriteria"
-                ></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>자산기준</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.assetCriteria"
-                ></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>결혼기준</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.marriageCriteria"
-                ></div>
+                <p class="col-6 detail-box"><strong>홈페이지</strong></p>
+                <div class="col-6" style="margin-left: 0.5rem">
+                  <button
+                    @click="websiteClick"
+                    class="btn btn-primary"
+                    style="
+                      font-size: 1.2rem;
+                      font-weight: 400;
+                      width: 100%;
+                      align-items: center;
+                      margin-bottom: 20px;
+                    "
+                  >
+                    바로가기
+                  </button>
+                </div>
               </div>
             </div>
-            <div v-if="selectedCategory === 'integrated'">
-              <!-- 통합지원 정보 -->
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>사업개요</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.businessOverview"
-                ></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>지원내용</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.supportDetails"
-                ></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>제공유형</strong></p>
-                <div class="col-6 info-box" v-html="selectedPolicy.offerType"></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>지원금액</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.paymentAmount"
-                ></div>
-              </div>
-              <div class="row modal-section">
-                <p class="col-6 detail-box"><strong>지원대상</strong></p>
-                <div
-                  class="col-6 info-box"
-                  v-html="selectedPolicy.supportTarget"
-                ></div>
-              </div>
-            </div>
-            <!-- 공통 섹션 -->
-            <div class="row modal-section">
-              <p class="col-6 detail-box"><strong>사업주체</strong></p>
-              <div
-                class="col-6 info-box"
-                v-html="selectedPolicy.businessEntity"
-              ></div>
-            </div>
-            <div class="row modal-section">
-              <p class="col-6 detail-box"><strong>홈페이지</strong></p>
-              <div class="col-6" style="margin-left: 0.5rem;">
-                <button @click="websiteClick" class="btn btn-primary" style="font-size: 1.2rem; font-weight: 400; width: 100%; align-items: center; margin-bottom: 20px;">
-                바로가기
-                </button>
-              </div>
-            </div>
+            <button
+              @click="closeModal"
+              class="btn btn-primary rounded-pill"
+              style="font-size: 23px; font-weight: 600"
+            >
+              닫기
+            </button>
           </div>
-          <button @click="closeModal" class="btn btn-primary rounded-pill" style="font-size: 23px; font-weight: 600;">
-            닫기
-          </button>
         </div>
-      </div>
 
-      <div class="row align-items-center">
-        <div class="col mt-3 mb-5">
-          <h4>이번 달 가장 인기있는 소식</h4>
+        <div class="row align-items-center">
+          <div class="col mt-3 mb-5">
+            <h4>이번 달 가장 인기있는 소식</h4>
+          </div>
         </div>
-      </div>
 
-      <!-- 최신 정책 콘텐츠 -->
-      <div class="row mb-5">
-        <div class="col-md-6 mb-2" v-for="post in posts" :key="post.postId">
-          <!-- <router-link
+        <!-- 최신 정책 콘텐츠 -->
+        <div class="row mb-5">
+          <div class="col-md-6 mb-2" v-for="post in posts" :key="post.postId">
+            <!-- <router-link
             :to="{ name: 'PostView', params: { postId: post.postId } }"
             style="text-decoration: none; color: inherit"
           > -->
@@ -138,16 +157,15 @@
                 </div>
               </div>
             </div>
-          <!-- </router-link> -->
+            <!-- </router-link> -->
+          </div>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <main style="background-color:#EFF7FF">
-
-    <div class="container mb-5" style="max-width: 800px;">
-      <div>
+    <main style="background-color: #eff7ff">
+      <div class="container mb-5" style="max-width: 800px">
+        <div>
           <div class="row align-items-center mt-5 mb-3">
             <div class="col mt-3 mb-2">
               <h4>한눈에 보는 정부정책</h4>
@@ -160,7 +178,9 @@
                 <!-- 지원선택 카테고리 -->
                 <div class="col-md-6 mb-3">
                   <div class="form-group row">
-                    <label class="col-form-label col-5 mr-1 text-start">지원선택</label>
+                    <label class="col-form-label col-5 mr-1 text-start"
+                      >지원선택</label
+                    >
                     <div class="col-12">
                       <select
                         class="form-select form-control-lg"
@@ -177,9 +197,15 @@
                 <!-- 지역 정보 선택 드롭다운 -->
                 <div class="col-md-6 mb-3">
                   <div class="form-group row">
-                    <label class="col-form-label col-5 text-start">지역정보</label>
+                    <label class="col-form-label col-5 text-start"
+                      >지역정보</label
+                    >
                     <div class="col-12">
-                      <select class="form-select form-control-lg" v-model="selectedRegion">
+                      <select
+                        class="form-select form-control-lg"
+                        v-model="selectedRegion"
+                        @change="handleRegionChange"
+                      >
                         <option value="all">전체</option>
                         <option value="서울특별시">서울특별시</option>
                         <option value="부산광역시">부산광역시</option>
@@ -203,15 +229,19 @@
                 </div>
 
                 <!-- 사업 구분 선택 드롭다운 -->
-                <div class="col-md-6 mb-3">
+                <div
+                  class="col-md-6 mb-3"
+                  v-if="selectedCategory === 'housing'"
+                >
                   <div class="form-group row">
-                    <label class="col-form-label col-5 text-start">{{
-                      selectedCategory === "housing" ? "사업구분" : "제공유형"
-                    }}</label>
+                    <label class="col-form-label col-5 text-start"
+                      >사업구분</label
+                    >
                     <div class="col-12">
                       <select
                         class="form-select form-control-lg"
-                        v-model="birateralClassification"
+                        v-model="selectedBusinessClassification"
+                        @change="handleBusinessClassificationChange"
                       >
                         <option value="all">전체</option>
                         <option
@@ -238,7 +268,26 @@
                         >
                           민간임대
                         </option>
-                        <!-- 통합지원 제공유형 옵션 추가 예시 -->
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <!-- 통합지원 제공유형 옵션 추가 예시 -->
+                <div
+                  class="col-md-6 mb-3"
+                  v-if="selectedCategory === 'integrated'"
+                >
+                  <div class="form-group row">
+                    <label class="col-form-label col-5 text-start"
+                      >제공유형</label
+                    >
+                    <div class="col-12">
+                      <select
+                        class="form-select form-control-lg"
+                        v-model="selectedOfferType"
+                        @change="handleOfferTypeChange"
+                      >
+                        <option value="all">전체</option>
                         <option
                           v-if="selectedCategory === 'integrated'"
                           value="현금지급"
@@ -277,11 +326,14 @@
                 <!-- 사업주체 선택 드롭다운 -->
                 <div class="col-md-6 mb-3">
                   <div class="form-group row">
-                    <label class="col-form-label col-5 text-start">사업주체</label>
+                    <label class="col-form-label col-5 text-start"
+                      >사업주체</label
+                    >
                     <div class="col-12">
                       <select
                         class="form-select form-control-lg"
                         v-model="selectedBusinessEntity"
+                        @change="handleBusinessEntityChange"
                       >
                         <option value="all">전체</option>
                         <option value="중앙정부">중앙정부</option>
@@ -293,8 +345,15 @@
 
                 <!-- 검색 버튼 -->
                 <div class="row">
-                  <button class="btn btn-primary mt-4" @click="fetchPolicies"
-                    style="border-radius:1.5rem; padding: 0.7rem; margin:0.7rem;">
+                  <button
+                    class="btn btn-primary mt-4"
+                    @click="fetchPolicies"
+                    style="
+                      border-radius: 1.5rem;
+                      padding: 0.7rem;
+                      margin: 0.7rem;
+                    "
+                  >
                     검색
                   </button>
                 </div>
@@ -316,7 +375,10 @@
                     </h5>
                   </div>
 
-                  <hr class="mt-1" style="height: 1px; background-color: #6c757d" />
+                  <hr
+                    class="mt-1"
+                    style="height: 1px; background-color: #6c757d"
+                  />
 
                   <ul class="policy-list min-vh-100 list-unstyled">
                     <li
@@ -324,9 +386,8 @@
                       :key="policy.id"
                       @click="selectPolicy(policy)"
                       class="text-start pl-5 fs-3"
-                      style="font-size: 1rem !important;"
+                      style="font-size: 1rem !important"
                     >
-
                       {{ policy.businessOverview }}
 
                       <!-- 마지막 요소가 아닐 때만 hr 태그를 추가합니다 -->
@@ -336,15 +397,23 @@
                       />
                     </li>
                   </ul>
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
-                  <hr class="mt-1" style="height: 2px; background-color: #6c757d" />
+                  <hr
+                    class="mt-1"
+                    style="height: 2px; background-color: #6c757d"
+                  />
+                  <hr
+                    class="mt-1"
+                    style="height: 2px; background-color: #6c757d"
+                  />
                   <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                       <li
                         class="page-item"
                         :class="{ disabled: currentPage === 1 }"
                       >
-                        <a class="page-link" href="#" @click="prevPage">&laquo;</a>
+                        <a class="page-link" href="#" @click="prevPage"
+                          >&laquo;</a
+                        >
                       </li>
                       <li
                         class="page-item"
@@ -360,7 +429,9 @@
                         class="page-item"
                         :class="{ disabled: currentPage === pageCount }"
                       >
-                        <a class="page-link" href="#" @click="nextPage">&raquo;</a>
+                        <a class="page-link" href="#" @click="nextPage"
+                          >&raquo;</a
+                        >
                       </li>
                     </ul>
                   </nav>
@@ -368,10 +439,10 @@
               </div>
             </div>
           </div>
+        </div>
       </div>
-    </div>
-
-  </main>
+    </main>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -406,6 +477,11 @@ export default {
       pageSize: 20,
       pageCount: 0,
       noResultsMessage: "", // 조건에 맞는 데이터가 없을 때 사용자에게 표시될 메시지
+      tempSelectedRegion: "all",
+      tempSelectedBusinessClassification: "all",
+      tempSelectedBusinessEntity: "all",
+      tempSelectedOfferType: "all", // 임시 제공 유형
+      applyFilter: false,
     };
   },
   async created() {
@@ -440,47 +516,60 @@ export default {
         : this.selectedOfferType;
     },
     filteredPolicies() {
+      if (!this.applyFilter) {
+        return []; // applyFilter가 false면 필터링하지 않고 빈 배열을 반환
+      }
+      // 검색 버튼 클릭 후 필터링 로직 적용
       if (this.selectedCategory === "housing") {
-        // 주거지원 선택 시
         return this.policies.filter((policy) => {
           return (
-            (!this.selectedRegion ||
-              this.selectedRegion === "all" ||
+            (this.selectedRegion === "all" ||
               policy.region === this.selectedRegion.toLowerCase().trim()) &&
-            (!this.selectedBusinessClassification ||
-              this.selectedBusinessClassification === "all" ||
+            (this.selectedBusinessClassification === "all" ||
               policy.businessClassification ===
                 this.selectedBusinessClassification.toLowerCase().trim()) &&
-            (!this.selectedBusinessEntity ||
-              this.selectedBusinessEntity === "all" ||
+            (this.selectedBusinessEntity === "all" ||
               policy.businessEntity ===
                 this.selectedBusinessEntity.toLowerCase().trim())
           );
         });
       } else if (this.selectedCategory === "integrated") {
-        // 통합지원 선택 시
         return this.policies.filter((policy) => {
           return (
-            (!this.selectedRegion ||
-              this.selectedRegion === "all" ||
+            (this.selectedRegion === "all" ||
               policy.region === this.selectedRegion.toLowerCase().trim()) &&
-            (!this.selectedOfferType ||
-              this.selectedOfferType === "all" ||
+            (this.selectedOfferType === "all" ||
               policy.offerType ===
-                this.selectedOfferType.toLowerCase().trim()) && // 제공유형으로 필터링
-            (!this.selectedBusinessEntity ||
-              this.selectedBusinessEntity === "all" ||
+                this.selectedOfferType.toLowerCase().trim()) &&
+            (this.selectedBusinessEntity === "all" ||
               policy.businessEntity ===
                 this.selectedBusinessEntity.toLowerCase().trim())
           );
         });
-      } else {
-        // 카테고리가 선택되지 않은 경우
-        return [];
       }
+      return [];
+    },
+  },
+  watch: {
+    selectedBusinessClassification(newVal, oldVal) {
+      console.log(`사업 구분 변경됨: ${oldVal} -> ${newVal}`);
+    },
+    selectedOfferType(newVal, oldVal) {
+      console.log(`제공 유형 변경됨: ${oldVal} -> ${newVal}`);
     },
   },
   methods: {
+    handleRegionChange() {
+      console.log("지역 정보 변경됨:", this.selectedRegion);
+    },
+
+    handleBusinessClassificationChange() {
+      console.log("사업 구분 변경됨:", this.selectedBusinessClassification);
+    },
+
+    handleBusinessEntityChange() {
+      console.log("사업 주체 변경됨:", this.selectedBusinessEntity);
+    },
     async fetchMemberInfo() {
       try {
         const accessToken = localStorage.getItem("accessToken");
@@ -510,30 +599,50 @@ export default {
         console.error("게시물을 불러오지 못했습니다.", error);
       }
     },
-    goToPostView (post) {
+    goToPostView(post) {
       // 로그인 확인
-      const accessToken = localStorage.getItem('accessToken')
+      const accessToken = localStorage.getItem("accessToken");
 
       if (!accessToken) {
-        alert('로그인해주세요.')
-        this.$router.push('/login')
-
+        alert("로그인해주세요.");
+        this.$router.push("/login");
       } else {
-        this.$router.push({ name: 'PostView', params: {postId: post.postId} })
+        this.$router.push({
+          name: "PostView",
+          params: { postId: post.postId },
+        });
       }
     },
     fetchPolicies() {
-      console.log(this.selectedCategory);
+      console.log("검색 버튼 클릭됨");
+      // 만약 선택된 카테고리가 없다면 알림을 표시하고 함수를 종료합니다.
       if (!this.selectedCategory) {
         alert("카테고리를 선택해주세요.");
         return;
       }
 
+      this.applyFilter = true;
+
+      // 콘솔에 선택된 사업 구분, 지역 정보, 사업 주체를 출력합니다.
+      console.log(
+        "검색 전 선택된 사업 구분:",
+        this.tempSelectedBusinessClassification
+      );
+      console.log("검색 전 선택된 지역 정보:", this.tempSelectedRegion);
+      console.log("검색 전 선택된 사업 주체:", this.tempSelectedBusinessEntity);
+
+      // 필터를 적용하기 전에 기존에 선택된 사업 구분, 지역 정보, 사업 주체를 임시로 저장합니다.
+      this.tempSelectedBusinessClassification =
+        this.selectedBusinessClassification;
+      this.tempSelectedRegion = this.selectedRegion;
+      this.tempSelectedBusinessEntity = this.selectedBusinessEntity;
+      this.tempSelectedOfferType = this.selectedOfferType;
+
       const accessToken = localStorage.getItem("accessToken");
       // 검색 버튼 클릭 시 로그인 상태 확인
       if (!accessToken) {
-        alert('로그인해주세요.');
-        this.$router.push('/login');
+        alert("로그인해주세요.");
+        this.$router.push("/login");
         return; // 로그인이 되어 있지 않으면 검색을 중단하고 로그인 페이지로 이동
       }
 
@@ -541,29 +650,31 @@ export default {
         this.selectedCategory === "housing"
           ? "mcihousingpolicy/housingfilter" // 주거지원의 경우
           : "mciintegratedpolicy/integratedfilter"; // 통합지원의 경우
+
       const params = {
         // category:
         // this.selectedCategory !== "all"
         //     ? this.selectedCategory.toLowerCase().trim()
         //     : undefined,
         region:
-          this.selectedRegion !== "all"
-            ? this.selectedRegion.toLowerCase().trim()
+          this.tempSelectedRegion !== "all"
+            ? this.tempSelectedRegion.toLowerCase().trim()
             : undefined,
         businessEntity:
-          this.selectedBusinessEntity !== "all"
-            ? this.selectedBusinessEntity.toLowerCase().trim()
+          this.tempSelectedBusinessEntity !== "all"
+            ? this.tempSelectedBusinessEntity.toLowerCase().trim()
             : undefined,
       };
+
       if (this.selectedCategory === "housing") {
         params.businessClassification =
-          this.selectedBusinessClassification !== "all"
-            ? this.selectedBusinessClassification.toLowerCase().trim()
+          this.tempSelectedBusinessClassification !== "all"
+            ? this.tempSelectedBusinessClassification.toLowerCase().trim()
             : undefined;
       } else if (this.selectedCategory === "integrated") {
         params.OfferType =
-          this.selectedOfferType !== "all"
-            ? this.selectedOfferType.toLowerCase().trim()
+          this.tempSelectedOfferType !== "all"
+            ? this.tempSelectedOfferType.toLowerCase().trim()
             : undefined;
       }
 
@@ -573,20 +684,14 @@ export default {
       axios
         .get(`http://localhost:8080/api/v1/${apiPath}`, { params, headers })
         .then((response) => {
-          this.policies = response.data.map((policy) => ({
-            ...policy,
-            region: policy.region.toLowerCase(),
-            businessEntity: policy.businessEntity.toLowerCase(),
-            // 조건부 데이터 추가
-            ...(this.selectedCategory === "housing"
-              ? {
-                  businessClassification:
-                    policy.businessClassification.toLowerCase(),
-                }
-              : { offerType: policy.offerType.toLowerCase() }),
-          }));
-          this.pageCount = Math.ceil(this.policies.length / this.pageSize);
-          this.noResultsMessage = "";
+          this.policies = response.data;
+          // 실제 선택값 업데이트 및 필터 적용
+          this.selectedRegion = this.tempSelectedRegion;
+          this.selectedBusinessClassification =
+            this.tempSelectedBusinessClassification;
+          this.selectedBusinessEntity = this.tempSelectedBusinessEntity;
+          this.selectedOfferType = this.tempSelectedOfferType;
+          this.applyFilter = true;
         })
         .catch((error) => {
           console.error("정책 정보를 불러오는 데 실패했습니다: ", error);
@@ -594,6 +699,7 @@ export default {
           this.pageCount = 0;
           this.noResultsMessage =
             "정책 정보를 불러오는 데 실패했습니다. 오류: " + error.message;
+          this.applyFilter = false;
         });
     },
     selectPolicy(policy) {
@@ -763,7 +869,6 @@ export default {
   margin-top: 20px; /* 모달 내의 버튼과의 간격을 조정합니다. */
   align-self: center; /* 버튼을 가운데로 정렬합니다. */
 }
-
 
 .form-control {
   height: 50px;
