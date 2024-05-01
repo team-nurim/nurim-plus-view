@@ -204,89 +204,85 @@ export default {
       submittedKeyword: '',
       results: [],
       member: {},
-      isAllSet: false
+      isAllSet: false,
+      accessToken: null // accessToken 속성 추가
     };
   },
-  async mounted () {
-    const accessToken = localStorage.getItem('accessToken')
-    if (accessToken) {
+  async mounted() {
+    this.accessToken = localStorage.getItem('accessToken'); // accessToken 설정
+    if (this.accessToken) {
       // 로그인 상태가 있을 경우 Vuex 상태 업데이트
-      this.fetchMemberInfo()
+      await this.fetchMemberInfo();
     }
   },
   methods: {
-    async fetchMemberInfo () {
+    async fetchMemberInfo() {
       try {
-        const accessToken = localStorage.getItem('accessToken')
-
         const response = await axios.get('/api/v1/members/mypage', {
           headers: {
-            'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
+            'Authorization': `Bearer ${this.accessToken}` // accessToken 사용
           }
-        })
+        });
         this.member = response.data;
       } catch (error) {
         console.error('회원정보를 불러오지 못했습니다.', error);
       }
     },
-    selectRegion (region) {
+    selectRegion(region) {
       this.selectedRegion = region;
     },
-    selectSubject (subject) {
+    selectSubject(subject) {
       this.selectedSubject = subject;
     },
-    submitKeyword () {
+    submitKeyword() {
       // 제출 버튼 클릭 시 호출되는 메서드
       // submittedKeyword에 입력한 키워드 할당
       this.submittedKeyword = this.keyword;
     },
-    async fetchResults () {
-
-      this.isAllSet = true
-
+    async fetchResults() {
       // 로그인 여부 확인
-      const accessToken = localStorage.getItem('accessToken')
-      console.log(accessToken)
-
-      if (!accessToken) {
-        if (confirm ('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
-          this.$router.push('/login')
+      if (!this.accessToken) {
+        if (confirm('로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?')) {
+          this.$router.push('/login');
         }
-        return
+        return;
       }
 
       try {
-        let endpoint = ''
+        let endpoint = '';
         switch (this.selectedSubject) {
           case '주거지원':
-            endpoint = '/api/v1/recommend/getFilteredHousingPolicy'
-            break
+            endpoint = '/api/v1/recommend/getFilteredHousingPolicy';
+            break;
           case '양육':
-            endpoint = '/api/v1/recommend/getFilteredChildcare'
-            break
+            endpoint = '/api/v1/recommend/getFilteredChildcare';
+            break;
           case '통합지원':
-            endpoint = '/api/v1/recommend/getFilteredIntegratedPolicy'
-            break
+            endpoint = '/api/v1/recommend/getFilteredIntegratedPolicy';
+            break;
+          default:
+            console.error('Invalid subject selected.');
+            return;
         }
-        const accessToken = localStorage.getItem('accessToken')
+
         const response = await axios.get(endpoint, {
           headers: {
-            'Authorization': `Bearer ${accessToken}`   // 토큰 헤더에 추가
+            'Authorization': `Bearer ${this.accessToken}` // accessToken 사용
           },
           params: {
             region: this.selectedRegion,
             keyword: this.submittedKeyword
           }
-        })
-        this.results = response.data.content   // 결과
-        console.log(this.results)
-
+        });
+        this.results = response.data.content; // 결과
+        this.isAllSet = true;
+        console.log(this.results);
       } catch (error) {
-        console.error('Error fetching results: ', error)
+        console.error('Error fetching results: ', error);
       }
     },
-    goAsk () {
-      this.$router.push('/community')
+    goAsk() {
+      this.$router.push('/community');
     }
   }
 }
